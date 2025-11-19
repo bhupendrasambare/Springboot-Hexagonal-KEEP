@@ -4,7 +4,7 @@
  * Time   :10:38 pm
  * Project:Keep
  **/
-package com.service.keep.domain.model;
+package com.service.keep.domain.user.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

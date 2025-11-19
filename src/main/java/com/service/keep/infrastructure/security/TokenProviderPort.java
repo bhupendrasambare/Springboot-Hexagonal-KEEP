@@ -4,7 +4,7 @@
  * Time   :10:57 pm
  * Project:Keep
  **/
-package com.service.keep.domain.security;
+package com.service.keep.infrastructure.security;
 
 public class TokenProviderPort {
 }
