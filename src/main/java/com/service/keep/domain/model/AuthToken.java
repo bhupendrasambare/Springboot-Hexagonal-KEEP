@@ -1,10 +1,10 @@
 /**
  * author @bhupendrasambare
  * Date   :21/11/25
- * Time   :8:35 pm
+ * Time   :8:36 pm
  * Project:Keep
  **/
-package com.service.keep.domain.user.model;
+package com.service.keep.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,23 +12,18 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class AuthToken {
 
-    private String id;
+    private String userId;
 
     private String username;
 
-    private String firstName;
-
-    private String lastName;
-
-    private String passwordHash;
+    private String token;
 
     private LocalDateTime createdAt;
 
-    private LocalDateTime updatedAt;
+    private LocalDateTime expiresAt;
 }

@@ -4,12 +4,13 @@
  * Time   :8:50 pm
  * Project:Keep
  **/
-package com.service.keep.domain.note.model;
+package com.service.keep.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -23,10 +24,6 @@ public class Note {
 
     private String description;
 
-    private String color;
-
-    private String tagId;
-
     private Boolean pinned;
 
     private Boolean archived;
@@ -34,4 +31,10 @@ public class Note {
     private Boolean trash;
 
     private String reminder;
+
+    private List<String> tagId;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 }
