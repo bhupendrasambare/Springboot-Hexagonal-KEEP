@@ -6,5 +6,18 @@
  **/
 package com.service.keep.domain.port.inbound;
 
-public class ManageAuthUseCase {
+import com.service.keep.domain.model.User;
+
+public interface ManageAuthUseCase {
+
+    User signup(String email, String name, String password);
+
+    String login(String email, String password);
+
+    boolean logout(String token);
+
+    boolean requestPasswordReset(String email);
+
+    boolean resetPassword(String resetToken, String newPassword);
+
 }

@@ -6,5 +6,10 @@
  **/
 package com.service.keep.domain.port.outbound;
 
-public class PasswordHasherPort {
+public interface PasswordHarsherPort {
+
+    String hash(String warPassword);
+
+    boolean matches(String rawPassword, String hashedPassword);
+
 }

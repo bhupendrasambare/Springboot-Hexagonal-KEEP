@@ -6,19 +6,21 @@
  **/
 package com.service.keep.domain.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.service.keep.domain.valueobject.NoteId;
+import com.service.keep.domain.valueobject.UserId;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 public class Note {
 
-    private String id;
+    private final NoteId id;
+
+    private final UserId userId;
 
     private String title;
 
@@ -37,4 +39,18 @@ public class Note {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    public Note(NoteId id, UserId userId, String title, String description, Boolean pinned, Boolean archived, Boolean trash, String reminder, List<String> tagId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.userId = userId;
+        this.title = title;
+        this.description = description;
+        this.pinned = pinned;
+        this.archived = archived;
+        this.trash = trash;
+        this.reminder = reminder;
+        this.tagId = tagId;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 }

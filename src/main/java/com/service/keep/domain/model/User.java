@@ -8,19 +8,17 @@ package com.service.keep.domain.model;
 
 import com.service.keep.domain.valueobject.Email;
 import com.service.keep.domain.valueobject.HashedPassword;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.service.keep.domain.valueobject.UserId;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 public class User {
 
-    private String id;
+    private final UserId id;
 
     private String username;
 
@@ -35,4 +33,15 @@ public class User {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    public User(UserId id, String username, String firstName, String lastName, Email email, HashedPassword passwordHash, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 }

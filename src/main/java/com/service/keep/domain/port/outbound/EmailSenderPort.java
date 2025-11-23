@@ -6,5 +6,6 @@
  **/
 package com.service.keep.domain.port.outbound;
 
-public class EmailSenderPort {
+public interface EmailSenderPort {
+    boolean sendEmail(String to, String subject, String body);
 }

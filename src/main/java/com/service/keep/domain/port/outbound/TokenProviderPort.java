@@ -6,5 +6,12 @@
  **/
 package com.service.keep.domain.port.outbound;
 
-public class TokenProviderPort {
+public interface TokenProviderPort {
+
+    String generateToken(String userId);
+
+    boolean validate(String token);
+
+    String extractUserId(String token);
+
 }

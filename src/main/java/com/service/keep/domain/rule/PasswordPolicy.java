@@ -6,5 +6,6 @@
  **/
 package com.service.keep.domain.rule;
 
-public class PasswordPolicy {
+public interface PasswordPolicy {
+    boolean isValid(String password);
 }

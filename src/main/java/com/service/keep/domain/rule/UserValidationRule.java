@@ -6,5 +6,8 @@
  **/
 package com.service.keep.domain.rule;
 
-public class UserValidationRule {
+import com.service.keep.domain.model.User;
+
+public interface UserValidationRule {
+    void validate(User user);
 }
