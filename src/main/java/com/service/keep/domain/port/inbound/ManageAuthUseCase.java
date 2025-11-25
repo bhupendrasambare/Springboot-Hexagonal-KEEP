@@ -10,7 +10,7 @@ import com.service.keep.domain.model.User;
 
 public interface ManageAuthUseCase {
 
-    User signup(String email, String name, String password);
+    User signup(String email, String username, String name, String password);
 
     String login(String email, String password);
 
