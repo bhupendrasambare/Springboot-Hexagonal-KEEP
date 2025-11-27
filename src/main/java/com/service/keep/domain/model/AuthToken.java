@@ -6,6 +6,7 @@
  **/
 package com.service.keep.domain.model;
 
+import com.service.keep.domain.valueobject.UserId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,11 +18,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class AuthToken {
 
-    private String userId;
+    private UserId userId;
 
     private String username;
 
     private String token;
+
+    private Boolean isExpired;
 
     private LocalDateTime createdAt;
 
