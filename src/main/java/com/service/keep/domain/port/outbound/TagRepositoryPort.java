@@ -21,5 +21,5 @@ public interface TagRepositoryPort {
 
     List<Tags> findAllUserId(UserId userId);
 
-    boolean delete(TagsId id);
+    boolean deleteById(TagsId id);
 }

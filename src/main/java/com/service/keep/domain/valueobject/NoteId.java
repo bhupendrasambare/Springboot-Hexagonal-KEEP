@@ -7,18 +7,35 @@
 package com.service.keep.domain.valueobject;
 
 import ch.qos.logback.core.util.StringUtil;
-import lombok.Getter;
 
-@Getter
+import java.util.Objects;
+
 public class NoteId {
 
-    private final String userid;
+    private final String value;
 
     public NoteId(String userid){
         if(StringUtil.isNullOrEmpty(userid)){
             throw new IllegalArgumentException("NoteId cannot be empty");
         }
 
-        this.userid = userid;
+        this.value = userid;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof NoteId)) return false;
+        NoteId noteId = (NoteId) o;
+        return Objects.equals(value, noteId.getValue());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 }

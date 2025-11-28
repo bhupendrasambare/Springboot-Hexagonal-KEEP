@@ -9,5 +9,8 @@ package com.service.keep.domain.rule;
 import com.service.keep.domain.model.User;
 
 public interface UserValidationRule {
-    void validate(User user);
+
+    void validateForCreation(User user);
+
+    void validateForUpdate(User user);
 }
