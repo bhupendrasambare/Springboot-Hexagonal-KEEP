@@ -16,6 +16,8 @@ public interface UserRepositoryPort {
 
     boolean existsByEmail(Email email);
 
+    boolean existsByUserName(String userName);
+
     User save(User user);
 
 }
