@@ -4,7 +4,7 @@
  * Time   :11:07 pm
  * Project:Keep
  **/
-package com.service.keep.infrastructure.mapper;
+package com.service.keep.application.mapper;
 
 import com.service.keep.application.dto.request.SignUpRequest;
 import com.service.keep.application.dto.response.UserResponse;

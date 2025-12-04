@@ -14,7 +14,7 @@ import com.service.keep.domain.port.outbound.PasswordHarsherPort;
 import com.service.keep.domain.port.outbound.UserRepositoryPort;
 import com.service.keep.domain.valueobject.HashedPassword;
 import com.service.keep.domain.valueobject.UserId;
-import com.service.keep.infrastructure.mapper.UserMapper;
+import com.service.keep.application.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

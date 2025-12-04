@@ -23,8 +23,8 @@ public class Note {
     private boolean pinned;
     private boolean archived;
     private boolean trashed;
-    private String reminder;             // ISO 8601 or business-defined format (domain decides)
-    private final List<String> tagId;    // list of tag ids (string) owned by this note
+    private String reminder;
+    private final List<String> tagId;
     private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

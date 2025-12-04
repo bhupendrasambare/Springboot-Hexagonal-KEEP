@@ -6,13 +6,12 @@
  **/
 package com.service.keep.application.dto.response;
 
-import com.service.keep.domain.model.User;
 import lombok.Builder;
 
 @Builder
 public class AuthResponse {
     
-    private User user;
+    private UserResponse user;
     private TokenResponse token;
 
 }

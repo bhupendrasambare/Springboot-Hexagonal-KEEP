@@ -15,6 +15,7 @@ import com.service.keep.domain.port.outbound.*;
 import com.service.keep.domain.valueobject.Email;
 import com.service.keep.domain.valueobject.HashedPassword;
 import com.service.keep.domain.valueobject.UserId;
+import com.service.keep.application.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -70,7 +71,7 @@ public class AuthService {
                 .build();
 
         return AuthResponse.builder()
-                .user(savedUser)
+                .user(UserMapper.toUserResponse(savedUser))
                 .token(response)
                 .build();
 
