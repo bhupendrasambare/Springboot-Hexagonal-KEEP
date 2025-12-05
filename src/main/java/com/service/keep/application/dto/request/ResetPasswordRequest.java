@@ -6,6 +6,7 @@
  **/
 package com.service.keep.application.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,10 +16,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ResetPasswordRequest {
 
+    @NotBlank
     private String token;
 
+    @NotBlank
     private String newPassword;
 
+    @NotBlank
     private String oldPassword;
 
 }

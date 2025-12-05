@@ -6,7 +6,6 @@
  **/
 package com.service.keep.application.dto.request;
 
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -19,7 +18,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SignUpRequest {
 
-    @NotBlank private String username;
+    @NotBlank
+    private String username;
 
     private String firstName;
 

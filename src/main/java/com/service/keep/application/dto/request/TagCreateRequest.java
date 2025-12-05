@@ -1,7 +1,7 @@
 /**
  * author @bhupendrasambare
- * Date   :03/12/25
- * Time   :11:25 pm
+ * Date   :04/12/25
+ * Time   :11:58 pm
  * Project:Keep
  **/
 package com.service.keep.application.dto.request;
@@ -11,20 +11,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
-public class NoteCreateRequest {
-
+public class TagCreateRequest {
     @NotBlank
-    private String title;
-
-    private String description;
-
-    private String reminder;
-
-    private List<String> tagIds;
-
+    private String name;
+    private String color;
+    private String imageUri;
 }

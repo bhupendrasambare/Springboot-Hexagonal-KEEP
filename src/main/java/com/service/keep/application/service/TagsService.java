@@ -1,0 +1,66 @@
+/**
+ * author @bhupendrasambare
+ * Date   :04/12/25
+ * Time   :11:56 pm
+ * Project:Keep
+ **/
+package com.service.keep.application.service;
+
+import com.service.keep.application.dto.request.TagCreateRequest;
+import com.service.keep.application.dto.response.TagResponse;
+import com.service.keep.application.mapper.TagMapper;
+import com.service.keep.domain.model.Tags;
+import com.service.keep.domain.port.outbound.TagRepositoryPort;
+import com.service.keep.domain.valueobject.TagsId;
+import com.service.keep.domain.valueobject.UserId;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class TagsService {
+
+    private final TagRepositoryPort tagsRepository;
+
+    public TagResponse create(String userId, TagCreateRequest req) {
+        Tags tags = new Tags(
+                new TagsId(UUID.randomUUID().toString()),
+                new UserId(userId),
+                req.getColor(),
+                req.getImageUri(),
+                req.getName(),
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
+        Tags saved = tagsRepository.save(tags);
+        return TagMapper.toResponse(saved);
+    }
+
+    public TagResponse rename(String userId, String tagId, String newName) {
+        Tags t = tagsRepository.findById(new TagsId(tagId))
+                .orElseThrow(() -> new IllegalArgumentException("Tag not found"));
+        if (!t.getUserId().getValue().equals(userId)) throw new IllegalArgumentException("Unauthorized");
+        t.rename(newName);
+        Tags saved = tagsRepository.save(t);
+        return TagMapper.toResponse(saved);
+    }
+
+    public void delete(String userId, String tagId) {
+        Tags t = tagsRepository.findById(new TagsId(tagId))
+                .orElseThrow(() -> new IllegalArgumentException("Tag not found"));
+        if (!t.getUserId().getValue().equals(userId)) throw new IllegalArgumentException("Unauthorized");
+        tagsRepository.deleteById(new TagsId(tagId));
+    }
+
+    public List<TagResponse> getAll(String userId) {
+        return tagsRepository.findAllUserId(new UserId(userId))
+                .stream()
+                .map(TagMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+}

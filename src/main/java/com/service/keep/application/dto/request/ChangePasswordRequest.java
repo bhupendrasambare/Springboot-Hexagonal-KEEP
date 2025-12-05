@@ -6,15 +6,21 @@
  **/
 package com.service.keep.application.dto.request;
 
-import lombok.Data;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class ChangePasswordRequest {
 
+    @NotBlank
     private String oldPassword;
 
+    @NotBlank
     private String newPassword;
 
 }
