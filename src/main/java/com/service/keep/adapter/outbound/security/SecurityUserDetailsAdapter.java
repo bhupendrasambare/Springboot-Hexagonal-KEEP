@@ -7,4 +7,5 @@
 package com.service.keep.adapter.outbound.security;
 
 public class SecurityUserDetailsAdapter {
+
 }
