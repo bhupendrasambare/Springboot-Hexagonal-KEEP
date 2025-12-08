@@ -6,5 +6,13 @@
  **/
 package com.service.keep.adapter.outbound.persistance.mongo.note;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Getter
+@Setter
+@Document("notes")
 public class NoteDocument {
+
 }
