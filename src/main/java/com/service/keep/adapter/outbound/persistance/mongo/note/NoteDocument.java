@@ -8,11 +8,19 @@ package com.service.keep.adapter.outbound.persistance.mongo.note;
 
 import lombok.Getter;
 import lombok.Setter;
+import nonapi.io.github.classgraph.json.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
 @Document("notes")
 public class NoteDocument {
+
+    @Id
+    private String id;
+
+    private String userId;
+
+
 
 }
