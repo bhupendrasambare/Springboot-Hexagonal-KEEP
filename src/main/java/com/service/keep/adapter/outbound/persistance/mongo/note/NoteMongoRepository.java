@@ -6,5 +6,11 @@
  **/
 package com.service.keep.adapter.outbound.persistance.mongo.note;
 
-public class NoteMongoRepository {
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+import java.util.List;
+
+public interface NoteMongoRepository extends MongoRepository<NoteDocument, String> {
+
+    List<NoteDocument> findAllByUserId(String userId);
 }
