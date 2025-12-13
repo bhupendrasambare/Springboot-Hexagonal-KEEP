@@ -20,4 +20,23 @@ import java.util.stream.Collectors;
 @Repository
 @RequiredArgsConstructor
 public class NotePersistenceAdapter implements NoteRepositoryPort {
+    @Override
+    public Note save(Note note) {
+        return null;
+    }
+
+    @Override
+    public List<Note> findByUserId(UserId userId) {
+        return null;
+    }
+
+    @Override
+    public Optional<Note> findById(NoteId id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public void deleteById(NoteId noteId) {
+
+    }
 }
