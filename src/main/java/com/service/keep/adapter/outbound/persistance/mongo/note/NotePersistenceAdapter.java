@@ -20,23 +20,64 @@ import java.util.stream.Collectors;
 @Repository
 @RequiredArgsConstructor
 public class NotePersistenceAdapter implements NoteRepositoryPort {
-    @Override
-    public Note save(Note note) {
-        return null;
-    }
+
+    private final NoteMongoRepository repository;
 
     @Override
-    public List<Note> findByUserId(UserId userId) {
-        return null;
+    public Note save(Note note) {
+        NoteDocument saved = repository.save(toDocument(note));
+        return toDomain(saved);
     }
 
     @Override
     public Optional<Note> findById(NoteId id) {
-        return Optional.empty();
+        return repository.findById(id.getValue()).map(this::toDomain);
     }
 
     @Override
-    public void deleteById(NoteId noteId) {
+    public List<Note> findAllByUserId(UserId userId) {
+        return repository.findAllByUserId(userId.getValue())
+                .stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
+    }
 
+    @Override
+    public void deleteById(NoteId id) {
+        repository.deleteById(id.getValue());
+    }
+
+    // ---------------- MAPPERS ----------------
+
+    private NoteDocument toDocument(Note note) {
+        NoteDocument d = new NoteDocument();
+        d.setId(note.getId().getValue());
+        d.setUserId(note.getUserId().getValue());
+        d.setTitle(note.getTitle());
+        d.setDescription(note.getDescription());
+        d.setPinned(note.isPinned());
+        d.setArchived(note.isArchived());
+        d.setTrash(note.isTrashed());
+        d.setReminder(note.getReminder());
+        d.setTagId(note.getTagId());
+        d.setCreatedAt(note.getCreatedAt());
+        d.setUpdatedAt(note.getUpdatedAt());
+        return d;
+    }
+
+    private Note toDomain(NoteDocument d) {
+        return new Note(
+                new NoteId(d.getId()),
+                new UserId(d.getUserId()),
+                d.getTitle(),
+                d.getDescription(),
+                d.getPinned(),
+                d.getArchived(),
+                d.getTrash(),
+                d.getReminder(),
+                d.getTagId(),
+                d.getCreatedAt(),
+                d.getUpdatedAt()
+        );
     }
 }
