@@ -35,7 +35,7 @@ public class NotePersistenceAdapter implements NoteRepositoryPort {
     }
 
     @Override
-    public List<Note> findAllByUserId(UserId userId) {
+    public List<Note> findByUserId(UserId userId) {
         return repository.findAllByUserId(userId.getValue())
                 .stream()
                 .map(this::toDomain)
