@@ -6,5 +6,11 @@
  **/
 package com.service.keep.adapter.outbound.persistance.mongo.tags;
 
-public class TagMongoRepository {
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+import java.util.List;
+
+public interface TagMongoRepository extends MongoRepository<TagDocument, String> {
+
+    List<TagDocument> findAllByUserId(String userId);
 }
