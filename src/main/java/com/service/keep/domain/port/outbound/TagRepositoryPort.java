@@ -15,11 +15,11 @@ import java.util.Optional;
 
 public interface TagRepositoryPort {
 
-    Tags save(Tags user);
+    Tags save(Tags tags);
 
     Optional<Tags> findById(TagsId id);
 
     List<Tags> findAllUserId(UserId userId);
 
-    boolean deleteById(TagsId id);
+    void deleteById(TagsId id);
 }
