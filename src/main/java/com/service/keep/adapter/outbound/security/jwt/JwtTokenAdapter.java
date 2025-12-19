@@ -4,7 +4,7 @@
  * Time   :12:27 am
  * Project:Keep
  **/
-package com.service.keep.adapter.outbound.security;
+package com.service.keep.adapter.outbound.security.jwt;
 
 public class JwtTokenAdapter {
 }

@@ -1,11 +1,10 @@
 /**
  * author @bhupendrasambare
- * Date   :05/12/25
- * Time   :12:27 am
+ * Date   :19/12/25
+ * Time   :10:22 pm
  * Project:Keep
  **/
 package com.service.keep.adapter.outbound.security;
 
-public class SecurityUserDetailsAdapter {
-
+public class AuthenticationUserAdapter {
 }
