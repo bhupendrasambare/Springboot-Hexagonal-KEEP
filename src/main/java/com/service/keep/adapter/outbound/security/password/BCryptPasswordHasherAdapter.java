@@ -6,5 +6,27 @@
  **/
 package com.service.keep.adapter.outbound.security.password;
 
-public class BCryptPasswordHasherAdapter {
+
+import com.service.keep.domain.port.outbound.PasswordHarsherPort;
+import org.springframework.stereotype.Component;
+
+@Component
+public class BCryptPasswordHasherAdapter implements PasswordHarsherPort {
+
+    private final PasswordEncoderConfig passwordEncoder;
+
+    public BCryptPasswordHasherAdapter(PasswordEncoderConfig passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public String hash(String rawPassword) {
+        return passwordEncoder.encode(rawPassword);
+    }
+
+    @Override
+    public boolean matches(String rawPassword, String hashedPassword) {
+        return passwordEncoder.matches(rawPassword, hashedPassword);
+    }
 }
+
