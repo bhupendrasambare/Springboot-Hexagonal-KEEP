@@ -4,18 +4,19 @@
  * Time   :10:21 pm
  * Project:Keep
  **/
-package com.service.keep.adapter.outbound.security.password;
+package com.service.keep.infrastructure.security.password;
 
 
 import com.service.keep.domain.port.outbound.PasswordHarsherPort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BCryptPasswordHasherAdapter implements PasswordHarsherPort {
 
-    private final PasswordEncoderConfig passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    public BCryptPasswordHasherAdapter(PasswordEncoderConfig passwordEncoder) {
+    public BCryptPasswordHasherAdapter(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
