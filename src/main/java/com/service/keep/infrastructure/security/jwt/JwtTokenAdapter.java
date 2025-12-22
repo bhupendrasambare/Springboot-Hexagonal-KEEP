@@ -21,6 +21,7 @@ import java.util.Date;
 @Component
 public class JwtTokenAdapter implements JwtTokenPort {
 
+
     private final JwtProperties properties;
     private final SecretKey secretKey;
 
