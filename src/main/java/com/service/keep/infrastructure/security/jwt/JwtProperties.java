@@ -7,7 +7,9 @@
 package com.service.keep.infrastructure.security.jwt;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
+@Component
 @ConfigurationProperties(prefix = "security.jwt")
 public class JwtProperties {
 
