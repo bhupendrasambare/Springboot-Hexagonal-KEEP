@@ -9,5 +9,4 @@ public interface JwtTokenPort {
     boolean validateToken(String token);
 
     String extractUserId(String token);
-
 }
