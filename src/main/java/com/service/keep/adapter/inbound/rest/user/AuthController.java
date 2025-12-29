@@ -6,8 +6,9 @@
  **/
 package com.service.keep.adapter.inbound.rest.user;
 
-import com.service.keep.application.dto.request.SignUpRequest;
+import com.service.keep.application.dto.request.*;
 import com.service.keep.application.dto.response.AuthResponse;
+import com.service.keep.application.dto.response.TokenResponse;
 import com.service.keep.application.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,26 @@ public class AuthController {
     @PostMapping("/signup")
     public AuthResponse signUp(@Valid @RequestBody SignUpRequest request){
         return this.authService.signUp(request);
+    }
+
+    @PostMapping("/login")
+    public TokenResponse login(@Valid @RequestBody LoginRequest request) {
+        return authService.login(request);
+    }
+
+    @PostMapping("/refresh")
+    public TokenResponse refresh(@RequestBody RefreshTokenRequest request) {
+        return authService.refresh(request);
+    }
+
+    @PostMapping("/forgot-password")
+    public void forgotPassword(@RequestBody ForgotPasswordRequest request) {
+        authService.forgotPassword(request);
+    }
+
+    @PostMapping("/reset-password")
+    public void resetPassword(@RequestBody ResetPasswordRequest request) {
+        authService.resetPassword(request);
     }
 
 }
