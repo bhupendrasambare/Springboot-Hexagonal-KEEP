@@ -6,5 +6,5 @@
  **/
 package com.service.keep.adapter.inbound.rest.tags;
 
-public class UserProfileController {
+public class TagController {
 }
