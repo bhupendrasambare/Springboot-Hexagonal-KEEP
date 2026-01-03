@@ -26,7 +26,6 @@ public class UserProfileService {
     private final PasswordHarsherPort passwordHarsher;
 
 
-    // TODO make the userId from auth
     public UserResponse getProfile(String userId){
         User user = userRepository.findById(new UserId(userId))
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
