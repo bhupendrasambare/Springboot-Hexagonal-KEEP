@@ -20,7 +20,7 @@ public class UserProfileController {
 
     private final UserProfileService userProfileService;
 
-    @GetMapping("/me")
+    @GetMapping("/profile")
     public UserResponse profile(){
         return this.userProfileService.getProfile();
     }
