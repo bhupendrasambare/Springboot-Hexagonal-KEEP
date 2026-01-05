@@ -24,6 +24,7 @@ public class UserProfileService {
 
     private final UserRepositoryPort userRepository;
     private final PasswordHarsherPort passwordHarsher;
+    private final AuthService authService;
 
 
     public UserResponse getProfile(String userId){
