@@ -27,7 +27,7 @@ public class UserProfileService {
     private final AuthService authService;
 
 
-    public UserResponse getProfile(String userId){
+    public UserResponse getProfile(){
         User user = userRepository.findById(new UserId(userId))
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
@@ -35,7 +35,7 @@ public class UserProfileService {
 
     }
 
-    public UserResponse updateProfile(String userId, UpdateProfileRequest request){
+    public UserResponse updateProfile(UpdateProfileRequest request){
         User user = userRepository.findById(new UserId(userId))
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
@@ -45,7 +45,7 @@ public class UserProfileService {
         return UserMapper.toUserResponse(updatedUser);
     }
 
-    public void updatePassword(String userId, ChangePasswordRequest request){
+    public void updatePassword(ChangePasswordRequest request){
         User user = userRepository.findById(new UserId(userId))
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
