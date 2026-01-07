@@ -4,7 +4,7 @@
  * Time   :12:26 am
  * Project:Keep
  **/
-package com.service.keep.adapter.outbound.persistance.mongo.user;
+package com.service.keep.adapter.outbound.persistence.mongo.user;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 

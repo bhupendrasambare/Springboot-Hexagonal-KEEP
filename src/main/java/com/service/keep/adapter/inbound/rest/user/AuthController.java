@@ -7,9 +7,10 @@
 package com.service.keep.adapter.inbound.rest.user;
 
 import com.service.keep.application.dto.request.*;
-import com.service.keep.application.dto.response.AuthResponse;
-import com.service.keep.application.dto.response.TokenResponse;
-import com.service.keep.application.service.AuthService;
+import com.service.keep.application.dto.response.AuthResult;
+import com.service.keep.domain.port.inbound.AuthUseCase;
+import com.service.keep.domain.port.outbound.JwtTokenPort;
+import com.service.keep.domain.port.outbound.PasswordHarsherPort;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,35 +19,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService authService;
+    private final AuthUseCase authUseCase;
 
     @PostMapping("/signup")
-    public AuthResponse signUp(@Valid @RequestBody SignUpRequest request){
-        return this.authService.signUp(request);
+    public AuthResult signup(@Valid @RequestBody SignUpRequest request) {
+        return authUseCase.signUp(request);
     }
 
     @PostMapping("/login")
-    public TokenResponse login(@Valid @RequestBody LoginRequest request) {
-        return authService.login(request);
+    public AuthResult login(@Valid @RequestBody LoginRequest request) {
+        return authUseCase.login(request);
     }
 
     @PostMapping("/refresh")
-    public TokenResponse refresh(@RequestBody RefreshTokenRequest request) {
-        return authService.refresh(request);
+    public AuthResult refresh(@Valid @RequestBody RefreshTokenRequest request) {
+        return authUseCase.refresh(request);
+    }
+
+    @PostMapping("/logout")
+    public void logout(@Valid @RequestBody RefreshTokenRequest request) {
+        authUseCase.logout(request);
     }
 
     @PostMapping("/forgot-password")
-    public void forgotPassword(@RequestBody ForgotPasswordRequest request) {
-        authService.forgotPassword(request);
+    public void forgot(@Valid @RequestBody ForgotPasswordRequest request) {
+        authUseCase.forgotPassword(request);
     }
 
     @PostMapping("/reset-password")
-    public void resetPassword(@RequestBody ResetPasswordRequest request) {
-        authService.resetPassword(request);
+    public void reset(@Valid @RequestBody ResetPasswordRequest request) {
+        authUseCase.resetPassword(request);
     }
-
 }

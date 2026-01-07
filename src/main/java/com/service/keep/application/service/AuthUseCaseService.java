@@ -1,0 +1,156 @@
+/**
+ * author @bhupendrasambare
+ * Date   :28/11/25
+ * Time   :12:41 am
+ * Project:Keep
+ **/
+package com.service.keep.application.service;
+
+import com.service.keep.application.dto.request.ForgotPasswordRequest;
+import com.service.keep.application.dto.request.RefreshTokenRequest;
+import com.service.keep.application.dto.request.ResetPasswordRequest;
+import com.service.keep.application.dto.request.SignUpRequest;
+import com.service.keep.application.dto.response.AuthResult;
+import com.service.keep.application.dto.response.TokenResponse;
+import com.service.keep.application.mapper.UserMapper;
+import com.service.keep.domain.model.AuthToken;
+import com.service.keep.domain.model.User;
+import com.service.keep.domain.port.inbound.AuthUseCase;
+import com.service.keep.domain.port.outbound.*;
+import com.service.keep.domain.valueobject.Email;
+import com.service.keep.domain.valueobject.HashedPassword;
+import com.service.keep.domain.valueobject.UserId;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class AuthUseCaseService implements AuthUseCase {
+
+    private final UserRepositoryPort userRepository;
+    private final PasswordHarsherPort passwordHarsher;
+    private final JwtTokenPort jwtToken;
+    private final AuthTokenRepositoryPort authTokenRepository;
+    private final EmailSenderPort emailSender;
+
+    @Override
+    public AuthResult signUp(SignUpRequest request) {
+
+        if (userRepository.existsByEmail(new Email(request.getEmail()))) {
+            throw new IllegalArgumentException("Email already registered");
+        }
+
+        HashedPassword hashed =
+                new HashedPassword(passwordHarsher.hash(request.getPassword()));
+
+        User user = new User(
+                new UserId(UUID.randomUUID().toString()),
+                request.getUsername(),
+                request.getFirstName(),
+                request.getLastName(),
+                new Email(request.getEmail()),
+                hashed,
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
+
+        userRepository.save(user);
+
+        String access = jwtToken.generateAccessToken(user.getId().getValue());
+        String refresh = jwtToken.generateRefreshToken(user.getId().getValue());
+
+        authTokenRepository.save(
+                new AuthToken(refresh, user.getId(), user.getUsername(),
+                        LocalDateTime.now(), LocalDateTime.now().plusDays(30))
+        );
+
+        return AuthResult.builder()
+                .user(UserMapper.toUserResponse(user))
+                .token(TokenResponse.builder()
+                        .accessToken(access)
+                        .refreshToken(refresh)
+                        .build())
+                .build();
+    }
+
+    @Override
+    public AuthResult login(Email email, String rawPassword) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid credentials"));
+
+        if (!passwordHarsher.matches(rawPassword, user.getPasswordHash().getValue())) {
+            throw new IllegalArgumentException("Invalid credentials");
+        }
+
+        String refresh = jwtToken.generateRefreshToken(user.getId().getValue());
+
+        AuthToken token = new AuthToken(
+                refresh,
+                user.getId(),
+                user.getUsername(),
+                LocalDateTime.now(),
+                LocalDateTime.now().plusDays(30)
+        );
+
+        authTokenRepository.save(token);
+        return AuthResult.builder().token(TokenResponse.builder()
+                .accessToken(refresh)
+                .refreshToken(refresh)
+                .build()).build();
+    }
+
+    @Override
+    public void refresh(RefreshTokenRequest request) {
+        AuthToken token = authTokenRepository.findByToken(request.getRefreshToken())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid token"));
+
+        if (token.isExpired()) {
+            authTokenRepository.deleteByToken(request.getRefreshToken());
+            throw new IllegalArgumentException("Token expired");
+        }
+    }
+
+    @Override
+    public void logout(RefreshTokenRequest request) {
+        authTokenRepository.deleteByToken(request.getRefreshToken());
+    }
+
+    @Override
+    public void forgotPassword(ForgotPasswordRequest request) {
+        User user = userRepository.findByEmail(new Email(request.getEmail()))
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        String token = UUID.randomUUID().toString();
+        authTokenRepository.save(
+                new AuthToken(token, user.getId(), user.getUsername(),
+                        LocalDateTime.now(), LocalDateTime.now().plusMinutes(15))
+        );
+
+        emailSender.sendEmail(
+                user.getEmail().getValue(),
+                "Password Reset",
+                "Reset token: " + token
+        );
+    }
+
+    @Override
+    public void resetPassword(ResetPasswordRequest request) {
+        AuthToken reset = authTokenRepository.findByToken(request.getToken())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid token"));
+
+        if (reset.isExpired()) {
+            authTokenRepository.deleteByToken(request.getToken());
+            throw new IllegalArgumentException("Token expired");
+        }
+
+        User user = userRepository.findById(reset.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        user.changePassword(new HashedPassword(request.getNewPassword()));
+        userRepository.save(user);
+        authTokenRepository.deleteByToken(request.getToken());
+    }
+}

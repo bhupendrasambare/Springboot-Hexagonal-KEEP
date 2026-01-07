@@ -4,9 +4,8 @@
  * Time   :12:26 am
  * Project:Keep
  **/
-package com.service.keep.adapter.outbound.persistance.mongo.user;
+package com.service.keep.adapter.outbound.persistence.mongo.user;
 
-import com.service.keep.application.mapper.UserMapper;
 import com.service.keep.domain.model.User;
 import com.service.keep.domain.port.outbound.UserRepositoryPort;
 import com.service.keep.domain.valueobject.Email;

@@ -1,20 +1,23 @@
 package com.service.keep.domain.port.inbound;
 
+import com.service.keep.application.dto.request.*;
+import com.service.keep.application.dto.response.AuthResult;
 import com.service.keep.domain.model.AuthToken;
-import com.service.keep.domain.model.User;
+import com.service.keep.domain.valueobject.Email;
+import com.service.keep.domain.valueobject.HashedPassword;
+import com.service.keep.domain.valueobject.UserId;
 
 public interface AuthUseCase {
 
-    User signUp(String userName, String firstName, String lastName, String email, String password);
+    AuthResult signUp(SignUpRequest request);
 
-    AuthToken login(String email, String password);
+    AuthResult login(LoginRequest request);
 
-    void logout(String refreshToken);
+    AuthResult refresh(RefreshTokenRequest request);
 
-    AuthToken refreshToken(String refreshToken);
+    void logout(RefreshTokenRequest request);
 
-    void forgotPassword(String email);
+    void forgotPassword(ForgotPasswordRequest request);
 
-    void resetPassword(String resetToken, String newPassword);
-
+    void resetPassword(ResetPasswordRequest request);
 }

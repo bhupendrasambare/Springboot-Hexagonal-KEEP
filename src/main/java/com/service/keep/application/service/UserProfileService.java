@@ -24,10 +24,10 @@ public class UserProfileService {
 
     private final UserRepositoryPort userRepository;
     private final PasswordHarsherPort passwordHarsher;
-    private final AuthService authService;
+    private final AuthUseCaseService authUseCaseService;
 
 
-    public UserResponse getProfile(){
+    public UserResponse getProfile(String userId){
         User user = userRepository.findById(new UserId(userId))
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
@@ -35,7 +35,7 @@ public class UserProfileService {
 
     }
 
-    public UserResponse updateProfile(UpdateProfileRequest request){
+    public UserResponse updateProfile(String userId, UpdateProfileRequest request){
         User user = userRepository.findById(new UserId(userId))
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
@@ -45,7 +45,7 @@ public class UserProfileService {
         return UserMapper.toUserResponse(updatedUser);
     }
 
-    public void updatePassword(ChangePasswordRequest request){
+    public void updatePassword(String userId, ChangePasswordRequest request){
         User user = userRepository.findById(new UserId(userId))
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 

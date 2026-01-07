@@ -4,7 +4,7 @@
  * Time   :12:07 am
  * Project:Keep
  **/
-package com.service.keep.adapter.outbound.persistance.mongo.user;
+package com.service.keep.adapter.outbound.persistence.mongo.user;
 
 import lombok.Getter;
 import lombok.Setter;
