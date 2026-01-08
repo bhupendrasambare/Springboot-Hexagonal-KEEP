@@ -6,10 +6,7 @@
  **/
 package com.service.keep.application.service;
 
-import com.service.keep.application.dto.request.ForgotPasswordRequest;
-import com.service.keep.application.dto.request.RefreshTokenRequest;
-import com.service.keep.application.dto.request.ResetPasswordRequest;
-import com.service.keep.application.dto.request.SignUpRequest;
+import com.service.keep.application.dto.request.*;
 import com.service.keep.application.dto.response.AuthResult;
 import com.service.keep.application.dto.response.TokenResponse;
 import com.service.keep.application.mapper.UserMapper;
@@ -77,33 +74,41 @@ public class AuthUseCaseService implements AuthUseCase {
     }
 
     @Override
-    public AuthResult login(Email email, String rawPassword) {
-        User user = userRepository.findByEmail(email)
+    public AuthResult login(LoginRequest request) {
+
+        User user = userRepository.findByEmail(new Email(request.getEmail()))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid credentials"));
 
-        if (!passwordHarsher.matches(rawPassword, user.getPasswordHash().getValue())) {
+        if (!passwordHarsher.matches(request.getPassword(), user.getPasswordHash().getValue())) {
             throw new IllegalArgumentException("Invalid credentials");
         }
 
-        String refresh = jwtToken.generateRefreshToken(user.getId().getValue());
+        String accessToken = jwtToken.generateAccessToken(user.getId().getValue());
+        String refreshToken = jwtToken.generateRefreshToken(user.getId().getValue());
 
-        AuthToken token = new AuthToken(
-                refresh,
-                user.getId(),
-                user.getUsername(),
-                LocalDateTime.now(),
-                LocalDateTime.now().plusDays(30)
+        authTokenRepository.save(
+                new AuthToken(
+                        refreshToken,
+                        user.getId(),
+                        user.getUsername(),
+                        LocalDateTime.now(),
+                        LocalDateTime.now().plusDays(30)
+                )
         );
 
-        authTokenRepository.save(token);
-        return AuthResult.builder().token(TokenResponse.builder()
-                .accessToken(refresh)
-                .refreshToken(refresh)
-                .build()).build();
+        return AuthResult.builder()
+                .user(UserMapper.toUserResponse(user))
+                .token(TokenResponse.builder()
+                        .accessToken(accessToken)
+                        .refreshToken(refreshToken)
+                        .build())
+                .build();
     }
 
+
     @Override
-    public void refresh(RefreshTokenRequest request) {
+    public AuthResult refresh(RefreshTokenRequest request) {
+
         AuthToken token = authTokenRepository.findByToken(request.getRefreshToken())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid token"));
 
@@ -111,7 +116,21 @@ public class AuthUseCaseService implements AuthUseCase {
             authTokenRepository.deleteByToken(request.getRefreshToken());
             throw new IllegalArgumentException("Token expired");
         }
+
+        User user = userRepository.findById(token.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        String newAccessToken = jwtToken.generateAccessToken(user.getId().getValue());
+
+        return AuthResult.builder()
+                .user(UserMapper.toUserResponse(user))
+                .token(TokenResponse.builder()
+                        .accessToken(newAccessToken)
+                        .refreshToken(request.getRefreshToken())
+                        .build())
+                .build();
     }
+
 
     @Override
     public void logout(RefreshTokenRequest request) {
