@@ -11,6 +11,7 @@ import com.service.keep.application.dto.request.NoteUpdateRequest;
 import com.service.keep.application.dto.response.NoteResponse;
 import com.service.keep.application.mapper.NoteMapper;
 import com.service.keep.domain.model.Note;
+import com.service.keep.domain.port.inbound.NoteUseCase;
 import com.service.keep.domain.port.outbound.NoteRepositoryPort;
 import com.service.keep.domain.valueobject.NoteId;
 import com.service.keep.domain.valueobject.UserId;
@@ -18,129 +19,104 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class NoteApplicationService {
+public class NoteApplicationService implements NoteUseCase {
 
-    private NoteRepositoryPort noteRepository;
+    private final NoteRepositoryPort noteRepository;
 
-    public NoteResponse createNote(String userId, NoteCreateRequest request){
+    @Override
+    public Note create(String userId, String title, String description, String reminder, List<String> tagIds) {
+
         Note note = new Note(
                 new NoteId(UUID.randomUUID().toString()),
                 new UserId(userId),
-                request.getTitle(),
-                request.getDescription(),
+                title,
+                description,
                 false,
                 false,
                 false,
-                request.getReminder(),
-                request.getTagIds(),
+                reminder,
+                tagIds,
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
-        Note savedNote = noteRepository.save(note);
-        return NoteMapper.toNoteResponse(savedNote);
 
+        return noteRepository.save(note);
     }
 
-    public NoteResponse update(String  userId, NoteUpdateRequest request){
-        Note existingNote = noteRepository.findById(new NoteId(request.getNoteId()))
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Note id"));
+    @Override
+    public Note update(String userId, String noteId, String title, String description, List<String> tagIds) {
 
-        if(!existingNote.getUserId().getValue().equals(userId)){
-            throw new IllegalArgumentException("Unauthorized request");
-        }
-
-        existingNote.update(request.getTitle(), request.getDescription(), request.getTagId());
-        Note saved = noteRepository.save(existingNote);
-
-        return NoteMapper.toNoteResponse(saved);
+        Note note = getOwnedNote(userId, noteId);
+        note.update(title, description, tagIds);
+        return noteRepository.save(note);
     }
 
-    public void delete(String userId, String noteId){
-        Note existingNote = noteRepository.findById(new NoteId(noteId))
-                .orElseThrow(() -> new IllegalArgumentException("Note not found"));
-
-        if(!existingNote.getUserId().getValue().equals(userId)){
-            throw new IllegalArgumentException("Unauthorized request");
-        }
-
+    @Override
+    public void delete(String userId, String noteId) {
+        getOwnedNote(userId, noteId);
         noteRepository.deleteById(new NoteId(noteId));
     }
 
-    public void pin(String userId, String noteId){
-        Note existingNote = noteRepository.findById(new NoteId(noteId))
-                .orElseThrow(() -> new IllegalArgumentException("Note not found"));
-
-        if(!existingNote.getUserId().getValue().equals(userId)){
-            throw new IllegalArgumentException("Unauthorized request");
-        }
-
-        existingNote.pin();
-        noteRepository.save(existingNote);
+    @Override
+    public void pin(String userId, String noteId) {
+        Note note = getOwnedNote(userId, noteId);
+        note.pin();
+        noteRepository.save(note);
     }
 
-    public void unPin(String userId, String noteId){
-        Note existingNote = noteRepository.findById(new NoteId(noteId))
-                .orElseThrow(() -> new IllegalArgumentException("Note not found"));
-
-        if(!existingNote.getUserId().getValue().equals(userId)){
-            throw new IllegalArgumentException("Unauthorized request");
-        }
-
-        existingNote.unpin();
-        noteRepository.save(existingNote);
+    @Override
+    public void unPin(String userId, String noteId) {
+        Note note = getOwnedNote(userId, noteId);
+        note.unpin();
+        noteRepository.save(note);
     }
 
-    public void archive(String userId, String noteId){
-        Note existingNote = noteRepository.findById(new NoteId(noteId))
-                .orElseThrow(() -> new IllegalArgumentException("Note not found"));
-
-        if(!existingNote.getUserId().getValue().equals(userId)){
-            throw new IllegalArgumentException("Unauthorized request");
-        }
-
-        existingNote.archive();
-        noteRepository.save(existingNote);
+    @Override
+    public void archive(String userId, String noteId) {
+        Note note = getOwnedNote(userId, noteId);
+        note.archive();
+        noteRepository.save(note);
     }
 
-    public void unArchive(String userId, String noteId){
-        Note existingNote = noteRepository.findById(new NoteId(noteId))
-                .orElseThrow(() -> new IllegalArgumentException("Note not found"));
-
-        if(!existingNote.getUserId().getValue().equals(userId)){
-            throw new IllegalArgumentException("Unauthorized request");
-        }
-
-        existingNote.unarchive();
-        noteRepository.save(existingNote);
+    @Override
+    public void unArchive(String userId, String noteId) {
+        Note note = getOwnedNote(userId, noteId);
+        note.unarchive();
+        noteRepository.save(note);
     }
 
-    public void trash(String userId, String noteId){
-        Note existingNote = noteRepository.findById(new NoteId(noteId))
-                .orElseThrow(() -> new IllegalArgumentException("Note not found"));
-
-        if(!existingNote.getUserId().getValue().equals(userId)){
-            throw new IllegalArgumentException("Unauthorized request");
-        }
-
-        existingNote.moveToTrash();
-        noteRepository.save(existingNote);
+    @Override
+    public void moveToTrash(String userId, String noteId) {
+        Note note = getOwnedNote(userId, noteId);
+        note.moveToTrash();
+        noteRepository.save(note);
     }
 
-    public void restore(String userId, String noteId){
-        Note existingNote = noteRepository.findById(new NoteId(noteId))
-                .orElseThrow(() -> new IllegalArgumentException("Note not found"));
-
-        if(!existingNote.getUserId().getValue().equals(userId)){
-            throw new IllegalArgumentException("Unauthorized request");
-        }
-
-        existingNote.restoreFromTrash();
-        noteRepository.save(existingNote);
+    @Override
+    public void restore(String userId, String noteId) {
+        Note note = getOwnedNote(userId, noteId);
+        note.restoreFromTrash();
+        noteRepository.save(note);
     }
 
+    @Override
+    public List<Note> getAll(String userId) {
+        return noteRepository.findByUserId(new UserId(userId));
+    }
 
+    // 🔒 Centralized ownership check
+    private Note getOwnedNote(String userId, String noteId) {
+        Note note = noteRepository.findById(new NoteId(noteId))
+                .orElseThrow(() -> new IllegalArgumentException("Note not found"));
+
+        if (!note.getUserId().getValue().equals(userId)) {
+            throw new IllegalArgumentException("Unauthorized request");
+        }
+        return note;
+    }
 }

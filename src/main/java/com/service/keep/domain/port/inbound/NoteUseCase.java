@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface NoteUseCase {
 
-    Note creatNote(String userId, String title, String description, List<String> tagsIds);
+    Note create(String userId, String title, String description, String reminder, List<String> tagIds);
 
-    Note updateNote(String userId, String noteId, String title, String description, List<String> tagIds);
+    Note update(String userId, String noteId, String title, String description, List<String> tagIds);
 
-    void deleteNote(String userId, String noteId);
+    void delete(String userId, String noteId);
 
     void pin(String userId, String noteId);
 
@@ -18,8 +18,12 @@ public interface NoteUseCase {
 
     void archive(String userId, String noteId);
 
+    void unArchive(String userId, String noteId);
+
     void moveToTrash(String userId, String noteId);
 
-    List<Note> getAllNotes(String userId);
+    void restore(String userId, String noteId);
 
+    List<Note> getAll(String userId);
 }
+

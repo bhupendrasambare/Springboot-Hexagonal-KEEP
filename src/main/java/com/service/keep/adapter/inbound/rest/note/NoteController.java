@@ -10,7 +10,8 @@ package com.service.keep.adapter.inbound.rest.note;
 import com.service.keep.application.dto.request.NoteCreateRequest;
 import com.service.keep.application.dto.request.NoteUpdateRequest;
 import com.service.keep.application.dto.response.NoteResponse;
-import com.service.keep.application.service.NoteApplicationService;
+import com.service.keep.application.mapper.NoteMapper;
+import com.service.keep.domain.port.inbound.NoteUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,24 +21,51 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/notes")
 @RequiredArgsConstructor
 public class NoteController {
-    private final NoteApplicationService noteUseCase;
+
+    private final NoteUseCase noteUseCase;
+
+    // TEMP – replace with SecurityContext later
+    private String getUserId() {
+        return "mock-user-id";
+    }
 
     @PostMapping
-    public ResponseEntity<NoteResponse> create(
-            @RequestBody @Valid NoteCreateRequest request) {
-        return ResponseEntity.ok(noteUseCase.createNote(request));
+    public ResponseEntity<NoteResponse> create(@Valid @RequestBody NoteCreateRequest request) {
+
+        return ResponseEntity.ok(
+                NoteMapper.toNoteResponse(
+                        noteUseCase.create(
+                                getUserId(),
+                                request.getTitle(),
+                                request.getDescription(),
+                                request.getReminder(),
+                                request.getTagIds()
+                        )
+                )
+        );
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<NoteResponse> update(
             @PathVariable String id,
-            @RequestBody @Valid NoteUpdateRequest request) {
-        return ResponseEntity.ok(noteUseCase.update(id, request));
+            @Valid @RequestBody NoteUpdateRequest request) {
+
+        return ResponseEntity.ok(
+                NoteMapper.toNoteResponse(
+                        noteUseCase.update(
+                                getUserId(),
+                                id,
+                                request.getTitle(),
+                                request.getDescription(),
+                                request.getTagId()
+                        )
+                )
+        );
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
-        noteUseCase.delete(id);
+        noteUseCase.delete(getUserId(), id);
         return ResponseEntity.noContent().build();
     }
 }
