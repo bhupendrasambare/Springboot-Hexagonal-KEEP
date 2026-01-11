@@ -10,6 +10,7 @@ import com.service.keep.application.dto.request.ChangePasswordRequest;
 import com.service.keep.application.dto.request.UpdateProfileRequest;
 import com.service.keep.application.dto.response.UserResponse;
 import com.service.keep.domain.model.User;
+import com.service.keep.domain.port.inbound.UserProfileUseCase;
 import com.service.keep.domain.port.outbound.PasswordHarsherPort;
 import com.service.keep.domain.port.outbound.UserRepositoryPort;
 import com.service.keep.domain.valueobject.HashedPassword;
@@ -20,43 +21,39 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserProfileService {
+public class UserProfileService implements UserProfileUseCase {
 
     private final UserRepositoryPort userRepository;
     private final PasswordHarsherPort passwordHarsher;
-    private final AuthUseCaseService authUseCaseService;
 
-
-    public UserResponse getProfile(String userId){
-        User user = userRepository.findById(new UserId(userId))
+    @Override
+    public User getUserProfile(String userId) {
+        return userRepository.findById(new UserId(userId))
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-        return UserMapper.toUserResponse(user);
-
     }
 
-    public UserResponse updateProfile(String userId, UpdateProfileRequest request){
-        User user = userRepository.findById(new UserId(userId))
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    @Override
+    public User updateProfile(String userId, String username, String firstName, String lastName) {
 
-        user.updateProfile(request.getUserName(),request.getFirstName(), request.getLastName());
-        User updatedUser = userRepository.save(user);
+        User user = getUserProfile(userId);
+        user.updateProfile(username, firstName, lastName);
 
-        return UserMapper.toUserResponse(updatedUser);
+        return userRepository.save(user);
     }
 
-    public void updatePassword(String userId, ChangePasswordRequest request){
-        User user = userRepository.findById(new UserId(userId))
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    @Override
+    public void changePassword(String userId, String oldPassword, String newPassword) {
 
-        if(!passwordHarsher.matches(request.getOldPassword(), user.getPasswordHash().getValue())){
+        User user = getUserProfile(userId);
+
+        if (!passwordHarsher.matches(oldPassword, user.getPasswordHash().getValue())) {
             throw new IllegalArgumentException("Invalid password");
         }
 
-        user.changePassword(new HashedPassword(passwordHarsher.hash(request.getNewPassword())));
+        user.changePassword(
+                new HashedPassword(passwordHarsher.hash(newPassword))
+        );
+
         userRepository.save(user);
-
     }
-
-
 }

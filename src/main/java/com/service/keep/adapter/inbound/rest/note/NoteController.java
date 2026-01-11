@@ -12,6 +12,7 @@ import com.service.keep.application.dto.request.NoteUpdateRequest;
 import com.service.keep.application.dto.response.NoteResponse;
 import com.service.keep.application.mapper.NoteMapper;
 import com.service.keep.domain.port.inbound.NoteUseCase;
+import com.service.keep.domain.port.outbound.AuthenticatedUserPort;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +25,11 @@ public class NoteController {
 
     private final NoteUseCase noteUseCase;
 
+    private final AuthenticatedUserPort authenticatedUserPort;
+
     // TEMP – replace with SecurityContext later
     private String getUserId() {
-        return "mock-user-id";
+        return authenticatedUserPort.getCurrentUserId().getValue();
     }
 
     @PostMapping

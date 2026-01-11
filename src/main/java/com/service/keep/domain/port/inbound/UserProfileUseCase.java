@@ -12,7 +12,7 @@ public interface UserProfileUseCase {
 
     User getUserProfile(String userId);
 
-    User updateProfile(String userId, String firstName,String lastName);
+    User updateProfile(String userId, String username, String firstName,String lastName);
 
     void changePassword(String userId, String oldPassword, String newPassword);
 
