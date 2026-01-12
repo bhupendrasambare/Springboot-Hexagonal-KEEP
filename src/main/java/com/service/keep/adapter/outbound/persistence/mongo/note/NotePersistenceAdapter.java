@@ -11,6 +11,8 @@ import com.service.keep.domain.port.outbound.NoteRepositoryPort;
 import com.service.keep.domain.valueobject.NoteId;
 import com.service.keep.domain.valueobject.UserId;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -35,11 +37,30 @@ public class NotePersistenceAdapter implements NoteRepositoryPort {
     }
 
     @Override
-    public List<Note> findByUserId(UserId userId) {
-        return repository.findAllByUserId(userId.getValue())
-                .stream()
+    public List<Note> findByUserId(
+            UserId userId,
+            boolean pinned,
+            boolean archived,
+            boolean trashed,
+            String keyword,
+            int page,
+            int pageSize
+    ) {
+        PageRequest pageable = PageRequest.of(page, pageSize);
+
+        Page<NoteDocument> result = repository
+                .findByUserIdAndPinnedAndArchivedAndTrashedAndTitleContainingIgnoreCase(
+                        userId.getValue(),
+                        pinned,
+                        archived,
+                        trashed,
+                        keyword == null ? "" : keyword,
+                        pageable
+                );
+
+        return result.stream()
                 .map(this::toDomain)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

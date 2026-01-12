@@ -6,11 +6,20 @@
  **/
 package com.service.keep.adapter.outbound.persistence.mongo.note;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
 public interface NoteMongoRepository extends MongoRepository<NoteDocument, String> {
 
-    List<NoteDocument> findAllByUserId(String userId);
+    Page<NoteDocument> findByUserIdAndPinnedAndArchivedAndTrashedAndTitleContainingIgnoreCase(
+            String userId,
+            boolean pinned,
+            boolean archived,
+            boolean trashed,
+            String title,
+            Pageable pageable
+    );
 }

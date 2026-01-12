@@ -41,6 +41,7 @@ public class UserProfileController {
         return UserMapper.toUserResponse(
                 userProfileUseCase.updateProfile(
                         getUserId(),
+                        request.getUserName(),
                         request.getFirstName(),
                         request.getLastName()
                 )

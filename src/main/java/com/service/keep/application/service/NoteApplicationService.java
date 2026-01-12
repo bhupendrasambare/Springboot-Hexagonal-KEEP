@@ -6,10 +6,6 @@
  **/
 package com.service.keep.application.service;
 
-import com.service.keep.application.dto.request.NoteCreateRequest;
-import com.service.keep.application.dto.request.NoteUpdateRequest;
-import com.service.keep.application.dto.response.NoteResponse;
-import com.service.keep.application.mapper.NoteMapper;
 import com.service.keep.domain.model.Note;
 import com.service.keep.domain.port.inbound.NoteUseCase;
 import com.service.keep.domain.port.outbound.NoteRepositoryPort;
@@ -105,11 +101,26 @@ public class NoteApplicationService implements NoteUseCase {
     }
 
     @Override
-    public List<Note> getAll(String userId) {
-        return noteRepository.findByUserId(new UserId(userId));
+    public List<Note> getAll(
+            String userId,
+            boolean pinned,
+            boolean archived,
+            boolean trashed,
+            String keyword,
+            Integer page,
+            Integer pageSize
+    ) {
+        return noteRepository.findByUserId(
+                new UserId(userId),
+                pinned,
+                archived,
+                trashed,
+                keyword,
+                page == null ? 0 : page,
+                pageSize == null ? 10 : pageSize
+        );
     }
 
-    // 🔒 Centralized ownership check
     private Note getOwnedNote(String userId, String noteId) {
         Note note = noteRepository.findById(new NoteId(noteId))
                 .orElseThrow(() -> new IllegalArgumentException("Note not found"));

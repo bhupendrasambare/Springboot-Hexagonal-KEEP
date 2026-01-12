@@ -1,6 +1,7 @@
 package com.service.keep.domain.port.inbound;
 
 import com.service.keep.domain.model.Note;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -24,6 +25,6 @@ public interface NoteUseCase {
 
     void restore(String userId, String noteId);
 
-    List<Note> getAll(String userId);
+    List<Note> getAll(String userId, boolean pin, boolean archive, boolean trashed, String keyword, Integer page, Integer pageSize);
 }
 

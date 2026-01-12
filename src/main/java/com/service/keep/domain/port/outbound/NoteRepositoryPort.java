@@ -11,7 +11,16 @@ public interface NoteRepositoryPort {
 
     Note save(Note note);
 
-    List<Note> findByUserId(UserId userId);
+    List<Note> findByUserId(
+            UserId userId,
+            boolean pinned,
+            boolean archived,
+            boolean trashed,
+            String keyword,
+            int page,
+            int pageSize
+    );
+
 
     Optional<Note> findById(NoteId id);
 
