@@ -25,7 +25,7 @@ public class NoteApplicationService implements NoteUseCase {
     private final NoteRepositoryPort noteRepository;
 
     @Override
-    public Note create(String userId, String title, String description, String reminder, List<String> tagIds) {
+    public Note create(String userId, String title, String description, String reminder, String tagId) {
 
         Note note = new Note(
                 new NoteId(UUID.randomUUID().toString()),
@@ -36,7 +36,7 @@ public class NoteApplicationService implements NoteUseCase {
                 false,
                 false,
                 reminder,
-                tagIds,
+                tagId,
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -45,10 +45,10 @@ public class NoteApplicationService implements NoteUseCase {
     }
 
     @Override
-    public Note update(String userId, String noteId, String title, String description, List<String> tagIds) {
+    public Note update(String userId, String noteId, String title, String description, String tagId) {
 
         Note note = getOwnedNote(userId, noteId);
-        note.update(title, description, tagIds);
+        note.update(title, description, tagId);
         return noteRepository.save(note);
     }
 

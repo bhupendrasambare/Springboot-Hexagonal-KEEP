@@ -21,6 +21,7 @@ public class NoteMapper {
                 .archived(note.isArchived())
                 .trashed(note.isTrashed())
                 .reminder(note.getReminder())
+                .tagId(note.getTagId())
                 .createdAt(note.getCreatedAt())
                 .updatedAt(note.getUpdatedAt())
                 .build();

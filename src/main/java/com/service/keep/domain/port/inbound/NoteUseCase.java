@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface NoteUseCase {
 
-    Note create(String userId, String title, String description, String reminder, List<String> tagIds);
+    Note create(String userId, String title, String description, String reminder, String tagId);
 
-    Note update(String userId, String noteId, String title, String description, List<String> tagIds);
+    Note update(String userId, String noteId, String title, String description, String tagId);
 
     void delete(String userId, String noteId);
 

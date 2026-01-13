@@ -8,6 +8,7 @@ package com.service.keep.domain.model;
 
 import com.service.keep.domain.valueobject.NoteId;
 import com.service.keep.domain.valueobject.UserId;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class Note {
     private boolean archived;
     private boolean trashed;
     private String reminder;
-    private final List<String> tagId;
+    private String tagId;
     private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -36,7 +37,7 @@ public class Note {
                 boolean archived,
                 boolean trashed,
                 String reminder,
-                List<String> tagId,
+                String tagId,
                 LocalDateTime createdAt,
                 LocalDateTime updatedAt) {
 
@@ -52,7 +53,7 @@ public class Note {
         this.archived = archived;
         this.trashed = trashed;
         this.reminder = reminder;
-        this.tagId = tagId == null ? new ArrayList<>() : new ArrayList<>(tagId);
+        this.tagId = tagId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt == null ? createdAt : updatedAt;
     }
@@ -89,8 +90,8 @@ public class Note {
         return reminder;
     }
 
-    public List<String> getTagId() {
-        return new ArrayList<>(tagId);
+    public String getTagId() {
+        return this.tagId;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -102,11 +103,10 @@ public class Note {
     }
 
 
-    public void update(String title, String description, List<String> newTagIds) {
+    public void update(String title, String description, String newTagIds) {
         this.title = title == null ? this.title : title;
         this.description = description == null ? this.description : description;
-        this.tagId.clear();
-        if (newTagIds != null) this.tagId.addAll(newTagIds);
+        if (newTagIds != null) this.tagId = newTagIds;
         this.updatedAt = LocalDateTime.now();
     }
 
@@ -163,14 +163,15 @@ public class Note {
     }
 
     public void addTag(String tagId) {
-        if (tagId != null && !this.tagId.contains(tagId)) {
-            this.tagId.add(tagId);
+        if (StringUtils.isNotBlank(tagId)) {
+            this.tagId=tagId;
             this.updatedAt = LocalDateTime.now();
         }
     }
 
     public void removeTag(String tagId) {
-        if (tagId != null && this.tagId.remove(tagId)) {
+        if (StringUtils.isNotBlank(tagId)) {
+            this.tagId = null;
             this.updatedAt = LocalDateTime.now();
         }
     }

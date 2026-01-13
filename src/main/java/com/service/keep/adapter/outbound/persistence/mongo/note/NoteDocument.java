@@ -33,7 +33,7 @@ public class NoteDocument {
 
     private String reminder;
 
-    private List<String> tagId;
+    private String tagId;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

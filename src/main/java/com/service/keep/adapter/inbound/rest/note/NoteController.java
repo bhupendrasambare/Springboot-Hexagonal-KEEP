@@ -44,7 +44,7 @@ public class NoteController {
                                 request.getTitle(),
                                 request.getDescription(),
                                 request.getReminder(),
-                                request.getTagIds()
+                                request.getTagId()
                         )
                 )
         );

@@ -24,7 +24,7 @@ public class NoteResponse {
     private boolean archived;
     private boolean trashed;
     private String reminder;
-    private final List<String> tagId;
+    private String tagId;
     private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

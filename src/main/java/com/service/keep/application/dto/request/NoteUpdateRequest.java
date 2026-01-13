@@ -25,6 +25,6 @@ public class NoteUpdateRequest {
 
     private String reminder;
 
-    private List<String> tagId;
+    private String tagId;
 
 }
