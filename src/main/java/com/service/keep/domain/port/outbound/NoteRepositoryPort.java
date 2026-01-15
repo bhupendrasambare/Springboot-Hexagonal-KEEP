@@ -23,6 +23,4 @@ public interface NoteRepositoryPort {
 
 
     Optional<Note> findById(NoteId id);
-
-    void deleteById(NoteId noteId);
 }

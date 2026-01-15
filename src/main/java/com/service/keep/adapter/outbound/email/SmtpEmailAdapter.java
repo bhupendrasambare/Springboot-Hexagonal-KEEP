@@ -6,5 +6,11 @@
  **/
 package com.service.keep.adapter.outbound.email;
 
-public class SmtpEmailAdapter {
+import com.service.keep.domain.port.outbound.EmailSenderPort;
+
+public class SmtpEmailAdapter implements EmailSenderPort {
+    @Override
+    public void sendEmail(String to, String subject, String body) {
+
+    }
 }

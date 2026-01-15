@@ -10,6 +10,7 @@ import com.service.keep.application.dto.request.TagCreateRequest;
 import com.service.keep.application.dto.response.TagResponse;
 import com.service.keep.application.mapper.TagMapper;
 import com.service.keep.domain.model.Tags;
+import com.service.keep.domain.port.inbound.TagsUseCase;
 import com.service.keep.domain.port.outbound.TagRepositoryPort;
 import com.service.keep.domain.valueobject.TagsId;
 import com.service.keep.domain.valueobject.UserId;
@@ -23,31 +24,30 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class TagsService {
+public class TagsService implements TagsUseCase {
 
     private final TagRepositoryPort tagsRepository;
 
-    public TagResponse create(String userId, TagCreateRequest req) {
+    @Override
+    public Tags create(String userId, String name, String color, String imageUri) {
         Tags tags = new Tags(
                 new TagsId(UUID.randomUUID().toString()),
                 new UserId(userId),
-                req.getColor(),
-                req.getImageUri(),
-                req.getName(),
+                color,
+                imageUri,
+                name,
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
-        Tags saved = tagsRepository.save(tags);
-        return TagMapper.toResponse(saved);
+        return tagsRepository.save(tags);
     }
 
-    public TagResponse rename(String userId, String tagId, String newName) {
+    public Tags rename(String userId, String tagId, String newName) {
         Tags t = tagsRepository.findById(new TagsId(tagId))
                 .orElseThrow(() -> new IllegalArgumentException("Tag not found"));
         if (!t.getUserId().getValue().equals(userId)) throw new IllegalArgumentException("Unauthorized");
         t.rename(newName);
-        Tags saved = tagsRepository.save(t);
-        return TagMapper.toResponse(saved);
+        return tagsRepository.save(t);
     }
 
     public void delete(String userId, String tagId) {
@@ -57,10 +57,8 @@ public class TagsService {
         tagsRepository.deleteById(new TagsId(tagId));
     }
 
-    public List<TagResponse> getAll(String userId) {
-        return tagsRepository.findAllUserId(new UserId(userId))
-                .stream()
-                .map(TagMapper::toResponse)
-                .collect(Collectors.toList());
+    @Override
+    public List<Tags> getAllTags(String userId) {
+        return tagsRepository.findAllUserId(new UserId(userId));
     }
 }

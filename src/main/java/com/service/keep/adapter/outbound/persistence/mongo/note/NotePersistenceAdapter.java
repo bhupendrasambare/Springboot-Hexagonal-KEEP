@@ -63,11 +63,6 @@ public class NotePersistenceAdapter implements NoteRepositoryPort {
                 .toList();
     }
 
-    @Override
-    public void deleteById(NoteId id) {
-        repository.deleteById(id.getValue());
-    }
-
     // ---------------- MAPPERS ----------------
 
     private NoteDocument toDocument(Note note) {
@@ -78,7 +73,7 @@ public class NotePersistenceAdapter implements NoteRepositoryPort {
         d.setDescription(note.getDescription());
         d.setPinned(note.isPinned());
         d.setArchived(note.isArchived());
-        d.setTrash(note.isTrashed());
+        d.setTrashed(note.isTrashed());
         d.setReminder(note.getReminder());
         d.setTagId(note.getTagId());
         d.setCreatedAt(note.getCreatedAt());
@@ -94,7 +89,7 @@ public class NotePersistenceAdapter implements NoteRepositoryPort {
                 d.getDescription(),
                 d.getPinned(),
                 d.getArchived(),
-                d.getTrash(),
+                d.getTrashed(),
                 d.getReminder(),
                 d.getTagId(),
                 d.getCreatedAt(),

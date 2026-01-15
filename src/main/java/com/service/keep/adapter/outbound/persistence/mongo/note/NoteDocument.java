@@ -29,7 +29,7 @@ public class NoteDocument {
 
     private Boolean pinned;
     private Boolean archived;
-    private Boolean trash;
+    private Boolean trashed;
 
     private String reminder;
 

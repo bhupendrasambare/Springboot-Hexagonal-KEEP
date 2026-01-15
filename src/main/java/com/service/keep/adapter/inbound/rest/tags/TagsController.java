@@ -8,8 +8,8 @@ package com.service.keep.adapter.inbound.rest.tags;
 
 import com.service.keep.application.dto.request.TagCreateRequest;
 import com.service.keep.application.dto.response.TagResponse;
+import com.service.keep.application.mapper.NoteMapper;
 import com.service.keep.application.mapper.TagMapper;
-import com.service.keep.application.service.TagsService;
 import com.service.keep.domain.port.inbound.TagsUseCase;
 import com.service.keep.domain.port.outbound.AuthenticatedUserPort;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,6 @@ public class TagsController {
 
     private final AuthenticatedUserPort authenticatedUserPort;
 
-    // TEMP – replace with SecurityContext later
     private String getUserId() {
         return authenticatedUserPort.getCurrentUserId().getValue();
     }
@@ -43,9 +42,17 @@ public class TagsController {
         );
     }
 
+    @GetMapping("/")
+    public ResponseEntity<?> getTags() {
+        return ResponseEntity.ok(tagsService.getAllTags(getUserId()));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable String id) {
-        tagsService.delete(getUserId(),id);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(tagsService.getAllTags(
+                        getUserId()
+                ).stream()
+                .map(TagMapper::toResponse)
+                .toList());
     }
 }

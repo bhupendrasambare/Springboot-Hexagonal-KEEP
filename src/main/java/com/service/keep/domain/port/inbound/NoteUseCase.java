@@ -11,8 +11,6 @@ public interface NoteUseCase {
 
     Note update(String userId, String noteId, String title, String description, String tagId);
 
-    void delete(String userId, String noteId);
-
     void pin(String userId, String noteId);
 
     void unPin(String userId, String noteId);

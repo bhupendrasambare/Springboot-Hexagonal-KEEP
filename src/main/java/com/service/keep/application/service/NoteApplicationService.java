@@ -53,12 +53,6 @@ public class NoteApplicationService implements NoteUseCase {
     }
 
     @Override
-    public void delete(String userId, String noteId) {
-        getOwnedNote(userId, noteId);
-        noteRepository.deleteById(new NoteId(noteId));
-    }
-
-    @Override
     public void pin(String userId, String noteId) {
         Note note = getOwnedNote(userId, noteId);
         note.pin();
