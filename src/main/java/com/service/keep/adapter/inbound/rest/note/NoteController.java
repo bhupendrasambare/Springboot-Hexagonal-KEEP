@@ -50,7 +50,7 @@ public class NoteController {
         );
     }
 
-    @PostMapping
+    @PostMapping("/find")
     public ResponseEntity<List<NoteResponse>> findAll(@Valid @RequestBody NoteSearchRequest request) {
 
         return ResponseEntity.ok(noteUseCase.getAll(

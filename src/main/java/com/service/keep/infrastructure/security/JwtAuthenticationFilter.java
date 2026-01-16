@@ -26,36 +26,52 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenPort jwtTokenPort;
-
     private final UserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        return path.startsWith("/api/auth/")
+                || path.startsWith("/swagger-ui/")
+                || path.startsWith("/v3/api-docs")
+                || path.equals("/swagger-ui.html");
+    }
+
+    @Override
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
+    ) throws ServletException, IOException {
+
         String header = request.getHeader("Authorization");
 
-        if(StringUtils.isNotBlank(header) && header.startsWith("Bearer ") ){
+        if (StringUtils.isNotBlank(header) && header.startsWith("Bearer ")) {
             String token = header.substring(7);
 
-            if(jwtTokenPort.validateToken(token)){
-                String username = jwtTokenPort.extractUserId(token);
+            if (jwtTokenPort.validateToken(token)) {
+                String userId = jwtTokenPort.extractUserId(token);
 
+                UserDetails userDetails =
+                        userDetailsService.loadUserByUsername(userId);
 
-                UserDetails details = userDetailsService.loadUserByUsername(username);
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities()
+                        );
 
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        details, null, details.getAuthorities()
-                );
-
-                authToken.setDetails(
+                authentication.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
 
                 SecurityContextHolder.getContext()
-                        .setAuthentication(authToken);
-
+                        .setAuthentication(authentication);
             }
         }
 
         filterChain.doFilter(request, response);
     }
 }
+

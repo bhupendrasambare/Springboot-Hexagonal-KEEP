@@ -18,6 +18,9 @@ import com.service.keep.domain.valueobject.Email;
 import com.service.keep.domain.valueobject.HashedPassword;
 import com.service.keep.domain.valueobject.UserId;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,7 +28,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class AuthUseCaseService implements AuthUseCase {
+public class AuthUseCaseService implements AuthUseCase, UserDetailsService {
 
     private final UserRepositoryPort userRepository;
     private final PasswordHarsherPort passwordHarsher;
@@ -171,5 +174,22 @@ public class AuthUseCaseService implements AuthUseCase {
         user.changePassword(new HashedPassword(request.getNewPassword()));
         userRepository.save(user);
         authTokenRepository.deleteByToken(request.getToken());
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findById(new UserId(username))
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User not found"));
+
+        return org.springframework.security.core.userdetails.User
+                .withUsername(user.getId().getValue())
+                .password(user.getPasswordHash().getValue())
+                .authorities("ROLE_USER")
+                .accountExpired(false)
+                .accountLocked(false)
+                .credentialsExpired(false)
+                .disabled(false)
+                .build();
     }
 }
