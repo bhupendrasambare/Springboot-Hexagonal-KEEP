@@ -6,7 +6,6 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<!-- SPRING BOOT -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -27,42 +26,22 @@
 	</properties>
 
 	<dependencies>
-
-		<!-- ===================== -->
-		<!-- WEB -->
-		<!-- ===================== -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
-		<!-- ===================== -->
-		<!-- SECURITY -->
-		<!-- ===================== -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-
-		<!-- ===================== -->
-		<!-- MONGODB -->
-		<!-- ===================== -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
-
-		<!-- ===================== -->
-		<!-- VALIDATION -->
-		<!-- ===================== -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
-
-		<!-- ===================== -->
-		<!-- JWT -->
-		<!-- ===================== -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
@@ -80,37 +59,21 @@
 			<version>${jjwt.version}</version>
 			<scope>runtime</scope>
 		</dependency>
-
-		<!-- ===================== -->
-		<!-- SWAGGER / OPENAPI -->
-		<!-- ===================== -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>${springdoc.version}</version>
 		</dependency>
-
-		<!-- ===================== -->
-		<!-- COMMON UTILS -->
-		<!-- ===================== -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.14.0</version>
 		</dependency>
-
-		<!-- ===================== -->
-		<!-- LOMBOK -->
-		<!-- ===================== -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
-
-		<!-- ===================== -->
-		<!-- TESTING -->
-		<!-- ===================== -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -121,14 +84,10 @@
 
 	<build>
 		<plugins>
-
-			<!-- SPRING BOOT -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-
-			<!-- JAVA 21 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

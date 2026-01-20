@@ -6,13 +6,14 @@
  **/
 package com.service.keep.application.dto.response;
 
-import lombok.Builder;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Setter
+@Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TagResponse {
     private String id;
     private String userId;

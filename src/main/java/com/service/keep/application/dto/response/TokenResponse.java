@@ -6,9 +6,12 @@
  **/
 package com.service.keep.application.dto.response;
 
-import lombok.Builder;
+import lombok.*;
 
+@Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TokenResponse {
 
     private String accessToken;
