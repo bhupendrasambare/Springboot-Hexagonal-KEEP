@@ -6,16 +6,12 @@
  **/
 package com.service.keep.application.service;
 
-import com.service.keep.application.dto.request.ChangePasswordRequest;
-import com.service.keep.application.dto.request.UpdateProfileRequest;
-import com.service.keep.application.dto.response.UserResponse;
 import com.service.keep.domain.model.User;
 import com.service.keep.domain.port.inbound.UserProfileUseCase;
 import com.service.keep.domain.port.outbound.PasswordHarsherPort;
 import com.service.keep.domain.port.outbound.UserRepositoryPort;
 import com.service.keep.domain.valueobject.HashedPassword;
 import com.service.keep.domain.valueobject.UserId;
-import com.service.keep.application.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

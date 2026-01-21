@@ -6,9 +6,6 @@
  **/
 package com.service.keep.application.service;
 
-import com.service.keep.application.dto.request.TagCreateRequest;
-import com.service.keep.application.dto.response.TagResponse;
-import com.service.keep.application.mapper.TagMapper;
 import com.service.keep.domain.model.Tags;
 import com.service.keep.domain.port.inbound.TagsUseCase;
 import com.service.keep.domain.port.outbound.TagRepositoryPort;
@@ -20,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

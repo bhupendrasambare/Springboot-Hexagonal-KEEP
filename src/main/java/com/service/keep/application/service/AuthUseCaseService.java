@@ -9,6 +9,7 @@ package com.service.keep.application.service;
 import com.service.keep.application.dto.request.*;
 import com.service.keep.application.dto.response.AuthResult;
 import com.service.keep.application.dto.response.TokenResponse;
+import com.service.keep.application.exception.InvalidCredentialsException;
 import com.service.keep.application.mapper.UserMapper;
 import com.service.keep.domain.model.AuthToken;
 import com.service.keep.domain.model.User;
@@ -83,7 +84,7 @@ public class AuthUseCaseService implements AuthUseCase, UserDetailsService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid credentials"));
 
         if (!passwordHarsher.matches(request.getPassword(), user.getPasswordHash().getValue())) {
-            throw new IllegalArgumentException("Invalid credentials");
+            throw new InvalidCredentialsException();
         }
 
         String accessToken = jwtToken.generateAccessToken(user.getId().getValue());
