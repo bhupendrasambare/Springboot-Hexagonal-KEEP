@@ -6,6 +6,7 @@
  **/
 package com.service.keep.application.service;
 
+import com.service.keep.application.exception.InvalidCredentialsException;
 import com.service.keep.domain.model.User;
 import com.service.keep.domain.port.inbound.UserProfileUseCase;
 import com.service.keep.domain.port.outbound.PasswordHarsherPort;
@@ -43,7 +44,7 @@ public class UserProfileService implements UserProfileUseCase {
         User user = getUserProfile(userId);
 
         if (!passwordHarsher.matches(oldPassword, user.getPasswordHash().getValue())) {
-            throw new IllegalArgumentException("Invalid password");
+            throw new InvalidCredentialsException();
         }
 
         user.changePassword(

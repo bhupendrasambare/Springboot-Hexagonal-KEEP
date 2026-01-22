@@ -9,7 +9,10 @@ package com.service.keep.application.service;
 import com.service.keep.application.dto.request.*;
 import com.service.keep.application.dto.response.AuthResult;
 import com.service.keep.application.dto.response.TokenResponse;
+import com.service.keep.application.exception.EmailAlreadyExistsException;
 import com.service.keep.application.exception.InvalidCredentialsException;
+import com.service.keep.application.exception.TokenExpiredException;
+import com.service.keep.application.exception.UserNotFoundException;
 import com.service.keep.application.mapper.UserMapper;
 import com.service.keep.domain.model.AuthToken;
 import com.service.keep.domain.model.User;
@@ -41,7 +44,7 @@ public class AuthUseCaseService implements AuthUseCase, UserDetailsService {
     public AuthResult signUp(SignUpRequest request) {
 
         if (userRepository.existsByEmail(new Email(request.getEmail()))) {
-            throw new IllegalArgumentException("Email already registered");
+            throw new EmailAlreadyExistsException();
         }
 
         HashedPassword hashed =
@@ -81,7 +84,7 @@ public class AuthUseCaseService implements AuthUseCase, UserDetailsService {
     public AuthResult login(LoginRequest request) {
 
         User user = userRepository.findByEmail(new Email(request.getEmail()))
-                .orElseThrow(() -> new IllegalArgumentException("Invalid credentials"));
+                .orElseThrow(InvalidCredentialsException::new);
 
         if (!passwordHarsher.matches(request.getPassword(), user.getPasswordHash().getValue())) {
             throw new InvalidCredentialsException();
@@ -118,11 +121,11 @@ public class AuthUseCaseService implements AuthUseCase, UserDetailsService {
 
         if (token.isExpired()) {
             authTokenRepository.deleteByToken(request.getRefreshToken());
-            throw new IllegalArgumentException("Token expired");
+            throw new TokenExpiredException();
         }
 
         User user = userRepository.findById(token.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(UserNotFoundException::new);
 
         String newAccessToken = jwtToken.generateAccessToken(user.getId().getValue());
 
@@ -144,7 +147,7 @@ public class AuthUseCaseService implements AuthUseCase, UserDetailsService {
     @Override
     public void forgotPassword(ForgotPasswordRequest request) {
         User user = userRepository.findByEmail(new Email(request.getEmail()))
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(UserNotFoundException::new);
 
         String token = UUID.randomUUID().toString();
         authTokenRepository.save(
@@ -166,11 +169,11 @@ public class AuthUseCaseService implements AuthUseCase, UserDetailsService {
 
         if (reset.isExpired()) {
             authTokenRepository.deleteByToken(request.getToken());
-            throw new IllegalArgumentException("Token expired");
+            throw new TokenExpiredException();
         }
 
         User user = userRepository.findById(reset.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(UserNotFoundException::new);
 
         user.changePassword(new HashedPassword(request.getNewPassword()));
         userRepository.save(user);
@@ -180,8 +183,7 @@ public class AuthUseCaseService implements AuthUseCase, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findById(new UserId(username))
-                .orElseThrow(() ->
-                        new UsernameNotFoundException("User not found"));
+                .orElseThrow(UserNotFoundException::new);
 
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getId().getValue())
