@@ -7,6 +7,7 @@
 package com.service.keep.application.service;
 
 import com.service.keep.application.exception.InvalidCredentialsException;
+import com.service.keep.application.exception.UserNotFoundException;
 import com.service.keep.domain.model.User;
 import com.service.keep.domain.port.inbound.UserProfileUseCase;
 import com.service.keep.domain.port.outbound.PasswordHarsherPort;
@@ -26,7 +27,7 @@ public class UserProfileService implements UserProfileUseCase {
     @Override
     public User getUserProfile(String userId) {
         return userRepository.findById(new UserId(userId))
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(UserNotFoundException::new);
     }
 
     @Override

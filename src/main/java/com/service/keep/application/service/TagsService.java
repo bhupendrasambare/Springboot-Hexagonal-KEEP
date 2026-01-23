@@ -6,6 +6,8 @@
  **/
 package com.service.keep.application.service;
 
+import com.service.keep.application.exception.TagNotFoundException;
+import com.service.keep.application.exception.UnauthorizedTagAccessException;
 import com.service.keep.domain.model.Tags;
 import com.service.keep.domain.port.inbound.TagsUseCase;
 import com.service.keep.domain.port.outbound.TagRepositoryPort;
@@ -40,16 +42,16 @@ public class TagsService implements TagsUseCase {
 
     public Tags rename(String userId, String tagId, String newName) {
         Tags t = tagsRepository.findById(new TagsId(tagId))
-                .orElseThrow(() -> new IllegalArgumentException("Tag not found"));
-        if (!t.getUserId().getValue().equals(userId)) throw new IllegalArgumentException("Unauthorized");
+                .orElseThrow(TagNotFoundException::new);
+        if (!t.getUserId().getValue().equals(userId)) throw new UnauthorizedTagAccessException();
         t.rename(newName);
         return tagsRepository.save(t);
     }
 
     public void delete(String userId, String tagId) {
         Tags t = tagsRepository.findById(new TagsId(tagId))
-                .orElseThrow(() -> new IllegalArgumentException("Tag not found"));
-        if (!t.getUserId().getValue().equals(userId)) throw new IllegalArgumentException("Unauthorized");
+                .orElseThrow(TagNotFoundException::new);
+        if (!t.getUserId().getValue().equals(userId)) throw new UnauthorizedTagAccessException();
         tagsRepository.deleteById(new TagsId(tagId));
     }
 

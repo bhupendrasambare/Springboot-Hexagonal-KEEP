@@ -6,6 +6,7 @@
  **/
 package com.service.keep.application.service;
 
+import com.service.keep.application.exception.NoteNotFoundException;
 import com.service.keep.domain.model.Note;
 import com.service.keep.domain.port.inbound.NoteUseCase;
 import com.service.keep.domain.port.outbound.NoteRepositoryPort;
@@ -117,7 +118,7 @@ public class NoteApplicationService implements NoteUseCase {
 
     private Note getOwnedNote(String userId, String noteId) {
         Note note = noteRepository.findById(new NoteId(noteId))
-                .orElseThrow(() -> new IllegalArgumentException("Note not found"));
+                .orElseThrow(NoteNotFoundException::new);
 
         if (!note.getUserId().getValue().equals(userId)) {
             throw new IllegalArgumentException("Unauthorized request");
