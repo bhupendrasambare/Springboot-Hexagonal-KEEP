@@ -9,10 +9,7 @@ package com.service.keep.application.service;
 import com.service.keep.application.dto.request.*;
 import com.service.keep.application.dto.response.AuthResult;
 import com.service.keep.application.dto.response.TokenResponse;
-import com.service.keep.application.exception.EmailAlreadyExistsException;
-import com.service.keep.application.exception.InvalidCredentialsException;
-import com.service.keep.application.exception.TokenExpiredException;
-import com.service.keep.application.exception.UserNotFoundException;
+import com.service.keep.application.exception.*;
 import com.service.keep.application.mapper.UserMapper;
 import com.service.keep.domain.model.AuthToken;
 import com.service.keep.domain.model.User;
@@ -117,7 +114,7 @@ public class AuthUseCaseService implements AuthUseCase, UserDetailsService {
     public AuthResult refresh(RefreshTokenRequest request) {
 
         AuthToken token = authTokenRepository.findByToken(request.getRefreshToken())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid token"));
+                .orElseThrow(InvalidTokenException::new);
 
         if (token.isExpired()) {
             authTokenRepository.deleteByToken(request.getRefreshToken());
@@ -165,7 +162,7 @@ public class AuthUseCaseService implements AuthUseCase, UserDetailsService {
     @Override
     public void resetPassword(ResetPasswordRequest request) {
         AuthToken reset = authTokenRepository.findByToken(request.getToken())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid token"));
+                .orElseThrow(InvalidTokenException::new);
 
         if (reset.isExpired()) {
             authTokenRepository.deleteByToken(request.getToken());
