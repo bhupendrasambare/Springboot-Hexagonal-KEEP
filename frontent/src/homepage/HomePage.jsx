@@ -1,9 +1,15 @@
-import React from 'react'
+import { useState } from 'react'
+import LocalNav from '../components/LocalNav'
 
-export default function HomePage() {
+function HomePage() {
+    const[sidebarActive, setSidebarActive] = useState(false)
+
   return (
-    <div>
-        HomePage
-    </div>
+    <>
+    <LocalNav sidebarActive={sidebarActive} setSidebarActive={setSidebarActive} />
+    
+    </>
   )
 }
+
+export default HomePage

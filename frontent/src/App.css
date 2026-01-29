@@ -1,6 +1,39 @@
+/* styles/theme.css */
+:root {
+  /* Google Keep Light Theme Palette */
+  --bg-app: #ffffff;
+  --bg-note: #ffffff;
+  --bg-note-hover: #f1f3f4;
+  --color-text: #202124;
+  --color-subtext: #5f6368;
+  --border-color: #dadce0;
+  --icon-color: #5f6368;
+  
+  /* Sidebar/Navbar */
+  --bg-navbar: #ffffff;
+  --color-active-item: #feefc3; /* Yellow active state */
+  
+  /* Font Families */
+  --font-family: 'Roboto', Arial, sans-serif;
+}
+
+body.dark {
+  /* Google Keep Dark Theme Palette */
+  --bg-app: #202124;
+  --bg-note: #202124;
+  --bg-note-hover: #2e2e2e;
+  --color-text: #e8eaed;
+  --color-subtext: #bdc1c6;
+  --border-color: #525355;
+  --icon-color: #e8eaed;
+  
+  /* Sidebar/Navbar */
+  --bg-navbar: #202124;
+  --color-active-item: #41331c;
+}
+
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
