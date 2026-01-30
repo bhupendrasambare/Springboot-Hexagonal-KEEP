@@ -8,7 +8,7 @@ import { MdOutlineRefresh, MdOutlineSettings, MdOutlineSupervisedUserCircle } fr
 function LocalNav() {
   return (
     <Navbar className="bg-body-tertiary">
-      <Container>
+      <div className='mx-1p d-flex w-100'>
         <Navbar.Brand href="#home">
           <GiHamburgerMenu size={25} className='me-4'/>
           Keep
@@ -24,7 +24,7 @@ function LocalNav() {
           <BsGrid3X3Gap size={25} />
           <MdOutlineSupervisedUserCircle size={25} />
         </Navbar.Collapse>
-      </Container>
+      </div>
     </Navbar>
   );
 }
