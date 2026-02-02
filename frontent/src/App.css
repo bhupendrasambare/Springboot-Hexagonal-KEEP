@@ -40,3 +40,6 @@ body.dark {
 .mx-1p{
   padding: 0px 20px;
 }
+.vh-100-50{
+  height: calc(100vh - 60px);
+}
