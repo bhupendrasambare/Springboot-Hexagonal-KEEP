@@ -10,13 +10,24 @@ function Sidebar() {
                     <BsLightbulb size={20} />
                     <div className="fw-bold">Notes</div>
                 </div>
+                <div className="d-flex justify-conent-around">
+                    <BsLightbulb size={20} />
+                    <div className="fw-bold">Notes</div>
+                </div>
+                <div className="d-flex justify-conent-around">
+                    <BsLightbulb size={20} />
+                    <div className="fw-bold">Notes</div>
+                </div>
+                <div className="d-flex justify-conent-around">
+                    <BsLightbulb size={20} />
+                    <div className="fw-bold">Notes</div>
+                </div>
             </div>
             <div className="fw-bold pb-3 px-2">
                 Open source licences
             </div>
         </div>
     </div>
-    
   )
 }
 
