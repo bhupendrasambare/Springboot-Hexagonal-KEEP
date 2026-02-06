@@ -2,7 +2,7 @@ import React from 'react'
 import { BsArchive, BsBell, BsLightbulb, BsPencil, BsTrash3 } from 'react-icons/bs'
 import { MdLabelImportantOutline } from 'react-icons/md'
 
-function Sidebar() {
+function Sidebar({activePage}) {
   return (
     <div>
         <div className="d-flex flex-column justify-content-between bg-secondary vh-100-50">
