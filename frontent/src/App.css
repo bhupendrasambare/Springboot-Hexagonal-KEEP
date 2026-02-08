@@ -43,3 +43,6 @@ body.dark {
 .vh-100-50{
   height: calc(100vh - 60px);
 }
+.max-200{
+  max-width: 200px;
+}

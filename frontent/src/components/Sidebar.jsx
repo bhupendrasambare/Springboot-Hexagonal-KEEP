@@ -6,7 +6,7 @@ import { ActivePage } from './Constants'
 function Sidebar({activePage, setActivePage}) {
   return (
     <div>
-        <div className="d-flex flex-column justify-content-between bg-secondary vh-100-50">
+        <div className="d-flex flex-column justify-content-between bg-secondary vh-100-50 max-200">
             <div className="d-flex flex-column">
                 <div 
                 className={("d-flex justify-conent-around" + ((activePage == ActivePage.NOTES)?" bg-danger":""))}
