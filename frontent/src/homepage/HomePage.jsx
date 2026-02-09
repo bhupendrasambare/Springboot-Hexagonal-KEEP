@@ -15,7 +15,7 @@ function HomePage() {
      setSidebarActive={setSidebarActive}
      showRow={showRow}
      setShowRow={setShowRow} />
-     <Sidebar activePage={activePage} setActivePage={setActivePage}/>
+     <Sidebar activePage={activePage} setActivePage={setActivePage} sidebarActive={sidebarActive}/>
     {sidebarActive? "Active":"in_actiove"}
     </>
   )

@@ -43,6 +43,14 @@ body.dark {
 .vh-100-50{
   height: calc(100vh - 60px);
 }
-.max-200{
-  max-width: 200px;
+.max-250{
+  max-width: 250px;
+}
+.sidebar-circle-icon{
+  width: 55px !important;
+  height: 40px !important;
+  padding: 10px;
+}
+.bg-warning-local{
+  background-color: rgba(255, 196, 0, 0.839)
 }
