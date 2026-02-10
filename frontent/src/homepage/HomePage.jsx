@@ -9,7 +9,7 @@ function HomePage() {
     const[activePage, setActivePage] = useState(ActivePage.NOTES)
 
   return (
-    <>
+    <div className='bg-dark'>
     <LocalNav
      sidebarActive={sidebarActive}
      setSidebarActive={setSidebarActive}
@@ -17,7 +17,7 @@ function HomePage() {
      setShowRow={setShowRow} />
      <Sidebar activePage={activePage} setActivePage={setActivePage} sidebarActive={sidebarActive}/>
     {sidebarActive? "Active":"in_actiove"}
-    </>
+    </div>
   )
 }
 

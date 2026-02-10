@@ -18,7 +18,7 @@ function LocalNav({sidebarActive, setSidebarActive,showRow, setShowRow}) {
   }, [refresh])
 
   return (
-    <Navbar className="bg-body-tertiary">
+    <Navbar className="bg-body-tertiary bg-black" data-bs-theme="dark">
       <div className='mx-1p d-flex w-100'>
         <Navbar.Brand href="#home">
           <GiHamburgerMenu onClick={() =>setSidebarActive(!sidebarActive)} size={25} className='me-4'/>
@@ -28,7 +28,7 @@ function LocalNav({sidebarActive, setSidebarActive,showRow, setShowRow}) {
           <input type="text" className="form-control" />
         </form>
         <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end gap-4">
+        <Navbar.Collapse className="justify-content-end gap-4 text-body-emphasis">
           {
             (refresh != true)? 
             <MdOutlineRefresh onClick={()=> setRefresh(true)} size={25} />:

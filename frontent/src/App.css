@@ -47,10 +47,10 @@ body.dark {
   max-width: 250px;
 }
 .sidebar-circle-icon{
-  width: 55px !important;
+  width: 40px !important;
   height: 40px !important;
   padding: 10px;
 }
 .bg-warning-local{
-  background-color: rgba(255, 196, 0, 0.839)
+  background-color: #41331c;
 }
