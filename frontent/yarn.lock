@@ -165,6 +165,11 @@
     "@babel/helper-string-parser" "^7.27.1"
     "@babel/helper-validator-identifier" "^7.28.5"
 
+"@crob/react-stack-grid@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.npmjs.org/@crob/react-stack-grid/-/react-stack-grid-1.0.2.tgz"
+  integrity sha512-qhGa7aUmkRUhzlumfkSBHzSasGdzC1NvDlwYz7K6eHnPDT3H3XkbR7U02pWbfEmrNOBYzXgPwG+mzXn30K0iZA==
+
 "@esbuild/darwin-arm64@0.27.2":
   version "0.27.2"
   resolved "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.27.2.tgz"
@@ -1096,7 +1101,7 @@ react-bootstrap@^2.10.10:
     uncontrollable "^7.2.1"
     warning "^4.0.3"
 
-react-dom@^19.2.0, react-dom@>=16.14.0, react-dom@>=16.6.0, react-dom@>=18:
+react-dom@^19.2.0, react-dom@>=16.14.0, react-dom@>=16.6.0, react-dom@>=16.8.0, react-dom@>=18:
   version "19.2.3"
   resolved "https://registry.npmjs.org/react-dom/-/react-dom-19.2.3.tgz"
   integrity sha512-yELu4WmLPw5Mr/lmeEpox5rw3RETacE++JgHqQzd2dg+YbJuat3jH4ingc+WPZhxaoFzdv9y33G+F7Nl5O0GBg==

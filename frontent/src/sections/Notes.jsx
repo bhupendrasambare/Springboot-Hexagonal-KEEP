@@ -1,11 +1,7 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export class Notes extends Component {
-  render() {
-    return (
-      <div>Notes</div>
-    )
-  }
+export const Notes = () => {
+  return (
+    <div>Notes</div>
+  )
 }
-
-export default Notes

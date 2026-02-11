@@ -1,4 +1,3 @@
-import React from 'react'
 import { BsArchive, BsBell, BsLightbulb, BsPencil, BsTrash3 } from 'react-icons/bs'
 import { MdLabelImportantOutline } from 'react-icons/md'
 import { ActivePage } from './Constants'
