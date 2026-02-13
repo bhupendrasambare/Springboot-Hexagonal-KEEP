@@ -1,4 +1,4 @@
-import React from 'react'
+import axios from 'axios';
 
 export const Notes = () => {
   return (
@@ -7,3 +7,5 @@ export const Notes = () => {
     </div>
   )
 }
+
+export default Notes
