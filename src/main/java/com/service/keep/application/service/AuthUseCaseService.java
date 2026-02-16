@@ -9,6 +9,7 @@ package com.service.keep.application.service;
 import com.service.keep.application.dto.request.*;
 import com.service.keep.application.dto.response.AuthResult;
 import com.service.keep.application.dto.response.TokenResponse;
+import com.service.keep.application.dto.response.UserResponse;
 import com.service.keep.application.exception.*;
 import com.service.keep.application.mapper.UserMapper;
 import com.service.keep.domain.model.AuthToken;
@@ -25,6 +26,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -107,6 +109,37 @@ public class AuthUseCaseService implements AuthUseCase, UserDetailsService {
                         .refreshToken(refreshToken)
                         .build())
                 .build();
+    }
+
+    @Override
+    public AuthResult loginWithGoogle(Email email, String name) {
+        Optional<User> existingUser = userRepository.findByEmail(email);
+
+        User user;
+
+        if (existingUser.isPresent()) {
+            user = existingUser.get();
+        } else {
+            user = User.createGoogleUser(
+                    new UserId(UUID.randomUUID().toString()),
+                    email,
+                    name
+            );
+
+            userRepository.save(user);
+        }
+
+        String accessToken = jwtToken.generateAccessToken(user.getId().getValue());
+        String refreshToken = jwtToken.generateRefreshToken(user.getId().getValue());
+        UserResponse userResponse = new UserResponse(
+                user.getId().getValue(),
+                user.getUsername(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail().getValue()
+        );
+        TokenResponse tokenResponse = new TokenResponse(accessToken, refreshToken);
+        return new AuthResult(userResponse, tokenResponse);
     }
 
 

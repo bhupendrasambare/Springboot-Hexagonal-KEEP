@@ -13,6 +13,8 @@ public interface AuthUseCase {
 
     AuthResult login(LoginRequest request);
 
+    AuthResult loginWithGoogle(Email email, String name);
+
     AuthResult refresh(RefreshTokenRequest request);
 
     void logout(RefreshTokenRequest request);

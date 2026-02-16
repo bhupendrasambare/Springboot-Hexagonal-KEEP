@@ -122,4 +122,21 @@ public class User {
                 ", email=" + email.getValue() +
                 '}';
     }
+
+    public static User createGoogleUser(
+            UserId userId,
+            Email email,
+            String username
+    ) {
+        return new User(
+                userId,
+                username,
+                username,
+                null,
+                email,
+                null,
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
+    }
 }

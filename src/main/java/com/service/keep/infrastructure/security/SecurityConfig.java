@@ -7,6 +7,7 @@
 package com.service.keep.infrastructure.security;
 
 import com.service.keep.domain.port.outbound.JwtTokenPort;
+import com.service.keep.infrastructure.security.oauth.OAuth2SuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +26,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(
             HttpSecurity http,
             JwtTokenPort jwtTokenPort,
-            UserDetailsService userDetailsService
+            UserDetailsService userDetailsService,
+            OAuth2SuccessHandler oAuth2SuccessHandler
     ) throws Exception {
 
         JwtAuthenticationFilter filter =
@@ -57,6 +59,8 @@ public class SecurityConfig {
                                 "/v3/api-docs/**"
                         ).permitAll()
                         .anyRequest().authenticated()
+                ).oauth2Login(oauth -> oauth
+                        .successHandler(oAuth2SuccessHandler)
                 )
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
