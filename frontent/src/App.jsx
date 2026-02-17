@@ -1,18 +1,18 @@
-
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import './App.css'
-import Login from './login/login'
-import HomePage from './homepage/HomePage'
+import { BrowserRouter } from "react-router-dom";
+import { AuthProvider } from "./store/AuthContext";
+import { ThemeProvider } from "./store/ThemeContext";
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
   return (
     <BrowserRouter>
-        <Routes>
-          <Route path='/login' element={<Login/>}/>
-          <Route path='*' element={<HomePage/>}/>
-        </Routes>
+      <ThemeProvider>
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

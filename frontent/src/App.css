@@ -1,6 +1,6 @@
-/* styles/theme.css */
+/* ================= THEME VARIABLES ================= */
+
 :root {
-  /* Google Keep Light Theme Palette */
   --bg-app: #ffffff;
   --bg-note: #ffffff;
   --bg-note-hover: #f1f3f4;
@@ -8,17 +8,15 @@
   --color-subtext: #5f6368;
   --border-color: #dadce0;
   --icon-color: #5f6368;
-  
-  /* Sidebar/Navbar */
+
   --bg-navbar: #ffffff;
-  --color-active-item: #feefc3; /* Yellow active state */
-  
-  /* Font Families */
+  --bg-sidebar: #ffffff;
+  --color-active-item: #feefc3;
+
   --font-family: 'Roboto', Arial, sans-serif;
 }
 
 body.dark {
-  /* Google Keep Dark Theme Palette */
   --bg-app: #202124;
   --bg-note: #202124;
   --bg-note-hover: #2e2e2e;
@@ -26,31 +24,74 @@ body.dark {
   --color-subtext: #bdc1c6;
   --border-color: #525355;
   --icon-color: #e8eaed;
-  
-  /* Sidebar/Navbar */
-  --bg-navbar: #202124;
+
+  --bg-navbar: #2b2b2b;
+  --bg-sidebar: #2b2b2b;
   --color-active-item: #41331c;
 }
+
+/* ================= GLOBAL ================= */
 
 #root {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
-.mx-1p{
+
+.app-container {
+  background-color: var(--bg-app);
+  color: var(--color-text);
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar-theme {
+  background-color: var(--bg-navbar) !important;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--color-text);
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar-theme {
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  color: var(--color-text);
+}
+
+.sidebar-item {
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 25px;
+  transition: background-color 0.2s ease;
+}
+
+.sidebar-item:hover {
+  background-color: var(--bg-note-hover);
+}
+
+.active-sidebar {
+  background-color: var(--color-active-item);
+}
+
+/* ================= UTILITIES ================= */
+
+.mx-1p {
   padding: 0px 20px;
 }
-.vh-100-50{
+
+.vh-100-50 {
   height: calc(100vh - 60px);
 }
-.max-250{
+
+.max-250 {
   max-width: 250px;
 }
-.sidebar-circle-icon{
+
+.sidebar-circle-icon {
   width: 40px !important;
   height: 40px !important;
   padding: 10px;
-}
-.bg-warning-local{
-  background-color: #41331c;
 }
