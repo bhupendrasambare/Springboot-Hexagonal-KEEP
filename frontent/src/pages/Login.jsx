@@ -1,63 +1,141 @@
+import { useState } from "react";
 import { useAuth } from "../store/AuthContext";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../api/axiosInstance";
 
 function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    const fakeToken = "abc123";
-    login(fakeToken);
-    navigate("/home");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      const response = await axiosInstance.post("/auth/login", {
+        email,
+        password,
+      });
+
+      login(response.data);
+      navigate("/home");
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Invalid email or password"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = () => {
+    // later you can redirect to backend oauth endpoint
+    window.location.href = "http://localhost:8080/oauth2/authorization/google";
   };
 
   return (
-    <section className="vh-100 container">
-  <div className="container py-5 h-100">
-    <div className="row d-flex align-items-center justify-content-center h-100">
-      <div className="col-md-8 col-lg-7 col-xl-6">
-        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
-          className="img-fluid" alt="Phone image"/>
-      </div>
-      <div className="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-        <form>
-          <div data-mdb-input-init className="form-outline mb-4">
-            <input type="email" id="form1Example13" className="form-control form-control-lg" />
-            <label className="form-label" for="form1Example13">Email address</label>
-          </div>
+    <section
+      className="vh-100 d-flex align-items-center"
+      style={{ backgroundColor: "#f8f9fa" }}
+    >
+      <div className="container">
+        <div className="row justify-content-center align-items-center py-5 h-80 w-80 shadow-lg border-0 rounded-4">
 
-          <div data-mdb-input-init className="form-outline mb-4">
-            <input type="password" id="form1Example23" className="form-control form-control-lg" />
-            <label className="form-label" for="form1Example23">Password</label>
-          </div>
-
-          <div className="d-flex justify-content-around align-items-center mb-4">
-            <div className="form-check">
-              <input className="form-check-input" type="checkbox" value="" id="form1Example3" checked />
-              <label className="form-check-label" for="form1Example3"> Remember me </label>
+            {/* Left Illustration */}
+            <div className="col-md-6 d-none d-md-block text-center">
+              <img
+                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
+                className="img-fluid"
+                alt="Login"
+              />
             </div>
-            <a href="#!">Forgot password?</a>
-          </div>
 
-          <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-primary btn-lg btn-block">Sign in</button>
+            {/* Login Form */}
+            <div className="col-md-6 col-md-5">
+              <div className=" p-4">
 
-          <div className="divider d-flex align-items-center my-4">
-            <p className="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
-          </div>
+                <h2 className="fw-bold mb-2 text-center">Welcome Back 👋</h2>
+                <p className="text-muted text-center mb-4">
+                  Sign in to continue managing your notes securely.
+                </p>
 
-          <a data-mdb-ripple-init className="btn btn-primary btn-lg btn-block login-bg-1" href="#!"
-            role="button">
-            <i className="fab fa-facebook-f me-2"></i>Continue with Facebook
-          </a>
-          <a data-mdb-ripple-init className="btn btn-primary btn-lg btn-block login-bg-2" href="#!"
-            role="button">
-            <i className="fab fa-twitter me-2"></i>Continue with Twitter</a>
+                <form onSubmit={handleLogin}>
 
-        </form>
+                  {/* Email */}
+                  <div className="mb-3">
+                    <label className="form-label fw-semibold">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      className="form-control form-control-md"
+                      placeholder="Enter your email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  {/* Password */}
+                  <div className="mb-3">
+                    <label className="form-label fw-semibold">
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      className="form-control form-control-md"
+                      placeholder="Enter your password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  {/* Error */}
+                  {error && (
+                    <div className="alert alert-danger py-2">
+                      {error}
+                    </div>
+                  )}
+
+                  {/* Submit */}
+                  <button
+                    type="submit"
+                    className="btn btn-primary btn-sm w-100 mt-2"
+                    disabled={loading}
+                  >
+                    {loading ? "Signing in..." : "Sign In"}
+                  </button>
+
+                  {/* Divider */}
+                  <div className="text-center my-3 text-muted">
+                    — OR —
+                  </div>
+
+                  {/* Google Login */}
+                  <button
+                    type="button"
+                    onClick={handleGoogleLogin}
+                    className="btn btn-light border w-100 d-flex align-items-center justify-content-center gap-2"
+                  >
+                    Continue with Google
+                  </button>
+
+                </form>
+
+              </div>
+            </div>
+
+
+        </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
   );
 }
 
