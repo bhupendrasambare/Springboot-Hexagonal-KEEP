@@ -6,3 +6,5 @@ export const ActivePage = Object.freeze({
     ARCHIVE: "ARCHIVE",
     BIN: "BIN"
 });
+
+export const BASE_URL = "http://localhost:8080";
