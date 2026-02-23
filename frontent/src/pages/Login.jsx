@@ -60,7 +60,7 @@ function Login() {
             <div className="col-md-6 col-md-5">
               <div className=" p-4">
 
-                <h2 className="fw-bold mb-2 text-center">Welcome Back 👋</h2>
+                <h2 className="fw-bold mb-2 text-center">Welcome to Keep Notes</h2>
                 <p className="text-muted text-center mb-4">
                   Sign in to continue managing your notes securely.
                 </p>
