@@ -62,7 +62,7 @@ function Login() {
 
                 <h2 className="fw-bold mb-2 text-center">Welcome to Keep Notes</h2>
                 <p className="text-muted text-center mb-4">
-                  Sign in to continue managing your notes securely.
+                  Sign in to continue managing your notes.
                 </p>
 
                 <form onSubmit={handleLogin}>
