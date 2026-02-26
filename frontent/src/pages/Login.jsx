@@ -124,7 +124,7 @@ function Login() {
                     onClick={handleGoogleLogin}
                     className="btn btn-light border w-100 d-flex align-items-center justify-content-center gap-2"
                   >
-                    Continue with Google
+                    Login with Google
                   </button>
 
                 </form>
