@@ -9,6 +9,7 @@ export const Notes = () => {
     <div>
       <h1>Notes</h1>
       <p>Recent notes</p>
+      <div className="container"></div>
     </div>
   )
 }
