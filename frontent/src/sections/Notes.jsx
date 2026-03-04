@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../api/axiosInstance";
 import { useAuth } from "../store/AuthContext";
+import { Modal } from "bootstrap";
 
 export const Notes = () => {
   const [notesList, setNotesList] = useState([]);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
   const { accessToken } = useAuth();
 
   useEffect(() => {
@@ -35,11 +38,52 @@ export const Notes = () => {
     }
   };
 
+  const openModal = () => {
+    const modal = new Modal(document.getElementById("noteModal"));
+    modal.show();
+  };
+
+  const handleSaveNote = async () => {
+    try {
+      await axiosInstance.post(
+        "/notes",
+        { title, content },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      setTitle("");
+      setContent("");
+      getNotes();
+
+      const modalEl = document.getElementById("noteModal");
+      const modal = Modal.getInstance(modalEl);
+      modal.hide();
+    } catch (error) {
+      console.error("Error saving note:", error);
+    }
+  };
+
   return (
-    <div>
-      <h1>Notes</h1>
+    <div className="w-100">
+      <h1 className="text-secondary">Notes</h1>
       <p>Recent notes</p>
 
+      {/* Input box */}
+      <div className="mb-3 d-flex justify-content-center">
+        <input
+          type="text"
+          className="form-control w-50"
+          placeholder="Take a note..."
+          onClick={openModal}
+          readOnly
+        />
+      </div>
+
+      {/* Notes List */}
       <div className="container">
         {notesList.map((note) => (
           <div key={note.id} className="card p-3 mb-2">
@@ -47,6 +91,53 @@ export const Notes = () => {
             <p>{note.content}</p>
           </div>
         ))}
+      </div>
+
+      {/* Bootstrap Modal (Medium Size) */}
+      <div
+        className="modal fade"
+        id="noteModal"
+        tabIndex="-1"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-lg">
+          <div className="modal-content">
+
+            <div className="modal-body">
+              <input
+                type="text"
+                className="form-control mb-3"
+                placeholder="Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+
+              <textarea
+                className="form-control"
+                rows="4"
+                placeholder="Write your note..."
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              />
+
+              <div className="mt-3 d-flex justify-content-end">
+
+              <button
+                className="mx-2 btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+              <button
+                className="mx-2 btn btn-primary"
+                onClick={handleSaveNote}
+              >
+                Save
+              </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
