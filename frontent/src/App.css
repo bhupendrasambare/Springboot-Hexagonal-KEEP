@@ -70,3 +70,6 @@ background: #eee;
 .login-bg-2{
   background-color: #55acee;
 }
+.cursor-pointer{
+  cursor: pointer;
+}

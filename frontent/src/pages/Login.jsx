@@ -42,7 +42,6 @@ function Login() {
   return (
     <section
       className="vh-100 d-flex align-items-center"
-      style={{ backgroundColor: "#f8f9fa" }}
     >
       <div className="container">
         <div className="row justify-content-center align-items-center py-5 h-80 w-80 shadow-lg border-0 rounded-4">
