@@ -7,11 +7,12 @@ export const Notes = () => {
   const [notesList, setNotesList] = useState([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [showModel, setShowModel] = useState(false);
   const { accessToken } = useAuth();
 
   useEffect(() => {
     getNotes();
-  }, []);
+  }, [showModel]);
 
   const getNotes = async () => {
     try {
@@ -94,8 +95,8 @@ export const Notes = () => {
       </div>
 
       {/* Bootstrap Modal (Medium Size) */}
-      <div
-        className="modal fade"
+      <Modal show={showModel} onHide= {()=> setShowModel(!showModel)}
+        className="fade"
         id="noteModal"
         tabIndex="-1"
         aria-hidden="true"
@@ -124,7 +125,7 @@ export const Notes = () => {
 
               <button
                 className="mx-2 btn btn-secondary"
-                data-bs-dismiss="modal"
+                 onHide= {()=> setShowModel(!showModel)}
               >
                 Cancel
               </button>
@@ -138,7 +139,7 @@ export const Notes = () => {
             </div>
           </div>
         </div>
-      </div>
+      </Modal>
     </div>
   );
 };
