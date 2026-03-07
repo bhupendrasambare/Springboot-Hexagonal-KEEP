@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../api/axiosInstance";
 import { useAuth } from "../store/AuthContext";
-import { Modal } from "bootstrap";
+import { Modal } from "react-bootstrap";
 
 export const Notes = () => {
   const [notesList, setNotesList] = useState([]);
@@ -79,7 +79,7 @@ export const Notes = () => {
           type="text"
           className="form-control w-50"
           placeholder="Take a note..."
-          onClick={openModal}
+          onClick={()=> setShowModel(true)}
           readOnly
         />
       </div>
@@ -101,7 +101,6 @@ export const Notes = () => {
         tabIndex="-1"
         aria-hidden="true"
       >
-        <div className="modal-dialog modal-lg">
           <div className="modal-content">
 
             <div className="modal-body">
@@ -138,7 +137,6 @@ export const Notes = () => {
               </div>
             </div>
           </div>
-        </div>
       </Modal>
     </div>
   );
