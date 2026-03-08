@@ -131,6 +131,7 @@ export const Notes = () => {
               <button
                 className="mx-2 btn btn-primary"
                 onClick={handleSaveNote}
+                
               >
                 Save
               </button>
