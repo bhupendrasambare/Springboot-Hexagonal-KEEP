@@ -2,9 +2,9 @@ import axiosInstance from "./axiosInstance";
 
 export const getNotesApi = async () => {
   const response = await axiosInstance.post("/notes/find", {
-    pinned: true,
-    archived: true,
-    trashed: true,
+    pinned: false,
+    archived: false,
+    trashed: false,
     keyword: "",
     page: 0,
     pageSize: 10,
