@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
-import { getNotesApi, createNoteApi } from "../api/notesService";
+import { getNotesApi, createNoteApi, getPinnedNotesApi } from "../api/notesService";
 
 export const Notes = () => {
+  const [pinnedNotesList, setPinnedNotesList] = useState([]);
   const [notesList, setNotesList] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -10,6 +11,7 @@ export const Notes = () => {
 
   useEffect(() => {
     loadNotes();
+    loadPinedNotes();
   }, []);
 
   const loadNotes = async () => {
@@ -18,6 +20,15 @@ export const Notes = () => {
       setNotesList(data);
     } catch (error) {
       console.error("Error fetching notes:", error);
+    }
+  };
+
+  const loadPinedNotes = async () => {
+    try {
+      const data = await getPinnedNotesApi();
+      setPinnedNotesList(data);
+    } catch (error) {
+      console.error("Error fetching pinned notes:", error);
     }
   };
 
