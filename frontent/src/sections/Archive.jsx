@@ -16,6 +16,7 @@ export const Notes = () => {
       console.error("Error fetching notes:", error);
     }
   };
+  
 
   return (
     <div className="w-100">
