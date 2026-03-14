@@ -6,7 +6,7 @@ import Notes from '../sections/Notes'
 import Reminder from '../sections/Reminder'
 import Important from '../sections/Important'
 import EditLabels from '../sections/EditLabels'
-import Archive from '../sections/Archive'
+import Archived from '../sections/Archive'
 import Bin from '../sections/Bin'
 
 function HomePage() {
@@ -35,7 +35,7 @@ function HomePage() {
           (activePage === ActivePage.REMINDER) ? <Reminder /> :
           (activePage === ActivePage.IMPORTANT) ? <Important /> :
           (activePage === ActivePage.EDITLABELS) ? <EditLabels /> :
-          (activePage === ActivePage.ARCHIVE) ? <Archive /> :
+          (activePage === ActivePage.ARCHIVE) ? <Archived /> :
           (activePage === ActivePage.BIN) ? <Bin /> :
           <></>
         }

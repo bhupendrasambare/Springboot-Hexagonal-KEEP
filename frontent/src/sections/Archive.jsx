@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getArchiveNotesApi } from "../api/notesService";
 
-export const Notes = () => {
+export const Archived = () => {
   const [archiveNotesList, setArchiveNotes] = useState([]);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ export const Notes = () => {
       console.error("Error fetching notes:", error);
     }
   };
-  
+
 
   return (
     <div className="w-100">
@@ -37,4 +37,4 @@ export const Notes = () => {
   );
 };
 
-export default Notes;
+export default Archived;
