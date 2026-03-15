@@ -70,7 +70,7 @@ export const Notes = () => {
       </div>
 
       {/* Notes List */}
-      <div className="container">
+      <div className="container card">
         {notesList.map((note) => (
           <div key={note.id} className="card p-3 mb-2">
             <h5>{note.title}</h5>
