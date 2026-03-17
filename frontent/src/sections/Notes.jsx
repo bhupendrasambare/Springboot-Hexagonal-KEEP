@@ -71,7 +71,7 @@ export const Notes = () => {
       </div>
 
       {/* Notes List */}
-      <div className="container d-flex justify-content-start">
+      <div className="container d-flex justify-content-start woven-container">
         {notesList.map((note) => (
           <NotesCard noteData={note}/>
         ))}
