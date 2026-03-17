@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { getNotesApi, createNoteApi, getPinnedNotesApi } from "../api/notesService";
+import NotesCard from "../components/NotesCard";
 
 export const Notes = () => {
   const [pinnedNotesList, setPinnedNotesList] = useState([]);
@@ -70,12 +71,9 @@ export const Notes = () => {
       </div>
 
       {/* Notes List */}
-      <div className="container card">
+      <div className="container d-flex justify-content-start">
         {notesList.map((note) => (
-          <div key={note.id} className="card p-3 mb-2">
-            <h5>{note.title}</h5>
-            <p>{note.description}</p>
-          </div>
+          <NotesCard noteData={note}/>
         ))}
       </div>
 

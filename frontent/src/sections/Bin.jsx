@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getArchiveNotesApi, getTrashNotesApi } from "../api/notesService";
+import NotesCard from "../components/NotesCard";
 
 export const Bin = () => {
   const [archiveNotesList, setArchiveNotes] = useState([]);
@@ -26,10 +27,7 @@ export const Bin = () => {
       {/* Notes List */}
       <div className="container card">
         {archiveNotesList.map((note) => (
-          <div key={note.id} className="card p-3 mb-2">
-            <h5>{note.title}</h5>
-            <p>{note.description}</p>
-          </div>
+          <NotesCard noteData={note}/>
         ))}
       </div>
 

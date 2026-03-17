@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getArchiveNotesApi } from "../api/notesService";
+import NotesCard from "../components/NotesCard";
 
 export const Archived = () => {
   const [archiveNotesList, setArchiveNotes] = useState([]);
@@ -24,12 +25,9 @@ export const Archived = () => {
       <h1 className="text-secondary">Archive Notes</h1>
 
       {/* Notes List */}
-      <div className="container card">
+      <div className="container d-flex justify-content-start">
         {archiveNotesList.map((note) => (
-          <div key={note.id} className="card p-3 mb-2">
-            <h5>{note.title}</h5>
-            <p>{note.description}</p>
-          </div>
+          <NotesCard noteData={note}/>
         ))}
       </div>
 

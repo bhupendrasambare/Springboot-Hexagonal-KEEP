@@ -73,3 +73,6 @@ background: #eee;
 .cursor-pointer{
   cursor: pointer;
 }
+.note-cards{
+  max-width: 200px; 
+}
