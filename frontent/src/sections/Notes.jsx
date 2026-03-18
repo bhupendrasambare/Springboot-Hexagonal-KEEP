@@ -59,7 +59,6 @@ export const Notes = () => {
       <h1 className="text-secondary">Notes</h1>
       <p>Recent notes</p>
 
-      {/* Input box */}
       <div className="mb-3 d-flex justify-content-center">
         <input
           type="text"
