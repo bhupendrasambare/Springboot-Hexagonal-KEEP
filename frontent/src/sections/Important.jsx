@@ -1,11 +1,12 @@
-import { Component } from 'react'
+import { useState } from "react"
 
-export class Important extends Component {
-  render() {
-    return (
-      <div>Important</div>
-    )
-  }
+
+function Important() {
+
+  const [importantNotes, setImportantNotes] = useState([]);
+  return (
+    <div>Important</div>
+  )
 }
 
 export default Important
