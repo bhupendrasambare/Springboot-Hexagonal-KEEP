@@ -6,10 +6,10 @@ export const Bin = () => {
   const [archiveNotesList, setArchiveNotes] = useState([]);
 
   useEffect(() => {
-    loadArchiveNotes();
+    getTrashNotes();
   }, []);
 
-  const loadArchiveNotes = async () => {
+  const getTrashNotes = async () => {
     try {
       const data = await getTrashNotesApi();
       setArchiveNotes(data);
