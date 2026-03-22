@@ -24,7 +24,6 @@ export const Bin = () => {
 
       <h1 className="text-secondary">Trash Notes</h1>
 
-      {/* Notes List */}
       <div className="container card">
         {trashNotesList.map((note) => (
           <NotesCard noteData={note}/>
