@@ -1,12 +1,37 @@
-import { useState } from "react"
+import { useEffect, useState } from "react";
+import { getTrashNotesApi } from "../api/notesService";
+import NotesCard from "../components/NotesCard";
+
+export const Important = () => {
+  const [trashNotesList, settrashNotes] = useState([]);
+
+  useEffect(() => {
+    getTrashNotes();
+  }, []);
+
+  const getTrashNotes = async () => {
+    try {
+      const data = await getTrashNotesApi();
+      settrashNotes(data);
+    } catch (error) {
+      console.error("Error fetching notes:", error);
+    }
+  };
 
 
-function Important() {
-
-  const [importantNotes, setImportantNotes] = useState([]);
   return (
-    <div>Important</div>
-  )
-}
+    <div className="w-100">
 
-export default Important
+      <h1 className="text-secondary">Trash Notes</h1>
+
+      <div className="container card">
+        {trashNotesList.map((note) => (
+          <NotesCard noteData={note}/>
+        ))}
+      </div>
+
+    </div>
+  );
+};
+
+export default Important;
