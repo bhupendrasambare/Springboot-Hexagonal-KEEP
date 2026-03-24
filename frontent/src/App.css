@@ -51,6 +51,11 @@ body.dark {
   height: 40px !important;
   padding: 10px;
 }
+.card-circle-icon{
+    width: 40px !important;
+  height: 40px !important;
+  padding: 10px;
+}
 .bg-warning-local{
   background-color: #41331c;
 }
