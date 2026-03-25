@@ -11,7 +11,11 @@ function NotesCard({noteData}) {
         <div className="footer">
           <MdOutlineArchive className='card-circle-icon' />
           <IoTrashBinOutline className='card-circle-icon' />
-          <MdOutlinePushPin className='card-circle-icon' />
+          {
+            noteData.pin ?
+            <MdPushPin className='card-circle-icon' />:<MdOutlinePushPin className='card-circle-icon' />
+          }
+          
         </div>
     </div>
   )

@@ -51,11 +51,6 @@ body.dark {
   height: 40px !important;
   padding: 10px;
 }
-.card-circle-icon{
-    width: 40px !important;
-  height: 40px !important;
-  padding: 10px;
-}
 .bg-warning-local{
   background-color: #41331c;
 }
@@ -89,4 +84,10 @@ background: #eee;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   grid-auto-rows: 100px;
   gap: 10px;
+}
+
+.card-circle-icon{
+    width: 30px !important;
+    height: 30px !important;
+    margin
 }
