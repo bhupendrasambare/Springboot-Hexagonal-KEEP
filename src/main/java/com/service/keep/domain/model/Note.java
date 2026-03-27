@@ -113,6 +113,8 @@ public class Note {
     public void pin() {
         if (!this.pinned) {
             this.pinned = true;
+            this.archived = false;
+            this.trashed = false;
             this.updatedAt = LocalDateTime.now();
         }
     }
@@ -120,6 +122,8 @@ public class Note {
     public void unpin() {
         if (this.pinned) {
             this.pinned = false;
+            this.archived = false;
+            this.trashed = false;
             this.updatedAt = LocalDateTime.now();
         }
     }
@@ -127,6 +131,8 @@ public class Note {
     public void archive() {
         if (!this.archived) {
             this.archived = true;
+            this.pinned = false;
+            this.trashed = false;
             this.updatedAt = LocalDateTime.now();
         }
     }
@@ -134,12 +140,16 @@ public class Note {
     public void unarchive() {
         if (this.archived) {
             this.archived = false;
+            this.pinned = false;
+            this.trashed = false;
             this.updatedAt = LocalDateTime.now();
         }
     }
 
     public void moveToTrash() {
         if (!this.trashed) {
+            this.archived = false;
+            this.pinned = false;
             this.trashed = true;
             this.updatedAt = LocalDateTime.now();
         }
@@ -147,6 +157,8 @@ public class Note {
 
     public void restoreFromTrash() {
         if (this.trashed) {
+            this.archived = false;
+            this.pinned = false;
             this.trashed = false;
             this.updatedAt = LocalDateTime.now();
         }

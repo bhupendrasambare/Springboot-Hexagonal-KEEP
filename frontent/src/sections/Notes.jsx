@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
-import { getNotesApi, createNoteApi, getPinnedNotesApi } from "../api/notesService";
+import { Modal, Button, Form, Container, Row, Col } from "react-bootstrap";
+import {
+  getNotesApi,
+  createNoteApi,
+  getPinnedNotesApi,
+} from "../api/notesService";
 import NotesCard from "../components/NotesCard";
 
 export const Notes = () => {
@@ -11,25 +15,20 @@ export const Notes = () => {
   const [showModel, setShowModel] = useState(false);
 
   useEffect(() => {
-    loadNotes();
-    loadPinedNotes();
+    refreshNotes();
   }, []);
 
-  const loadNotes = async () => {
+  const refreshNotes = async () => {
     try {
-      const data = await getNotesApi();
-      setNotesList(data);
+      const [pinned, notes] = await Promise.all([
+        getPinnedNotesApi(),
+        getNotesApi(),
+      ]);
+
+      setPinnedNotesList([...pinned]);
+      setNotesList(notes.filter((n) => !n.archived));
     } catch (error) {
       console.error("Error fetching notes:", error);
-    }
-  };
-
-  const loadPinedNotes = async () => {
-    try {
-      const data = await getPinnedNotesApi();
-      setPinnedNotesList(data);
-    } catch (error) {
-      console.error("Error fetching pinned notes:", error);
     }
   };
 
@@ -47,37 +46,61 @@ export const Notes = () => {
       setTitle("");
       setDescription("");
       setShowModel(false);
-      loadNotes();
+      refreshNotes();
     } catch (error) {
       console.error("Error creating note:", error);
     }
   };
 
   return (
-    <div className="w-100">
+    <Container fluid className="notes-wrapper">
 
-      <h1 className="text-secondary">Notes</h1>
-      <p>Recent notes</p>
+      <h2 className="text-secondary fw-bold">Notes</h2>
+      <p className="text-muted">Recent notes</p>
 
-      <div className="mb-3 d-flex justify-content-center">
+      {/* Create Note Box */}
+      <div className="note-input-box mb-4">
         <input
           type="text"
-          className="form-control w-50"
+          className="form-control"
           placeholder="Take a note..."
           onClick={() => setShowModel(true)}
           readOnly
         />
       </div>
 
-      {/* Notes List */}
-      <div className="container d-flex justify-content-start woven-container">
-        {notesList.map((note) => (
-          <NotesCard noteData={note}/>
-        ))}
-      </div>
+      {/* PINNED NOTES */}
+      {pinnedNotesList.length > 0 && (
+        <>
+          <h6 className="section-title">Pinned</h6>
+
+          <Row className="g-4">
+            {pinnedNotesList.map((note) => (
+              <Col key={note.id} xs={12} sm={6} md={4} lg={3}>
+                <NotesCard noteData={note} refreshNotes={refreshNotes} />
+              </Col>
+            ))}
+          </Row>
+        </>
+      )}
+
+      {/* NORMAL NOTES */}
+      {notesList.length > 0 && (
+        <>
+          <h6 className="section-title mt-5">Others</h6>
+
+          <Row className="g-4">
+            {notesList.map((note) => (
+              <Col key={note.id} xs={12} sm={6} md={4} lg={3}>
+                <NotesCard noteData={note} refreshNotes={refreshNotes} />
+              </Col>
+            ))}
+          </Row>
+        </>
+      )}
 
       {/* Modal */}
-      <Modal show={showModel} onHide={() => setShowModel(false)} centered size="md">
+      <Modal show={showModel} onHide={() => setShowModel(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Create Note</Modal.Title>
         </Modal.Header>
@@ -114,8 +137,7 @@ export const Notes = () => {
           </Modal.Footer>
         </Form>
       </Modal>
-
-    </div>
+    </Container>
   );
 };
 

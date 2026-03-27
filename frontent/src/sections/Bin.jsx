@@ -1,36 +1,41 @@
 import { useEffect, useState } from "react";
+import { Container, Row, Col } from "react-bootstrap";
 import { getTrashNotesApi } from "../api/notesService";
 import NotesCard from "../components/NotesCard";
 
 export const Bin = () => {
-  const [trashNotesList, settrashNotes] = useState([]);
+  const [trashNotesList, setTrashNotes] = useState([]);
 
   useEffect(() => {
-    getTrashNotes();
+    loadTrashNotes();
   }, []);
 
-  const getTrashNotes = async () => {
+  const loadTrashNotes = async () => {
     try {
       const data = await getTrashNotesApi();
-      settrashNotes(data);
+      setTrashNotes([...data]);
     } catch (error) {
-      console.error("Error fetching notes:", error);
+      console.error("Error fetching trash notes:", error);
     }
   };
 
-
   return (
-    <div className="w-100">
+    <Container fluid className="notes-wrapper">
+      <h2 className="text-secondary fw-bold">Trash Notes</h2>
+      <p className="text-muted">Notes moved to trash</p>
 
-      <h1 className="text-secondary">Trash Notes</h1>
-
-      <div className="container card">
-        {trashNotesList.map((note) => (
-          <NotesCard noteData={note}/>
-        ))}
-      </div>
-
-    </div>
+      {trashNotesList.length === 0 ? (
+        <div className="empty-notes">No notes in trash</div>
+      ) : (
+        <Row className="g-4">
+          {trashNotesList.map((note) => (
+            <Col key={note.id} xs={12} sm={6} md={4} lg={3}>
+              <NotesCard noteData={note} refreshNotes={loadTrashNotes} />
+            </Col>
+          ))}
+        </Row>
+      )}
+    </Container>
   );
 };
 

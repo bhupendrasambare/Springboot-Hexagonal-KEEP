@@ -1,5 +1,7 @@
 import axiosInstance from "./axiosInstance";
 
+/* ================= FETCH NOTES ================= */
+
 export const getPinnedNotesApi = async () => {
   const response = await axiosInstance.post("/notes/find", {
     pinned: true,
@@ -10,7 +12,7 @@ export const getPinnedNotesApi = async () => {
     pageSize: 10,
   });
 
-  return response.data.content || response.data;
+  return response.data.data;
 };
 
 export const getNotesApi = async () => {
@@ -23,7 +25,7 @@ export const getNotesApi = async () => {
     pageSize: 10,
   });
 
-  return response.data.content || response.data;
+  return response.data.data;
 };
 
 export const getArchiveNotesApi = async () => {
@@ -36,7 +38,7 @@ export const getArchiveNotesApi = async () => {
     pageSize: 10,
   });
 
-  return response.data.content || response.data;
+  return response.data.data;
 };
 
 export const getTrashNotesApi = async () => {
@@ -49,10 +51,44 @@ export const getTrashNotesApi = async () => {
     pageSize: 10,
   });
 
-  return response.data.content || response.data;
+  return response.data.data;
 };
+
 
 export const createNoteApi = async (note) => {
   const response = await axiosInstance.post("/notes", note);
+  return response.data.data;
+};
+
+
+export const pinNoteApi = async (noteId) => {
+  const response = await axiosInstance.post(`/notes/pin/${noteId}`);
+  return response.data;
+};
+
+export const unPinNoteApi = async (noteId) => {
+  const response = await axiosInstance.post(`/notes/un-pin/${noteId}`);
+  return response.data;
+};
+
+
+export const archiveNoteApi = async (noteId) => {
+  const response = await axiosInstance.post(`/notes/archive/${noteId}`);
+  return response.data;
+};
+
+export const unArchiveNoteApi = async (noteId) => {
+  const response = await axiosInstance.post(`/notes/un-archive/${noteId}`);
+  return response.data;
+};
+
+
+export const trashNoteApi = async (noteId) => {
+  const response = await axiosInstance.post(`/notes/trash/${noteId}`);
+  return response.data;
+};
+
+export const unTrashNoteApi = async (noteId) => {
+  const response = await axiosInstance.post(`/notes/un-trash/${noteId}`);
   return response.data;
 };

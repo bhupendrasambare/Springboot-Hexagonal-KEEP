@@ -10,9 +10,12 @@ import com.service.keep.application.dto.request.ChangePasswordRequest;
 import com.service.keep.application.dto.request.UpdateProfileRequest;
 import com.service.keep.application.dto.response.UserResponse;
 import com.service.keep.application.mapper.UserMapper;
+import com.service.keep.application.response.Response;
+import com.service.keep.application.response.ResponseUtil;
 import com.service.keep.domain.port.inbound.UserProfileUseCase;
 import com.service.keep.domain.port.outbound.AuthenticatedUserPort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserProfileController {
 
     private final UserProfileUseCase userProfileUseCase;
-
     private final AuthenticatedUserPort authenticatedUserPort;
 
     private String getUserId() {
@@ -29,16 +31,19 @@ public class UserProfileController {
     }
 
     @GetMapping("/profile")
-    public UserResponse profile() {
-        return UserMapper.toUserResponse(
+    public ResponseEntity<Response> profile() {
+
+        UserResponse response = UserMapper.toUserResponse(
                 userProfileUseCase.getUserProfile(getUserId())
         );
+
+        return ResponseUtil.success("Profile fetched successfully", response);
     }
 
     @PutMapping("/update")
-    public UserResponse update(@RequestBody UpdateProfileRequest request) {
+    public ResponseEntity<Response> update(@RequestBody UpdateProfileRequest request) {
 
-        return UserMapper.toUserResponse(
+        UserResponse response = UserMapper.toUserResponse(
                 userProfileUseCase.updateProfile(
                         getUserId(),
                         request.getUserName(),
@@ -46,15 +51,19 @@ public class UserProfileController {
                         request.getLastName()
                 )
         );
+
+        return ResponseUtil.success("Profile updated successfully", response);
     }
 
     @PutMapping("/change-password")
-    public void changePassword(@RequestBody ChangePasswordRequest request) {
+    public ResponseEntity<Response> changePassword(@RequestBody ChangePasswordRequest request) {
 
         userProfileUseCase.changePassword(
                 getUserId(),
                 request.getOldPassword(),
                 request.getNewPassword()
         );
+
+        return ResponseUtil.success("Password changed successfully");
     }
 }

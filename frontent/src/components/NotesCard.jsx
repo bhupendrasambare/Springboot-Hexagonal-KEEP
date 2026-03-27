@@ -1,24 +1,96 @@
-import React from 'react'
-import { IoTrashBinOutline } from 'react-icons/io5'
-import { MdOutlineArchive, MdOutlinePushPin } from 'react-icons/md'
+import { IoTrashBinOutline } from "react-icons/io5";
+import { MdOutlineArchive, MdOutlinePushPin, MdPushPin } from "react-icons/md";
+import {
+  pinNoteApi,
+  unPinNoteApi,
+  archiveNoteApi,
+  unArchiveNoteApi,
+  trashNoteApi,
+} from "../api/notesService";
 
-function NotesCard({noteData}) {
+function NotesCard({ noteData, refreshNotes }) {
+
+  const handleArchiveToggle = async () => {
+    try {
+      if (noteData.archived) {
+        await unArchiveNoteApi(noteData.id);
+      } else {
+        await archiveNoteApi(noteData.id);
+      }
+
+      await refreshNotes();
+    } catch (error) {
+      console.error("Archive error:", error);
+    }
+  };
+
+  const handlePinToggle = async () => {
+    try {
+      if (noteData.pinned) {
+        await unPinNoteApi(noteData.id);
+      } else {
+        await pinNoteApi(noteData.id);
+      }
+
+      await refreshNotes();
+    } catch (error) {
+      console.error("Pin error:", error);
+    }
+  };
+
+  const handleTrash = async () => {
+    try {
+      await trashNoteApi(noteData.id);
+      await refreshNotes();
+    } catch (error) {
+      console.error("Trash error:", error);
+    }
+  };
+
   return (
-    <div className='card note-cards p-2 m-3'>
-        <h1 className='fw-bold fs-4'>{noteData.title}</h1>
-        <p className='fs-6'>{noteData.description}</p>
+    <div className="note-card">
 
-        <div className="footer">
-          <MdOutlineArchive className='card-circle-icon' />
-          <IoTrashBinOutline className='card-circle-icon' />
-          {
-            noteData.pin ?
-            <MdPushPin className='card-circle-icon' />:<MdOutlinePushPin className='card-circle-icon' />
-          }
-          
-        </div>
+      <div className="note-content">
+        <h5 className="note-title">{noteData.title}</h5>
+        <p className="note-description">{noteData.description}</p>
+      </div>
+
+      <div className="note-footer">
+
+        
+
+        {noteData.trashed == false ?
+          <>
+            <IoTrashBinOutline
+              className="note-icon"
+              onClick={handleTrash}
+            />
+          </>:<></>
+        }
+        
+
+        {noteData.trashed == false ?
+          <>
+            <MdOutlineArchive
+              className="note-icon"
+              onClick={handleArchiveToggle}
+            />
+          </>:<></>
+        }
+
+        {noteData.archived == false && noteData.trashed == false ?
+          <>
+            {noteData.pinned ? (
+              <MdPushPin className="note-icon active-icon" onClick={handlePinToggle} />
+            ) : (
+              <MdOutlinePushPin className="note-icon" onClick={handlePinToggle} />
+            )}
+          </>:<></>
+        }
+
+      </div>
     </div>
-  )
+  );
 }
 
-export default NotesCard
+export default NotesCard;

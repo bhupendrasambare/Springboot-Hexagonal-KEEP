@@ -23,8 +23,11 @@ function Login() {
         password,
       });
 
-      login(response.data);
+      const authData = response.data.data;
+
+      login(authData);
       navigate("/home");
+
     } catch (err) {
       setError(
         err.response?.data?.message || "Invalid email or password"
