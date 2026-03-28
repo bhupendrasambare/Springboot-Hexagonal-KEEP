@@ -22,7 +22,6 @@ export const Archived = () => {
   return (
     <Container fluid className="notes-wrapper">
       <h2 className="text-secondary fw-bold">Archived Notes</h2>
-      <p className="text-muted">Notes you have archived</p>
 
       {archiveNotesList.length === 0 ? (
         <div className="empty-notes">No archived notes found</div>

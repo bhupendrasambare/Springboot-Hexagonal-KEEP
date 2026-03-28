@@ -56,7 +56,6 @@ export const Notes = () => {
     <Container fluid className="notes-wrapper">
 
       <h2 className="text-secondary fw-bold">Notes</h2>
-      <p className="text-muted">Recent notes</p>
 
       {/* Create Note Box */}
       <div className="note-input-box mb-4">

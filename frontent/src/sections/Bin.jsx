@@ -22,7 +22,6 @@ export const Bin = () => {
   return (
     <Container fluid className="notes-wrapper">
       <h2 className="text-secondary fw-bold">Trash Notes</h2>
-      <p className="text-muted">Notes moved to trash</p>
 
       {trashNotesList.length === 0 ? (
         <div className="empty-notes">No notes in trash</div>
