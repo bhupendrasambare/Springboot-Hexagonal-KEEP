@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { getTrashNotesApi } from "../api/notesService";
+import { getPinnedNotesApi, getPinnedNotesApi } from "../api/notesService";
 import NotesCard from "../components/NotesCard";
 
 export const Important = () => {
-  const [trashNotesList, settrashNotes] = useState([]);
+  const [PinnedNotesList, setPinnedNotes] = useState([]);
 
   useEffect(() => {
-    getTrashNotes();
+    getPinnedNotes();
   }, []);
 
-  const getTrashNotes = async () => {
+  const getPinnedNotes = async () => {
     try {
-      const data = await getTrashNotesApi();
-      settrashNotes(data);
+      const data = await getPinnedNotesApi();
+      setPinnedNotes(data);
     } catch (error) {
       console.error("Error fetching notes:", error);
     }
@@ -25,7 +25,7 @@ export const Important = () => {
       <h1 className="text-secondary">Trash Notes</h1>
 
       <div className="container card">
-        {trashNotesList.map((note) => (
+        {PinnedNotesList.map((note) => (
           <NotesCard noteData={note}/>
         ))}
       </div>
