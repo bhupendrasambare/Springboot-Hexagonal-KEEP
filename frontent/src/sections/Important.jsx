@@ -1,37 +1,56 @@
 import { useEffect, useState } from "react";
-import { getPinnedNotesApi, getPinnedNotesApi } from "../api/notesService";
+import { Container, Row, Col } from "react-bootstrap";
+import {
+  getPinnedNotesApi,
+} from "../api/notesService";
 import NotesCard from "../components/NotesCard";
+import { MdLabelImportantOutline } from "react-icons/md";
 
-export const Important = () => {
-  const [PinnedNotesList, setPinnedNotes] = useState([]);
+export const Notes = () => {
+  const [pinnedNotesList, setPinnedNotesList] = useState([]);
 
   useEffect(() => {
-    getPinnedNotes();
+    refreshNotes();
   }, []);
 
-  const getPinnedNotes = async () => {
+  const refreshNotes = async () => {
     try {
-      const data = await getPinnedNotesApi();
-      setPinnedNotes(data);
+      const [pinned, notes] = await Promise.all([
+        getPinnedNotesApi(),
+      ]);
+
+      setPinnedNotesList([...pinned]);
     } catch (error) {
       console.error("Error fetching notes:", error);
     }
   };
 
-
   return (
-    <div className="w-100">
+    <Container fluid className="notes-wrapper">
 
-      <h1 className="text-secondary">Trash Notes</h1>
+      {(pinnedNotesList.length > 0)?(<h2 className="text-secondary fw-bold mb-5">Important Notes</h2>):(<></>)}
 
-      <div className="container card">
-        {PinnedNotesList.map((note) => (
-          <NotesCard noteData={note}/>
-        ))}
-      </div>
 
-    </div>
+      {/* PINNED NOTES */}
+      {(pinnedNotesList.length > 0)?(
+        <>
+
+          <Row className="g-4">
+            {pinnedNotesList.map((note) => (
+              <Col key={note.id} xs={12} sm={6} md={4} lg={3}>
+                <NotesCard noteData={note} refreshNotes={refreshNotes} />
+              </Col>
+            ))}
+          </Row>
+        </>
+      ):<>
+        <div className="empty-fullpage-wrapper">
+          <MdLabelImportantOutline className="empty-fullpage-icon" />
+          <p className="empty-fullpage-text">No Important Notes Found</p>
+        </div>
+      </>}
+    </Container>
   );
 };
 
-export default Important;
+export default Notes;

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { getTrashNotesApi } from "../api/notesService";
 import NotesCard from "../components/NotesCard";
+import { IoTrashBinOutline } from "react-icons/io5";
 
 export const Bin = () => {
   const [trashNotesList, setTrashNotes] = useState([]);
@@ -21,10 +22,13 @@ export const Bin = () => {
 
   return (
     <Container fluid className="notes-wrapper">
-      <h2 className="text-secondary fw-bold">Trash Notes</h2>
+      {(trashNotesList.length > 0)?(<h2 className="text-secondary fw-bold mb-5">Archived Notes</h2>):(<></>)}
 
       {trashNotesList.length === 0 ? (
-        <div className="empty-notes">No notes in trash</div>
+        <div className="empty-fullpage-wrapper">
+          <IoTrashBinOutline className="empty-fullpage-icon" />
+          <p className="empty-fullpage-text">No archived notes found</p>
+        </div>
       ) : (
         <Row className="g-4">
           {trashNotesList.map((note) => (
