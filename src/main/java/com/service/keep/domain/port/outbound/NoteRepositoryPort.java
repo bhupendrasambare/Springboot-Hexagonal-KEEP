@@ -3,6 +3,7 @@ package com.service.keep.domain.port.outbound;
 import com.service.keep.domain.model.Note;
 import com.service.keep.domain.valueobject.NoteId;
 import com.service.keep.domain.valueobject.UserId;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +12,7 @@ public interface NoteRepositoryPort {
 
     Note save(Note note);
 
-    List<Note> findByUserId(
+    Page<Note> findByUserId(
             UserId userId,
             boolean pinned,
             boolean archived,

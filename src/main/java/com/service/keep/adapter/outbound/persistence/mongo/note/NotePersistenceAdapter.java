@@ -37,7 +37,7 @@ public class NotePersistenceAdapter implements NoteRepositoryPort {
     }
 
     @Override
-    public List<Note> findByUserId(
+    public Page<Note> findByUserId(
             UserId userId,
             boolean pinned,
             boolean archived,
@@ -58,9 +58,7 @@ public class NotePersistenceAdapter implements NoteRepositoryPort {
                         pageable
                 );
 
-        return result.stream()
-                .map(this::toDomain)
-                .toList();
+        return result.map(this::toDomain);
     }
 
     // ---------------- MAPPERS ----------------

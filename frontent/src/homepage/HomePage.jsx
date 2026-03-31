@@ -1,21 +1,22 @@
-import { useState } from 'react'
-import LocalNav from '../components/LocalNav'
-import Sidebar from '../components/Sidebar'
-import { ActivePage } from '../components/Constants'
-import Notes from '../sections/Notes'
-import Reminder from '../sections/Reminder'
-import Important from '../sections/Important'
-import EditLabels from '../sections/EditLabels'
-import Archived from '../sections/Archive'
-import Bin from '../sections/Bin'
+import { useState } from "react";
+import { Route, Routes, Navigate } from "react-router-dom";
+
+import LocalNav from "../components/LocalNav";
+import Sidebar from "../components/Sidebar";
+
+import Notes from "../sections/Notes";
+import Reminder from "../sections/Reminder";
+import Important from "../sections/Important";
+import EditLabels from "../sections/EditLabels";
+import Archived from "../sections/Archive";
+import Bin from "../sections/Bin";
 
 function HomePage() {
-  const [sidebarActive, setSidebarActive] = useState(false)
-  const [showRow, setShowRow] = useState(false)
-  const [activePage, setActivePage] = useState(ActivePage.NOTES)
+  const [sidebarActive, setSidebarActive] = useState(false);
+  const [showRow, setShowRow] = useState(false);
 
   return (
-    <div className='bg-dark'>
+    <div className="bg-dark">
       <LocalNav
         sidebarActive={sidebarActive}
         setSidebarActive={setSidebarActive}
@@ -24,24 +25,24 @@ function HomePage() {
       />
 
       <div className="d-flex w-100">
-        <Sidebar
-          activePage={activePage}
-          setActivePage={setActivePage}
-          sidebarActive={sidebarActive}
-        />
+        <Sidebar sidebarActive={sidebarActive} />
 
-        {
-          (activePage === ActivePage.NOTES) ? <Notes /> :
-          (activePage === ActivePage.REMINDER) ? <Reminder /> :
-          (activePage === ActivePage.IMPORTANT) ? <Important /> :
-          (activePage === ActivePage.EDITLABELS) ? <EditLabels /> :
-          (activePage === ActivePage.ARCHIVE) ? <Archived /> :
-          (activePage === ActivePage.BIN) ? <Bin /> :
-          <></>
-        }
+        <div className="flex-grow-1">
+          <Routes>
+            <Route path="/" element={<Notes />} />
+            <Route path="/reminder" element={<Reminder />} />
+            <Route path="/important" element={<Important />} />
+            <Route path="/edit-labels" element={<EditLabels />} />
+            <Route path="/archive" element={<Archived />} />
+            <Route path="/bin" element={<Bin />} />
+
+            {/* default */}
+            <Route path="*" element={<Navigate to="/home" />} />
+          </Routes>
+        </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default HomePage
+export default HomePage;

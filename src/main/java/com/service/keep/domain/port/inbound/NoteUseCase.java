@@ -23,6 +23,6 @@ public interface NoteUseCase {
 
     void restore(String userId, String noteId);
 
-    List<Note> getAll(String userId, boolean pin, boolean archive, boolean trashed, String keyword, Integer page, Integer pageSize);
+    Page<Note> getAll(String userId, boolean pin, boolean archive, boolean trashed, String keyword, Integer page, Integer pageSize);
 }
 

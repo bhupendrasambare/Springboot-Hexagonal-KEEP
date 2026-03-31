@@ -1,17 +1,15 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from "react-router-dom";
+import HomePage from "../homepage/HomePage";
+import Login from "../pages/login";
 import ProtectedRoute from './ProtectedRoute'
-import HomePage from '../homepage/HomePage'
-import Login from '../pages/login';
-import { useAuth } from '../store/AuthContext';
 
 function AppRoutes() {
-  const { isAuthenticated } = useAuth();
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
 
       <Route
-        path="/home"
+        path="/home/*"
         element={
           <ProtectedRoute>
             <HomePage />

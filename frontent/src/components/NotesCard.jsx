@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { IoTrashBinOutline } from "react-icons/io5";
 import { MdOutlineArchive, MdOutlinePushPin, MdPushPin } from "react-icons/md";
+import { Modal } from "react-bootstrap";
 import {
   pinNoteApi,
   unPinNoteApi,
@@ -9,6 +11,21 @@ import {
 } from "../api/notesService";
 
 function NotesCard({ noteData, refreshNotes }) {
+  const [showModal, setShowModal] = useState(false);
+
+  /* ================= TEXT LIMIT HANDLING ================= */
+
+  const trimTitle = (text) => {
+    if (!text) return "";
+    return text.length > 50 ? text.substring(0, 50) + "..." : text;
+  };
+
+  const trimDescription = (text) => {
+    if (!text) return "";
+    return text.length > 200 ? text.substring(0, 200) + "..." : text;
+  };
+
+  /* ================= ACTIONS ================= */
 
   const handleArchiveToggle = async () => {
     try {
@@ -47,49 +64,68 @@ function NotesCard({ noteData, refreshNotes }) {
     }
   };
 
+  /* ================= UI ================= */
+
   return (
-    <div className="note-card">
+    <>
+      <div className="note-card">
+        <div className="note-content">
+          <h5
+            style={{ cursor: "pointer" }}
+            onClick={() => setShowModal(true)}
+            className="note-title">{trimTitle(noteData.title)}</h5>
 
-      <div className="note-content">
-        <h5 className="note-title">{noteData.title}</h5>
-        <p className="note-description">{noteData.description}</p>
-      </div>
+          <p
+            className="note-description"
+            style={{ cursor: "pointer" }}
+            onClick={() => setShowModal(true)}
+          >
+            {trimDescription(noteData.description)}
+          </p>
+        </div>
 
-      <div className="note-footer">
+        <div className="note-footer">
+          {noteData.trashed === false && (
+            <IoTrashBinOutline className="note-icon" onClick={handleTrash} />
+          )}
 
-        
-
-        {noteData.trashed == false ?
-          <>
-            <IoTrashBinOutline
-              className="note-icon"
-              onClick={handleTrash}
-            />
-          </>:<></>
-        }
-        
-
-        {noteData.trashed == false ?
-          <>
+          {noteData.trashed === false && (
             <MdOutlineArchive
               className="note-icon"
               onClick={handleArchiveToggle}
             />
-          </>:<></>
-        }
+          )}
 
-        {noteData.archived == false && noteData.trashed == false ?
-          <>
-            {noteData.pinned ? (
-              <MdPushPin className="note-icon active-icon" onClick={handlePinToggle} />
-            ) : (
-              <MdOutlinePushPin className="note-icon" onClick={handlePinToggle} />
-            )}
-          </>:<></>
-        }
-
+          {noteData.archived === false && noteData.trashed === false && (
+            <>
+              {noteData.pinned ? (
+                <MdPushPin
+                  className="note-icon active-icon"
+                  onClick={handlePinToggle}
+                />
+              ) : (
+                <MdOutlinePushPin
+                  className="note-icon"
+                  onClick={handlePinToggle}
+                />
+              )}
+            </>
+          )}
+        </div>
       </div>
-    </div>
+
+      {/* ================= VIEW NOTE MODAL ================= */}
+
+      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>{noteData.title}</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <p style={{ whiteSpace: "pre-wrap" }}>{noteData.description}</p>
+        </Modal.Body>
+      </Modal>
+    </>
   );
 }
 

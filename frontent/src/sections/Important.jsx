@@ -1,54 +1,110 @@
 import { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import {
-  getPinnedNotesApi,
-} from "../api/notesService";
-import NotesCard from "../components/NotesCard";
 import { MdLabelImportantOutline } from "react-icons/md";
+import { getPinnedNotesApi } from "../api/notesService";
+import NotesCard from "../components/NotesCard";
 
 export const Notes = () => {
   const [pinnedNotesList, setPinnedNotesList] = useState([]);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(false);
 
+  const pageSize = 8;
+
+  /* ========== FIRST LOAD ========== */
   useEffect(() => {
-    refreshNotes();
+    loadPinnedNotes();
   }, []);
 
-  const refreshNotes = async () => {
-    try {
-      const [pinned, notes] = await Promise.all([
-        getPinnedNotesApi(),
-      ]);
+  /* ========== SCROLL LISTENER ========== */
+  useEffect(() => {
+    const handleScroll = () => {
+      if (loading) return;
+      if (page >= totalPages) return;
 
-      setPinnedNotesList([...pinned]);
+      const bottom =
+        window.innerHeight + document.documentElement.scrollTop >=
+        document.documentElement.offsetHeight - 120;
+
+      if (bottom) {
+        loadMoreNotes();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [page, totalPages, loading]);
+
+  /* ========== FIRST PAGE LOAD ========== */
+  const loadPinnedNotes = async () => {
+    try {
+      setLoading(true);
+
+      const pageData = await getPinnedNotesApi(0, pageSize);
+
+      setPinnedNotesList(pageData?.content ?? []);
+      setPage(1);
+      setTotalPages(pageData?.totalPages ?? 0);
     } catch (error) {
-      console.error("Error fetching notes:", error);
+      console.error("Error fetching pinned notes:", error);
+      setPinnedNotesList([]);
+    } finally {
+      setLoading(false);
     }
   };
 
+  /* ========== LOAD MORE ON SCROLL ========== */
+  const loadMoreNotes = async () => {
+    try {
+      setLoading(true);
+
+      const pageData = await getPinnedNotesApi(page, pageSize);
+      const newNotes = pageData?.content ?? [];
+
+      setPinnedNotesList((prev) => {
+        const existingIds = new Set(prev.map((n) => n.id));
+        const filtered = newNotes.filter((n) => !existingIds.has(n.id));
+        return [...prev, ...filtered];
+      });
+
+      setPage((prev) => prev + 1);
+    } catch (error) {
+      console.error("Error loading more pinned notes:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /* ========== UI ========== */
   return (
     <Container fluid className="notes-wrapper">
+      {pinnedNotesList.length > 0 && (
+        <h2 className="text-secondary fw-bold mb-5">Important Notes</h2>
+      )}
 
-      {(pinnedNotesList.length > 0)?(<h2 className="text-secondary fw-bold mb-5">Important Notes</h2>):(<></>)}
-
-
-      {/* PINNED NOTES */}
-      {(pinnedNotesList.length > 0)?(
-        <>
-
-          <Row className="g-4">
-            {pinnedNotesList.map((note) => (
-              <Col key={note.id} xs={12} sm={6} md={4} lg={3}>
-                <NotesCard noteData={note} refreshNotes={refreshNotes} />
-              </Col>
-            ))}
-          </Row>
-        </>
-      ):<>
+      {pinnedNotesList.length === 0 && !loading ? (
         <div className="empty-fullpage-wrapper">
           <MdLabelImportantOutline className="empty-fullpage-icon" />
           <p className="empty-fullpage-text">No Important Notes Found</p>
         </div>
-      </>}
+      ) : (
+        <>
+          <Row className="g-4">
+            {pinnedNotesList.map((note) => (
+              <Col key={note.id} xs={12} sm={6} md={4} lg={3}>
+                <NotesCard noteData={note} refreshNotes={loadPinnedNotes} />
+              </Col>
+            ))}
+          </Row>
+
+          {loading && (
+            <div className="text-center mt-4 mb-5">
+              <span className="text-muted">Loading more important notes...</span>
+            </div>
+          )}
+        </>
+      )}
     </Container>
   );
 };

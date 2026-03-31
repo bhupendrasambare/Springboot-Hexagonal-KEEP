@@ -8,16 +8,20 @@ package com.service.keep.adapter.inbound.rest.note;
 
 import com.service.keep.application.dto.request.*;
 import com.service.keep.application.dto.response.NoteResponse;
+import com.service.keep.application.dto.response.PageResponse;
 import com.service.keep.application.mapper.NoteMapper;
 import com.service.keep.application.response.Response;
 import com.service.keep.application.response.ResponseUtil;
+import com.service.keep.domain.model.Note;
 import com.service.keep.domain.port.inbound.NoteUseCase;
 import com.service.keep.domain.port.outbound.AuthenticatedUserPort;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -51,20 +55,23 @@ public class NoteController {
     @PostMapping("/find")
     public ResponseEntity<Response> findAll(@Valid @RequestBody NoteSearchRequest request) {
 
-        List<NoteResponse> notes = noteUseCase.getAll(
-                        getUserId(),
-                        request.getPinned(),
-                        request.getArchived(),
-                        request.getTrashed(),
-                        request.getKeyword(),
-                        request.getPage(),
-                        request.getPageSize()
-                )
-                .stream()
+        Page<Note> data = noteUseCase.getAll(
+                getUserId(),
+                request.getPinned(),
+                request.getArchived(),
+                request.getTrashed(),
+                request.getKeyword(),
+                request.getPage(),
+                request.getPageSize()
+        );
+
+        List<NoteResponse> notes = data.stream()
                 .map(NoteMapper::toNoteResponse)
                 .toList();
 
-        return ResponseUtil.success("Notes fetched successfully", notes);
+        PageResponse<NoteResponse> pageResponse = new PageResponse<>(notes, data);
+
+        return ResponseUtil.success("Notes fetched successfully", pageResponse);
     }
 
     @PutMapping("/{id}")
