@@ -141,13 +141,13 @@ export const Notes = () => {
 
           <Row className="g-4">
             {pinnedToShow.map((note) => (
-              <Col key={note.id} xs={12} sm={6} md={4} lg={3}>
+              <Col key={note.id} xs={12} md={4} lg={3} xl={2}>
                 <NotesCard noteData={note} refreshNotes={refreshNotes} />
               </Col>
             ))}
 
             {showMorePinned && (
-              <Col xs={12} sm={6} md={4} lg={3}>
+              <Col xs={12} md={4} lg={3} xl={2}>
                 <div
                   className="note-card"
                   onClick={() => navigate("/important")}

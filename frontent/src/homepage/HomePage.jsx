@@ -27,7 +27,7 @@ function HomePage() {
       <div className="d-flex w-100">
         <Sidebar sidebarActive={sidebarActive} />
 
-        <div className="flex-grow-1">
+        <div className="ms-6rem flex-grow-1">
           <Routes>
             <Route path="/" element={<Notes />} />
             <Route path="/reminder" element={<Reminder />} />

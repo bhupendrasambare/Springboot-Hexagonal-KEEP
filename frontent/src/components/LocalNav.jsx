@@ -38,7 +38,7 @@ function LocalNav({ sidebarActive, setSidebarActive, showRow, setShowRow }) {
 
   return (
     <>
-    <Navbar className="bg-body-tertiary bg-black" data-bs-theme="dark">
+    <Navbar className="bg-body-tertiary bg-black" fixed="top" data-bs-theme="dark">
       <div className='mx-1p d-flex w-100'>
         <Navbar.Brand href="#home">
           <GiHamburgerMenu onClick={() =>setSidebarActive(!sidebarActive)} size={25} className='me-4'/>

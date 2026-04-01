@@ -5,13 +5,13 @@ import { MdLabelImportantOutline } from "react-icons/md";
 function Sidebar({ sidebarActive }) {
 
   const getClass = ({ isActive }) =>
-    "fs-5 my-2 d-flex align-items-center cursor-pointer px-3 py-2 text-decoration-none fw-bold " +
+    "fs-5 my-2 d-flex align-items-center cursor-pointer px-1 py-2 text-decoration-none fw-bold " +
     (isActive ? "rounded-pill rounded-start bg-warning-local text-white" : "text-white");
 
   return (
     <div
       className={
-        "sidebar-wrapper d-flex flex-column justify-content-between vh-100-50 p-3 pb-0 ps-0 " +
+        "sidebar-wrapper d-flex flex-column justify-content-between vh-100-50 pb-0 ps-0 " +
         (sidebarActive ? "sidebar-open" : "sidebar-close")
       }
     >
