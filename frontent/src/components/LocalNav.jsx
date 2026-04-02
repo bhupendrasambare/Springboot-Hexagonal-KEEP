@@ -8,8 +8,6 @@ import {useAuth} from "../store/AuthContext"
 import {
   MdOutlineRefresh,
   MdOutlineSupervisedUserCircle,
-  MdOutlineDarkMode,
-  MdOutlineLightMode,
   MdOutlineSettings,
 } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
