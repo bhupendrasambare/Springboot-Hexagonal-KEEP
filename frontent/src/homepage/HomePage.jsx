@@ -14,6 +14,10 @@ import Bin from "../sections/Bin";
 function HomePage() {
   const [sidebarActive, setSidebarActive] = useState(false);
   const [showRow, setShowRow] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+  const refreshNotes = () =>{
+    setRefresh(!refresh);
+  }
 
   return (
     <div className="bg-dark">
@@ -22,6 +26,7 @@ function HomePage() {
         setSidebarActive={setSidebarActive}
         showRow={showRow}
         setShowRow={setShowRow}
+        refreshNotes ={refreshNotes}
       />
 
       <div className="d-flex w-100">
@@ -29,12 +34,12 @@ function HomePage() {
 
         <div className="ms-6rem flex-grow-1">
           <Routes>
-            <Route path="/" element={<Notes />} />
-            <Route path="/reminder" element={<Reminder />} />
-            <Route path="/important" element={<Important />} />
-            <Route path="/edit-labels" element={<EditLabels />} />
-            <Route path="/archive" element={<Archived />} />
-            <Route path="/bin" element={<Bin />} />
+            <Route path="/" element={<Notes refresh={refresh} />} />
+            <Route path="/reminder" element={<Reminder refresh={refresh} />} />
+            <Route path="/important" element={<Important refresh={refresh} />} />
+            <Route path="/edit-labels" element={<EditLabels refresh={refresh} />} />
+            <Route path="/archive" element={<Archived refresh={refresh} />} />
+            <Route path="/bin" element={<Bin refresh={refresh} />} />
 
             {/* default */}
             <Route path="*" element={<Navigate to="/home" />} />

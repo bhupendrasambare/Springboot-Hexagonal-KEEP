@@ -8,7 +8,7 @@ import {
 } from "../api/notesService";
 import NotesCard from "../components/NotesCard";
 
-export const Notes = () => {
+export const Notes = ({refresh}) => {
   const [pinnedNotesList, setPinnedNotesList] = useState([]);
   const [notesList, setNotesList] = useState([]);
 
@@ -25,7 +25,7 @@ export const Notes = () => {
 
   useEffect(() => {
     refreshNotes();
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     const handleScroll = () => {

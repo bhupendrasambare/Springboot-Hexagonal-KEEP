@@ -13,7 +13,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
-function LocalNav({ sidebarActive, setSidebarActive, showRow, setShowRow }) {
+function LocalNav({ sidebarActive, setSidebarActive, showRow, setShowRow, refreshNotes }) {
   const [refresh, setRefresh] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -21,8 +21,8 @@ function LocalNav({ sidebarActive, setSidebarActive, showRow, setShowRow }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-
     const timerId = setTimeout(() => {
+      refreshNotes()
     setRefresh(false)
       }, 1000)
   }, [refresh])
