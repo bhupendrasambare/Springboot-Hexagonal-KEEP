@@ -1,11 +1,9 @@
-import { Component } from 'react'
+import React from 'react'
 
-export class Reminder extends Component {
-  render() {
-    return (
-      <div>Reminder</div>
-    )
-  }
+function Reminder({refresh}) {
+  return (
+    <div>Reminder</div>
+  )
 }
 
 export default Reminder

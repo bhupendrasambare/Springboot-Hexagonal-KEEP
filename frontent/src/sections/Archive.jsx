@@ -4,7 +4,7 @@ import { MdOutlineArchive } from "react-icons/md";
 import { getArchiveNotesApi } from "../api/notesService";
 import NotesCard from "../components/NotesCard";
 
-export const Archived = () => {
+export const Archived = ({refresh}) => {
   const [archiveNotesList, setArchiveNotes] = useState([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -14,7 +14,7 @@ export const Archived = () => {
 
   useEffect(() => {
     loadArchiveNotes();
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     const handleScroll = () => {

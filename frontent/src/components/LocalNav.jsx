@@ -21,8 +21,8 @@ function LocalNav({ sidebarActive, setSidebarActive, showRow, setShowRow, refres
   const navigate = useNavigate();
 
   useEffect(() => {
+    refreshNotes()
     const timerId = setTimeout(() => {
-      refreshNotes()
     setRefresh(false)
       }, 1000)
   }, [refresh])

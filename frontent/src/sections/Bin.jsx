@@ -4,7 +4,7 @@ import { IoTrashBinOutline } from "react-icons/io5";
 import { getTrashNotesApi } from "../api/notesService";
 import NotesCard from "../components/NotesCard";
 
-export const Bin = () => {
+export const Bin = ({refresh}) => {
   const [trashNotesList, setTrashNotes] = useState([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -14,7 +14,7 @@ export const Bin = () => {
 
   useEffect(() => {
     loadTrashNotes();
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     const handleScroll = () => {

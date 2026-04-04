@@ -4,7 +4,7 @@ import { MdLabelImportantOutline } from "react-icons/md";
 import { getPinnedNotesApi } from "../api/notesService";
 import NotesCard from "../components/NotesCard";
 
-export const Notes = () => {
+export const Notes = ({refresh}) => {
   const [pinnedNotesList, setPinnedNotesList] = useState([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -15,7 +15,7 @@ export const Notes = () => {
   /* ========== FIRST LOAD ========== */
   useEffect(() => {
     loadPinnedNotes();
-  }, []);
+  }, [refresh]);
 
   /* ========== SCROLL LISTENER ========== */
   useEffect(() => {
