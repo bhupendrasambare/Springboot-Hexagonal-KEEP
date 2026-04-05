@@ -12,12 +12,10 @@ export const Notes = ({refresh}) => {
 
   const pageSize = 8;
 
-  /* ========== FIRST LOAD ========== */
   useEffect(() => {
     loadPinnedNotes();
   }, [refresh]);
 
-  /* ========== SCROLL LISTENER ========== */
   useEffect(() => {
     const handleScroll = () => {
       if (loading) return;
@@ -36,7 +34,6 @@ export const Notes = ({refresh}) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [page, totalPages, loading]);
 
-  /* ========== FIRST PAGE LOAD ========== */
   const loadPinnedNotes = async () => {
     try {
       setLoading(true);
@@ -54,7 +51,6 @@ export const Notes = ({refresh}) => {
     }
   };
 
-  /* ========== LOAD MORE ON SCROLL ========== */
   const loadMoreNotes = async () => {
     try {
       setLoading(true);
@@ -76,7 +72,6 @@ export const Notes = ({refresh}) => {
     }
   };
 
-  /* ========== UI ========== */
   return (
     <Container fluid className="notes-wrapper">
       {pinnedNotesList.length > 0 && (
