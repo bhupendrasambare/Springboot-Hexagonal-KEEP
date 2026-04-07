@@ -24,4 +24,6 @@ public interface NoteRepositoryPort {
 
 
     Optional<Note> findById(NoteId id);
+
+    List<Note> findAllByUserId(UserId userId);
 }

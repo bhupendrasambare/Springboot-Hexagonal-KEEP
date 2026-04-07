@@ -13,6 +13,7 @@ import com.service.keep.domain.valueobject.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -37,6 +38,11 @@ public class NotePersistenceAdapter implements NoteRepositoryPort {
     }
 
     @Override
+    public List<Note> findAllByUserId(UserId userId) {
+        return repository.findByUserId(userId.getValue()).stream().map(this::toDomain).collect(Collectors.toList());
+    }
+
+    @Override
     public Page<Note> findByUserId(
             UserId userId,
             boolean pinned,
@@ -46,7 +52,7 @@ public class NotePersistenceAdapter implements NoteRepositoryPort {
             int page,
             int pageSize
     ) {
-        PageRequest pageable = PageRequest.of(page, pageSize);
+        PageRequest pageable = PageRequest.of(page, pageSize, Sort.by("createdAt").descending());
 
         Page<NoteDocument> result = repository
                 .findByUserIdAndPinnedAndArchivedAndTrashedAndTitleContainingIgnoreCase(
@@ -74,6 +80,9 @@ public class NotePersistenceAdapter implements NoteRepositoryPort {
         d.setTrashed(note.isTrashed());
         d.setReminder(note.getReminder());
         d.setTagId(note.getTagId());
+        d.setTags(note.getTags());
+        d.setKeywords(note.getKeywords());
+        d.setSummary(note.getSummary());
         d.setCreatedAt(note.getCreatedAt());
         d.setUpdatedAt(note.getUpdatedAt());
         return d;
@@ -90,6 +99,9 @@ public class NotePersistenceAdapter implements NoteRepositoryPort {
                 d.getTrashed(),
                 d.getReminder(),
                 d.getTagId(),
+                d.getTags(),
+                d.getKeywords(),
+                d.getSummary(),
                 d.getCreatedAt(),
                 d.getUpdatedAt()
         );

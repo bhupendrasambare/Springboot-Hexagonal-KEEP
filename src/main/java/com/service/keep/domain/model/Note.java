@@ -26,6 +26,11 @@ public class Note {
     private boolean trashed;
     private String reminder;
     private String tagId;
+
+    private List<String> tags;
+    private List<String> keywords;
+    private String summary;
+
     private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -38,6 +43,9 @@ public class Note {
                 boolean trashed,
                 String reminder,
                 String tagId,
+                List<String> tags,
+                List<String> keywords,
+                String summary,
                 LocalDateTime createdAt,
                 LocalDateTime updatedAt) {
 
@@ -47,66 +55,58 @@ public class Note {
 
         this.id = id;
         this.userId = userId;
+
         this.title = title == null ? "" : title;
         this.description = description == null ? "" : description;
+
         this.pinned = pinned;
         this.archived = archived;
         this.trashed = trashed;
+
         this.reminder = reminder;
         this.tagId = tagId;
+
+        this.tags = tags != null ? tags : new ArrayList<>();
+        this.keywords = keywords != null ? keywords : new ArrayList<>();
+        this.summary = summary;
+
         this.createdAt = createdAt;
         this.updatedAt = updatedAt == null ? createdAt : updatedAt;
     }
 
-    public NoteId getId() {
-        return id;
-    }
+    public NoteId getId() { return id; }
+    public UserId getUserId() { return userId; }
+    public String getTitle() { return title; }
+    public String getDescription() { return description; }
 
-    public UserId getUserId() {
-        return userId;
-    }
+    public boolean isPinned() { return pinned; }
+    public boolean isArchived() { return archived; }
+    public boolean isTrashed() { return trashed; }
 
-    public String getTitle() {
-        return title;
-    }
+    public String getReminder() { return reminder; }
+    public String getTagId() { return tagId; }
 
-    public String getDescription() {
-        return description;
-    }
+    public List<String> getTags() { return tags; }
+    public List<String> getKeywords() { return keywords; }
+    public String getSummary() { return summary; }
 
-    public boolean isPinned() {
-        return pinned;
-    }
-
-    public boolean isArchived() {
-        return archived;
-    }
-
-    public boolean isTrashed() {
-        return trashed;
-    }
-
-    public String getReminder() {
-        return reminder;
-    }
-
-    public String getTagId() {
-        return this.tagId;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
 
     public void update(String title, String description, String newTagIds) {
         this.title = title == null ? this.title : title;
         this.description = description == null ? this.description : description;
+
         if (newTagIds != null) this.tagId = newTagIds;
+
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateMetadata(List<String> tags, List<String> keywords, String summary) {
+        if (tags != null) this.tags = tags;
+        if (keywords != null) this.keywords = keywords;
+        if (summary != null) this.summary = summary;
+
         this.updatedAt = LocalDateTime.now();
     }
 
@@ -176,7 +176,7 @@ public class Note {
 
     public void addTag(String tagId) {
         if (StringUtils.isNotBlank(tagId)) {
-            this.tagId=tagId;
+            this.tagId = tagId;
             this.updatedAt = LocalDateTime.now();
         }
     }
@@ -193,7 +193,6 @@ public class Note {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Note note = (Note) o;
         return Objects.equals(id, note.id);
     }

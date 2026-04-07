@@ -12,6 +12,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -33,6 +34,10 @@ public class NoteDocument {
     private String reminder;
 
     private String tagId;
+
+    private List<String> tags;
+    private List<String> keywords;
+    private String summary;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

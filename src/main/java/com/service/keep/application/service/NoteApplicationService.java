@@ -9,6 +9,7 @@ package com.service.keep.application.service;
 import com.service.keep.application.exception.NoteNotFoundException;
 import com.service.keep.domain.model.Note;
 import com.service.keep.domain.port.inbound.NoteUseCase;
+import com.service.keep.domain.port.outbound.AiSearchPort;
 import com.service.keep.domain.port.outbound.NoteRepositoryPort;
 import com.service.keep.domain.valueobject.NoteId;
 import com.service.keep.domain.valueobject.UserId;
@@ -25,9 +26,13 @@ import java.util.UUID;
 public class NoteApplicationService implements NoteUseCase {
 
     private final NoteRepositoryPort noteRepository;
+    private final AiSearchPort aiSearchPort;
 
     @Override
-    public Note create(String userId, String title, String description, String reminder, String tagId) {
+    public Note create(String userId, String title, String description,
+                       String reminder, String tagId) {
+
+        var metadata = aiSearchPort.generateMetadata(title, description);
 
         Note note = new Note(
                 new NoteId(UUID.randomUUID().toString()),
@@ -39,6 +44,7 @@ public class NoteApplicationService implements NoteUseCase {
                 false,
                 reminder,
                 tagId,
+                metadata.getTags(), metadata.getKeywords(), metadata.getSummary(),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -51,7 +57,46 @@ public class NoteApplicationService implements NoteUseCase {
 
         Note note = getOwnedNote(userId, noteId);
         note.update(title, description, tagId);
+
+        if (title != null || description != null) {
+            var metadata = aiSearchPort.generateMetadata(
+                    note.getTitle(),
+                    note.getDescription()
+            );
+
+            note.updateMetadata(
+                    metadata.getTags(),
+                    metadata.getKeywords(),
+                    metadata.getSummary()
+            );
+        }
         return noteRepository.save(note);
+    }
+
+    public List<Note> aiSearch(String userId, String prompt) {
+
+        var searchMeta = aiSearchPort.parseSearchQuery(prompt);
+
+        List<Note> notes = noteRepository.findAllByUserId(new UserId(userId));
+
+        return notes.stream()
+                .filter(note ->
+                        containsAny(note.getKeywords(), searchMeta.getKeywords()) ||
+                                containsAny(note.getTags(), searchMeta.getTags()) ||
+                                note.getTitle().toLowerCase().contains(prompt.toLowerCase())
+                )
+                .toList();
+    }
+
+    private boolean containsAny(List<String> source, List<String> target) {
+        if (source == null || target == null) return false;
+
+        return source.stream()
+                .anyMatch(s ->
+                        target.stream().anyMatch(t ->
+                                s.toLowerCase().contains(t.toLowerCase())
+                        )
+                );
     }
 
     @Override
