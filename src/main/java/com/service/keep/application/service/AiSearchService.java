@@ -10,10 +10,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.keep.application.dto.response.MetadataResponse;
 import com.service.keep.application.dto.response.SearchQueryResponse;
 import com.service.keep.domain.port.outbound.AiSearchPort;
+import com.service.keep.infrastructure.config.OllamaConfiguration;
 import com.service.keep.infrastructure.dto.OllamaRequest;
 import com.service.keep.infrastructure.dto.OllamaResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,12 +23,7 @@ public class AiSearchService implements AiSearchPort {
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
-
-    @Value("${ollama.base-url}")
-    private String baseUrl;
-
-    @Value("${ollama.model}")
-    private String model;
+    private final OllamaConfiguration configuration;
 
     @Override
     public MetadataResponse generateMetadata(String title, String description) {
@@ -48,10 +43,10 @@ public class AiSearchService implements AiSearchPort {
                 }
                 """.formatted(title, description);
 
-            var request = new OllamaRequest(model, prompt, false);
+            var request = new OllamaRequest(configuration.getModel(), prompt, false);
 
             var response = restTemplate.postForObject(
-                    baseUrl + "/api/generate",
+                    configuration.getBaseUrl() + "/api/generate",
                     request,
                     OllamaResponse.class
             );
@@ -82,10 +77,10 @@ public class AiSearchService implements AiSearchPort {
                     }
                     """.formatted(promptText);
 
-            var request = new OllamaRequest(model, prompt, false);
+            var request = new OllamaRequest(configuration.getModel(), prompt, false);
 
             var response = restTemplate.postForObject(
-                    baseUrl + "/api/generate",
+                    configuration.getBaseUrl() + "/api/generate",
                     request,
                     OllamaResponse.class
             );
