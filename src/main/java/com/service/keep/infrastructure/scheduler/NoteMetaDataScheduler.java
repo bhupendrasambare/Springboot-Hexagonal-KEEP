@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class NoteMetaDataScheduler {
 
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 1000)
     public void updateMetaData(){}
 
 }
