@@ -14,6 +14,7 @@ import com.service.keep.infrastructure.config.OllamaConfiguration;
 import com.service.keep.infrastructure.dto.OllamaRequest;
 import com.service.keep.infrastructure.dto.OllamaResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -27,6 +28,43 @@ public class AiSearchService implements AiSearchPort {
 
     @Override
     public MetadataResponse generateMetadata(String title, String description) {
+
+        try {
+            String prompt = """
+                Extract metadata from the note.
+
+                Title: %s
+                Description: %s
+
+                Return ONLY JSON in this format:
+                {
+                  "tags": [],
+                  "keywords": [],
+                  "summary": ""
+                }
+                """.formatted(title, description);
+
+            var request = new OllamaRequest(configuration.getModel(), prompt, false);
+
+            var response = restTemplate.postForObject(
+                    configuration.getBaseUrl() + "/api/generate",
+                    request,
+                    OllamaResponse.class
+            );
+
+            String cleaned = cleanJson(response.getResponse());
+
+            return objectMapper.readValue(cleaned, MetadataResponse.class);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new MetadataResponse();
+        }
+    }
+
+    @Override
+    @Async
+    public MetadataResponse generateMetadataAsync(String title, String description) {
 
         try {
             String prompt = """

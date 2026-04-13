@@ -13,5 +13,7 @@ public interface AiSearchPort {
 
     MetadataResponse generateMetadata(String title, String description);
 
+    MetadataResponse generateMetadataAsync(String title, String description);
+
     SearchQueryResponse parseSearchQuery(String prompt);
 }
