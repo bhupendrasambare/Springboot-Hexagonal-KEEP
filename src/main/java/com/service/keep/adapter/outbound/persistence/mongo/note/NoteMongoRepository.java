@@ -24,4 +24,6 @@ public interface NoteMongoRepository extends MongoRepository<NoteDocument, Strin
     );
 
     List<NoteDocument> findByUserId(String userId);
+
+    Page<NoteDocument> findByMetaDataFlag(Boolean metaDataFlag, Pageable pageable);
 }

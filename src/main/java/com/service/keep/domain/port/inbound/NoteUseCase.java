@@ -23,6 +23,10 @@ public interface NoteUseCase {
 
     void restore(String userId, String noteId);
 
+    Note saveNoteInternal(Note note);
+
+    Page<Note> getAllNonMetaDataNotes(Integer size);
+
     Page<Note> getAll(String userId, boolean pin, boolean archive, boolean trashed, String keyword, Integer page, Integer pageSize);
 }
 

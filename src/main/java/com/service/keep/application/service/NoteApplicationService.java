@@ -15,6 +15,8 @@ import com.service.keep.domain.valueobject.NoteId;
 import com.service.keep.domain.valueobject.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -139,6 +141,17 @@ public class NoteApplicationService implements NoteUseCase {
         Note note = getOwnedNote(userId, noteId);
         note.restoreFromTrash();
         noteRepository.save(note);
+    }
+
+    @Override
+    public Note saveNoteInternal(Note note) {
+        return noteRepository.save(note);
+    }
+
+    @Override
+    public Page<Note> getAllNonMetaDataNotes(Integer size) {
+        Pageable pageable = PageRequest.of(0,size);
+        return noteRepository.findAllByMetaDataFlag(Boolean.FALSE, pageable);
     }
 
     @Override

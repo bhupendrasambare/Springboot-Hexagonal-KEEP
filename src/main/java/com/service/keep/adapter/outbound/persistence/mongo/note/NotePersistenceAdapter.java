@@ -13,6 +13,7 @@ import com.service.keep.domain.valueobject.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
@@ -40,6 +41,15 @@ public class NotePersistenceAdapter implements NoteRepositoryPort {
     @Override
     public List<Note> findAllByUserId(UserId userId) {
         return repository.findByUserId(userId.getValue()).stream().map(this::toDomain).collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<Note> findAllByMetaDataFlag(Boolean metaDataFlag, Pageable pageable) {
+
+        Page<NoteDocument> result = repository
+                .findByMetaDataFlag(metaDataFlag,pageable);
+
+        return result.map(this::toDomain);
     }
 
     @Override

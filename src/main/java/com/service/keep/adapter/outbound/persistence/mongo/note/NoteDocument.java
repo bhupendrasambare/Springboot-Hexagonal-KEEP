@@ -31,6 +31,8 @@ public class NoteDocument {
     private Boolean archived;
     private Boolean trashed;
 
+    private Boolean metaDataFlag;
+
     private String reminder;
 
     private String tagId;

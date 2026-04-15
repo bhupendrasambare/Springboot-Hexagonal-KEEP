@@ -24,6 +24,7 @@ public class Note {
     private boolean pinned;
     private boolean archived;
     private boolean trashed;
+    private boolean metaDataFlag;
     private String reminder;
     private String tagId;
 
@@ -214,5 +215,13 @@ public class Note {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
+    }
+
+    public boolean isMetaDataFlag() {
+        return metaDataFlag;
+    }
+
+    public void setMetaDataFlag(boolean metaDataFlag) {
+        this.metaDataFlag = metaDataFlag;
     }
 }
