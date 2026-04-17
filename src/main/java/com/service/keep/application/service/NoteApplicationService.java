@@ -46,10 +46,10 @@ public class NoteApplicationService implements NoteUseCase {
                 false,
                 reminder,
                 tagId,
-                metadata.getTags(), metadata.getKeywords(), metadata.getSummary(),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
+        note.setMetaDataFlag(false);
 
         return noteRepository.save(note);
     }
@@ -59,19 +59,7 @@ public class NoteApplicationService implements NoteUseCase {
 
         Note note = getOwnedNote(userId, noteId);
         note.update(title, description, tagId);
-
-        if (title != null || description != null) {
-            var metadata = aiSearchPort.generateMetadata(
-                    note.getTitle(),
-                    note.getDescription()
-            );
-
-            note.updateMetadata(
-                    metadata.getTags(),
-                    metadata.getKeywords(),
-                    metadata.getSummary()
-            );
-        }
+        note.setMetaDataFlag(false);
         return noteRepository.save(note);
     }
 

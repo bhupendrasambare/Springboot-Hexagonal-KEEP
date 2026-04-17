@@ -44,9 +44,6 @@ public class Note {
                 boolean trashed,
                 String reminder,
                 String tagId,
-                List<String> tags,
-                List<String> keywords,
-                String summary,
                 LocalDateTime createdAt,
                 LocalDateTime updatedAt) {
 

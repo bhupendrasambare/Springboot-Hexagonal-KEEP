@@ -109,9 +109,6 @@ public class NotePersistenceAdapter implements NoteRepositoryPort {
                 d.getTrashed(),
                 d.getReminder(),
                 d.getTagId(),
-                d.getTags(),
-                d.getKeywords(),
-                d.getSummary(),
                 d.getCreatedAt(),
                 d.getUpdatedAt()
         );
