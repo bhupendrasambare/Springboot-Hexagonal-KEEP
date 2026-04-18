@@ -28,5 +28,7 @@ public interface NoteUseCase {
     Page<Note> getAllNonMetaDataNotes(Integer size);
 
     Page<Note> getAll(String userId, boolean pin, boolean archive, boolean trashed, String keyword, Integer page, Integer pageSize);
+
+    Page<Note> findByAi(String request);
 }
 

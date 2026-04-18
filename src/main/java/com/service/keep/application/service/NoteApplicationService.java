@@ -6,6 +6,7 @@
  **/
 package com.service.keep.application.service;
 
+import com.service.keep.application.dto.response.SearchQueryResponse;
 import com.service.keep.application.exception.NoteNotFoundException;
 import com.service.keep.domain.model.Note;
 import com.service.keep.domain.port.inbound.NoteUseCase;
@@ -161,6 +162,13 @@ public class NoteApplicationService implements NoteUseCase {
                 page == null ? 0 : page,
                 pageSize == null ? 10 : pageSize
         );
+    }
+
+    @Override
+    public Page<Note> findByAi(String request) {
+        SearchQueryResponse response = aiSearchPort.parseSearchQuery(request);
+        noteRepository.findAllByMetaDataFlag()
+        response.getTags();
     }
 
     private Note getOwnedNote(String userId, String noteId) {

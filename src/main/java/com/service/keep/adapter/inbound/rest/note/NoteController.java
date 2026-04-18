@@ -74,6 +74,20 @@ public class NoteController {
         return ResponseUtil.success("Notes fetched successfully", pageResponse);
     }
 
+    @PostMapping("/find")
+    public ResponseEntity<Response> findAll(@Valid @RequestParam String request) {
+
+        Page<Note> data = noteUseCase.findByAi(request);
+
+        List<NoteResponse> notes = data.stream()
+                .map(NoteMapper::toNoteResponse)
+                .toList();
+
+        PageResponse<NoteResponse> pageResponse = new PageResponse<>(notes, data);
+
+        return ResponseUtil.success("Notes fetched successfully", pageResponse);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Response> update(
             @PathVariable String id,
