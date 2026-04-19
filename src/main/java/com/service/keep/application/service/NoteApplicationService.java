@@ -6,7 +6,6 @@
  **/
 package com.service.keep.application.service;
 
-import com.service.keep.application.dto.response.SearchQueryResponse;
 import com.service.keep.application.exception.NoteNotFoundException;
 import com.service.keep.domain.model.Note;
 import com.service.keep.domain.port.inbound.NoteUseCase;
@@ -35,8 +34,6 @@ public class NoteApplicationService implements NoteUseCase {
     public Note create(String userId, String title, String description,
                        String reminder, String tagId) {
 
-        var metadata = aiSearchPort.generateMetadata(title, description);
-
         Note note = new Note(
                 new NoteId(UUID.randomUUID().toString()),
                 new UserId(userId),
@@ -64,19 +61,17 @@ public class NoteApplicationService implements NoteUseCase {
         return noteRepository.save(note);
     }
 
-    public List<Note> aiSearch(String userId, String prompt) {
+    @Override
+    public List<Note> findByAi(String request, String userId) {
 
-        var searchMeta = aiSearchPort.parseSearchQuery(prompt);
+        var searchMeta = aiSearchPort.parseSearchQuery(request);
 
-        List<Note> notes = noteRepository.findAllByUserId(new UserId(userId));
-
-        return notes.stream()
-                .filter(note ->
-                        containsAny(note.getKeywords(), searchMeta.getKeywords()) ||
-                                containsAny(note.getTags(), searchMeta.getTags()) ||
-                                note.getTitle().toLowerCase().contains(prompt.toLowerCase())
-                )
-                .toList();
+        return noteRepository.searchByAi(
+                new UserId(userId),
+                searchMeta.getKeywords(),
+                searchMeta.getTags(),
+                request   // title fallback
+        );
     }
 
     private boolean containsAny(List<String> source, List<String> target) {
@@ -162,13 +157,6 @@ public class NoteApplicationService implements NoteUseCase {
                 page == null ? 0 : page,
                 pageSize == null ? 10 : pageSize
         );
-    }
-
-    @Override
-    public Page<Note> findByAi(String request) {
-        SearchQueryResponse response = aiSearchPort.parseSearchQuery(request);
-        noteRepository.findAllByMetaDataFlag()
-        response.getTags();
     }
 
     private Note getOwnedNote(String userId, String noteId) {

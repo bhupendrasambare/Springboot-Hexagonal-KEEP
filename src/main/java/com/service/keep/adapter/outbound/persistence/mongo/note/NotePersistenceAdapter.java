@@ -77,6 +77,16 @@ public class NotePersistenceAdapter implements NoteRepositoryPort {
         return result.map(this::toDomain);
     }
 
+    @Override
+    public List<Note> searchByAi(UserId userId, List<String> keywords, List<String> tags, String title) {
+
+        return repository
+                .searchByAi(userId.getValue(), keywords, tags, title)
+                .stream()
+                .map(this::toDomain)
+                .toList();
+    }
+
     // ---------------- MAPPERS ----------------
 
     private NoteDocument toDocument(Note note) {

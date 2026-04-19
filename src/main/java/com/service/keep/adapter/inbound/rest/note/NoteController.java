@@ -74,18 +74,16 @@ public class NoteController {
         return ResponseUtil.success("Notes fetched successfully", pageResponse);
     }
 
-    @PostMapping("/find")
-    public ResponseEntity<Response> findAll(@Valid @RequestParam String request) {
+    @PostMapping("/search-notes")
+    public ResponseEntity<Response> searchNotes(@Valid @RequestParam String request) {
 
-        Page<Note> data = noteUseCase.findByAi(request);
+        List<Note> data = noteUseCase.findByAi(request, getUserId());
 
         List<NoteResponse> notes = data.stream()
                 .map(NoteMapper::toNoteResponse)
                 .toList();
 
-        PageResponse<NoteResponse> pageResponse = new PageResponse<>(notes, data);
-
-        return ResponseUtil.success("Notes fetched successfully", pageResponse);
+        return ResponseUtil.success("Notes fetched successfully", notes);
     }
 
     @PutMapping("/{id}")

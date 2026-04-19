@@ -29,4 +29,6 @@ public interface NoteRepositoryPort {
     List<Note> findAllByUserId(UserId userId);
 
     Page<Note> findAllByMetaDataFlag(Boolean metaDataFlag, Pageable pageable);
+
+    List<Note> searchByAi(UserId userId, List<String> keywords, List<String> tags, String title);
 }
