@@ -71,7 +71,7 @@ public class NoteController {
 
         PageResponse<NoteResponse> pageResponse = new PageResponse<>(notes, data);
 
-        return ResponseUtil.success("Notes fetched successfully", pageResponse);
+        return ResponseUtil.success("Notes searched successfully", pageResponse);
     }
 
     @PostMapping("/search-notes")
