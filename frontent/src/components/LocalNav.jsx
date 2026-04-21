@@ -27,6 +27,13 @@ function LocalNav({ sidebarActive, setSidebarActive, showRow, setShowRow, refres
       }, 1000)
   }, [refresh])
 
+  function seachsubmit (e){
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const values = Object.fromEntries(formData.entries());
+    console.log(values?.searchParameter)
+  }
+
 
   const handleLogout = () => {
     logout();
@@ -39,12 +46,12 @@ function LocalNav({ sidebarActive, setSidebarActive, showRow, setShowRow, refres
     <Navbar className="bg-body-tertiary bg-black" fixed="top" data-bs-theme="dark">
       <div className='mx-1p d-flex w-100'>
         <Navbar.Brand href="#home">
-          <GiHamburgerMenu onClick={() =>setSidebarActive(!sidebarActive)} size={25} className='me-4'/>
+          <GiHamburgerMenu onClick={setSidebarActive} size={25} className='me-4'/>
           Keep
         </Navbar.Brand>
 
-        <form action="" className="form-control w-50 p-0">
-          <input type="text" className="form-control" />
+        <form onSubmit={(data)=>seachsubmit(data)} className="form-control w-50 p-0">
+          <input name="searchParameter" type="text" className="form-control" />
         </form>
 
         <Navbar.Toggle />
