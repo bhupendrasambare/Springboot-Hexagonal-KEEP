@@ -12,10 +12,12 @@ import {
 } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
+import { searchNotes } from "../api/notesService";
 
 function LocalNav({ sidebarActive, setSidebarActive, showRow, setShowRow, refreshNotes }) {
   const [refresh, setRefresh] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [searchString, setSearchString] = useState("");
 
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -27,11 +29,11 @@ function LocalNav({ sidebarActive, setSidebarActive, showRow, setShowRow, refres
       }, 1000)
   }, [refresh])
 
-  function seachsubmit (e){
+  const seachsubmit = async (e) =>{
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const values = Object.fromEntries(formData.entries());
-    console.log(values?.searchParameter)
+    console.log(searchString)
+    var data = await searchNotes(searchString);
+    console.log(data);
   }
 
 
@@ -51,7 +53,7 @@ function LocalNav({ sidebarActive, setSidebarActive, showRow, setShowRow, refres
         </Navbar.Brand>
 
         <form onSubmit={(data)=>seachsubmit(data)} className="form-control w-50 p-0">
-          <input name="searchParameter" type="text" className="form-control" />
+          <input name="searchParameter" onChange={(e)=>setSearchString(e.target.value)}  type="text" className="form-control" />
         </form>
 
         <Navbar.Toggle />

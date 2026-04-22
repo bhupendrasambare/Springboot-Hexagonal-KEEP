@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,8 +23,8 @@ public class KeepApplication {
 	@Bean
 	public RestTemplate restTemplate(RestTemplateBuilder builder) {
 		return builder
-				.setConnectTimeout(Duration.ofMillis(5000))
-				.setReadTimeout(Duration.ofMillis(5000))
+				.setConnectTimeout(Duration.ofSeconds(60))
+				.setReadTimeout(Duration.ofSeconds(60))
 				.build();
 	}
 

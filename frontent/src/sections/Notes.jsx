@@ -141,7 +141,7 @@ export const Notes = ({refresh}) => {
 
           <Row className="g-4">
             {pinnedToShow.map((note) => (
-              <Col key={note.id} xs={12} md={4} lg={3} xl={2}>
+              <Col key={note.id} xs={12} sm={6} md={4} lg={3}>
                 <NotesCard noteData={note} refreshNotes={refreshNotes} />
               </Col>
             ))}
@@ -150,7 +150,7 @@ export const Notes = ({refresh}) => {
               <Col xs={12} md={4} lg={3} xl={2}>
                 <div
                   className="note-card"
-                  onClick={() => navigate("/important")}
+                  onClick={() => navigate("/home/important")}
                   style={{ cursor: "pointer" }}
                 >
                   <div className="note-content">

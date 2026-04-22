@@ -74,8 +74,8 @@ public class NoteController {
         return ResponseUtil.success("Notes searched successfully", pageResponse);
     }
 
-    @PostMapping("/search-notes")
-    public ResponseEntity<Response> searchNotes(@Valid @RequestParam String request) {
+    @GetMapping("/search-notes")
+    public ResponseEntity<Response> searchNotes(@RequestParam String request) {
 
         List<Note> data = noteUseCase.findByAi(request, getUserId());
 

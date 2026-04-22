@@ -106,3 +106,8 @@ export const unTrashNoteApi = async (noteId) => {
   const response = await axiosInstance.post(`/notes/un-trash/${noteId}`);
   return response?.data ?? null;
 };
+
+export const searchNotes = async (searchString) => {
+  const response = await axiosInstance.get(`/notes/search-notes?request=${searchString}`);
+  return response?.data ?? null;
+};

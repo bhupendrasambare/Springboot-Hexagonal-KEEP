@@ -14,7 +14,6 @@ import com.service.keep.infrastructure.config.OllamaConfiguration;
 import com.service.keep.infrastructure.dto.OllamaRequest;
 import com.service.keep.infrastructure.dto.OllamaResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -63,7 +62,6 @@ public class AiSearchService implements AiSearchPort {
     }
 
     @Override
-    @Async
     public MetadataResponse generateMetadataAsync(String title, String description) {
 
         try {
@@ -104,16 +102,21 @@ public class AiSearchService implements AiSearchPort {
 
         try {
             String prompt = """
-                    Extract search keywords from the query.
+                Extract search keywords from the query.
 
-                    Query: %s
+                Query: %s
 
-                    Return ONLY JSON:
-                    {
-                      "tags": [],
-                      "keywords": []
-                    }
-                    """.formatted(promptText);
+                STRICT RULES:
+                - Return ONLY valid JSON
+                - Do NOT use markdown
+                - Do NOT add explanation
+
+                Format:
+                {
+                  "tags": [],
+                  "keywords": []
+                }
+                """.formatted(promptText);
 
             var request = new OllamaRequest(configuration.getModel(), prompt, false);
 
@@ -123,7 +126,13 @@ public class AiSearchService implements AiSearchPort {
                     OllamaResponse.class
             );
 
-            return objectMapper.readValue(response.getResponse(), SearchQueryResponse.class);
+            if (response == null || response.getResponse() == null) {
+                return new SearchQueryResponse();
+            }
+
+            String cleaned = cleanJson2(response.getResponse());
+
+            return objectMapper.readValue(cleaned, SearchQueryResponse.class);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -142,6 +151,26 @@ public class AiSearchService implements AiSearchPort {
         raw = raw.trim();
 
         // sometimes model adds text before/after JSON → extract only JSON block
+        int start = raw.indexOf("{");
+        int end = raw.lastIndexOf("}");
+
+        if (start != -1 && end != -1) {
+            raw = raw.substring(start, end + 1);
+        }
+
+        return raw;
+    }
+
+    private String cleanJson2(String raw) {
+        if (raw == null) return "";
+
+        // remove markdown wrappers
+        raw = raw.replaceAll("```json", "")
+                .replaceAll("```", "");
+
+        raw = raw.trim();
+
+        // extract only JSON block
         int start = raw.indexOf("{");
         int end = raw.lastIndexOf("}");
 
