@@ -10,11 +10,13 @@ import Important from "../sections/Important";
 import EditLabels from "../sections/EditLabels";
 import Archived from "../sections/Archive";
 import Bin from "../sections/Bin";
+import SearchResult from "../sections/SearchResult";
 
 function HomePage() {
   const [sidebarActive, setSidebarActive] = useState(false);
   const [showRow, setShowRow] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [searchString, setSearchString] = useState("");
   const refreshNotes = () =>{
     setRefresh(!refresh);
   }
@@ -40,6 +42,7 @@ function HomePage() {
             <Route path="/edit-labels" element={<EditLabels refresh={refresh} />} />
             <Route path="/archive" element={<Archived refresh={refresh} />} />
             <Route path="/bin" element={<Bin refresh={refresh} />} />
+            <Route path="/search" element={<SearchResult refresh={refresh} searchString={searchString} />} />
 
             {/* default */}
             <Route path="*" element={<Navigate to="/home" />} />
