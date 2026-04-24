@@ -54,13 +54,13 @@ export const SearchResult = ({refresh, searchString}) => {
   return (
     <Container fluid className="notes-wrapper">
       {pinnedNotesList.length > 0 && (
-        <h2 className="text-secondary fw-bold mb-5">Important Notes</h2>
+        <h2 className="text-secondary fw-bold mb-5">Search results Notes</h2>
       )}
 
       {pinnedNotesList.length === 0 && !loading ? (
         <div className="empty-fullpage-wrapper">
           <MdLabelImportantOutline className="empty-fullpage-icon" />
-          <p className="empty-fullpage-text">No Important Notes Found</p>
+          <p className="empty-fullpage-text">No Notes Found</p>
         </div>
       ) : (
         <>
@@ -74,7 +74,7 @@ export const SearchResult = ({refresh, searchString}) => {
 
           {loading && (
             <div className="text-center mt-4 mb-5">
-              <span className="text-muted">Loading more important notes...</span>
+              <span className="text-muted">Loading more notes...</span>
             </div>
           )}
         </>
