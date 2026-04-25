@@ -13,7 +13,7 @@ export const SearchResult = ({refresh, searchString}) => {
   const pageSize = 8;
 
   useEffect(() => {
-    loadPinnedNotes();
+    loadSearchNotes();
   }, [refresh]);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export const SearchResult = ({refresh, searchString}) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [page, totalPages, loading]);
 
-  const loadPinnedNotes = async () => {
+  const loadSearchNotes = async () => {
     try {
       setLoading(true);
 
