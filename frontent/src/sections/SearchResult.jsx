@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { MdLabelImportantOutline } from "react-icons/md";
-import { getPinnedNotesApi } from "../api/notesService";
 import NotesCard from "../components/NotesCard";
 
 export const SearchResult = ({refresh, searchString}) => {
@@ -38,7 +37,7 @@ export const SearchResult = ({refresh, searchString}) => {
     try {
       setLoading(true);
 
-      const pageData = await getPinnedNotesApi(0, pageSize);
+      const pageData = await searchNotes(searchString);
 
       setPinnedNotesList(pageData?.content ?? []);
       setPage(1);
