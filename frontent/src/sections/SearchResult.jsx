@@ -1,50 +1,37 @@
 import { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { MdLabelImportantOutline } from "react-icons/md";
+import { useSearchParams } from "react-router-dom";
+import { searchNotes } from "../api/notesService";
 import NotesCard from "../components/NotesCard";
 
-export const SearchResult = ({refresh, searchString}) => {
-  const [pinnedNotesList, setPinnedNotesList] = useState([]);
-  const [page, setPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
+export const SearchResult = ({ refresh }) => {
+  const [notesList, setNotesList] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const pageSize = 8;
+  const [searchParams] = useSearchParams();
+  const searchString = searchParams.get("q") || "";
 
   useEffect(() => {
-    loadSearchNotes();
-  }, [refresh]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (loading) return;
-      if (page >= totalPages) return;
-
-      const bottom =
-        window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 120;
-
-      if (bottom) {
-        loadMoreNotes();
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [page, totalPages, loading]);
+    if (searchString) {
+      loadSearchNotes();
+    } else {
+      setNotesList([]);
+    }
+  }, [refresh, searchString]);
 
   const loadSearchNotes = async () => {
     try {
       setLoading(true);
 
-      const pageData = await searchNotes(searchString);
+      const response = await searchNotes(searchString);
 
-      setPinnedNotesList(pageData?.content ?? []);
-      setPage(1);
-      setTotalPages(pageData?.totalPages ?? 0);
+      const notes = response?.data ?? [];
+
+      setNotesList(notes);
     } catch (error) {
-      console.error("Error fetching pinned notes:", error);
-      setPinnedNotesList([]);
+      console.error("Error fetching search notes:", error);
+      setNotesList([]);
     } finally {
       setLoading(false);
     }
@@ -52,28 +39,32 @@ export const SearchResult = ({refresh, searchString}) => {
 
   return (
     <Container fluid className="notes-wrapper">
-      {pinnedNotesList.length > 0 && (
-        <h2 className="text-secondary fw-bold mb-5">Search results Notes</h2>
+      {notesList.length > 0 && (
+        <h2 className="text-secondary fw-bold mb-5">
+          Search Results for "{searchString}"
+        </h2>
       )}
 
-      {pinnedNotesList.length === 0 && !loading ? (
+      {notesList.length === 0 && !loading ? (
         <div className="empty-fullpage-wrapper">
           <MdLabelImportantOutline className="empty-fullpage-icon" />
-          <p className="empty-fullpage-text">No Notes Found</p>
+          <p className="empty-fullpage-text">
+            No notes found for "{searchString}"
+          </p>
         </div>
       ) : (
         <>
           <Row className="g-4">
-            {pinnedNotesList.map((note) => (
+            {notesList.map((note) => (
               <Col key={note.id} xs={12} sm={6} md={4} lg={3}>
-                <NotesCard noteData={note} refreshNotes={loadPinnedNotes} />
+                <NotesCard noteData={note} refreshNotes={loadSearchNotes} />
               </Col>
             ))}
           </Row>
 
           {loading && (
             <div className="text-center mt-4 mb-5">
-              <span className="text-muted">Loading more notes...</span>
+              <span className="text-muted">Searching notes...</span>
             </div>
           )}
         </>

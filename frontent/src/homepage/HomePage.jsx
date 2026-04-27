@@ -42,7 +42,7 @@ function HomePage() {
             <Route path="/edit-labels" element={<EditLabels refresh={refresh} />} />
             <Route path="/archive" element={<Archived refresh={refresh} />} />
             <Route path="/bin" element={<Bin refresh={refresh} />} />
-            <Route path="/search" element={<SearchResult refresh={refresh} searchString={searchString} />} />
+            <Route path="/search" element={<SearchResult refresh={refresh} />} />
 
             {/* default */}
             <Route path="*" element={<Navigate to="/home" />} />
