@@ -10,7 +10,7 @@ export const SearchResult = ({ refresh }) => {
   const [loading, setLoading] = useState(false);
 
   const [searchParams] = useSearchParams();
-  const searchString = searchParams.get("q") || "";
+  const searchString = searchParams.get("query") || "";
 
   useEffect(() => {
     if (searchString) {
