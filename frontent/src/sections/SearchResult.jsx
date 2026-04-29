@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { MdLabelImportantOutline } from "react-icons/md";
 import { useSearchParams } from "react-router-dom";
 import { searchNotes } from "../api/notesService";
@@ -13,7 +13,7 @@ export const SearchResult = ({ refresh }) => {
   const searchString = searchParams.get("query") || "";
 
   useEffect(() => {
-    if (searchString) {
+    if (searchString.trim() !== "") {
       loadSearchNotes();
     } else {
       setNotesList([]);
@@ -23,6 +23,8 @@ export const SearchResult = ({ refresh }) => {
   const loadSearchNotes = async () => {
     try {
       setLoading(true);
+
+      console.log(searchString + " called");
 
       const response = await searchNotes(searchString);
 
@@ -39,35 +41,45 @@ export const SearchResult = ({ refresh }) => {
 
   return (
     <Container fluid className="notes-wrapper">
-      {notesList.length > 0 && (
-        <h2 className="text-secondary fw-bold mb-5">
-          Search Results for "{searchString}"
-        </h2>
+
+      {/* 🔥 LOADING STATE */}
+      {loading && (
+        <div className="empty-fullpage-wrapper">
+          <Spinner animation="border" variant="secondary" />
+          <p className="empty-fullpage-text mt-3">
+            Searching notes...
+          </p>
+        </div>
       )}
 
-      {notesList.length === 0 && !loading ? (
+      {/* 🔥 DATA STATE */}
+      {!loading && notesList.length > 0 && (
+        <>
+          <h2 className="text-secondary fw-bold mb-5">
+            Search Results for "{searchString}"
+          </h2>
+
+          <Row className="g-4">
+            {notesList.map((note) => (
+              <Col key={note.id} xs={12} sm={6} md={4} lg={3}>
+                <NotesCard
+                  noteData={note}
+                  refreshNotes={loadSearchNotes}
+                />
+              </Col>
+            ))}
+          </Row>
+        </>
+      )}
+
+      {/* 🔥 EMPTY STATE */}
+      {!loading && notesList.length === 0 && (
         <div className="empty-fullpage-wrapper">
           <MdLabelImportantOutline className="empty-fullpage-icon" />
           <p className="empty-fullpage-text">
             No notes found for "{searchString}"
           </p>
         </div>
-      ) : (
-        <>
-          <Row className="g-4">
-            {notesList.map((note) => (
-              <Col key={note.id} xs={12} sm={6} md={4} lg={3}>
-                <NotesCard noteData={note} refreshNotes={loadSearchNotes} />
-              </Col>
-            ))}
-          </Row>
-
-          {loading && (
-            <div className="text-center mt-4 mb-5">
-              <span className="text-muted">Searching notes...</span>
-            </div>
-          )}
-        </>
       )}
     </Container>
   );
