@@ -41,8 +41,6 @@ export const SearchResult = ({ refresh }) => {
 
   return (
     <Container fluid className="notes-wrapper">
-
-      {/* 🔥 LOADING STATE */}
       {loading && (
         <div className="empty-fullpage-wrapper">
           <Spinner animation="border" variant="secondary" />
@@ -52,7 +50,6 @@ export const SearchResult = ({ refresh }) => {
         </div>
       )}
 
-      {/* 🔥 DATA STATE */}
       {!loading && notesList.length > 0 && (
         <>
           <h2 className="text-secondary fw-bold mb-5">
@@ -72,7 +69,6 @@ export const SearchResult = ({ refresh }) => {
         </>
       )}
 
-      {/* 🔥 EMPTY STATE */}
       {!loading && notesList.length === 0 && (
         <div className="empty-fullpage-wrapper">
           <MdLabelImportantOutline className="empty-fullpage-icon" />
