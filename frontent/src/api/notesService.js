@@ -121,8 +121,7 @@ export const searchNotes = async (searchString, retryCount = 0) => {
     if (status === 500 && retryCount < 2) {
       console.warn(`Retrying search... attempt ${retryCount + 1}`);
 
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // ⏳ 2 sec delay
-
+      await new Promise((resolve) => setTimeout(resolve, 10000));
       return searchNotes(searchString, retryCount + 1);
     }
 

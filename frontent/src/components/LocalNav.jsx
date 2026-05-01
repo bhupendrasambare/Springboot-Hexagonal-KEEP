@@ -4,17 +4,22 @@ import Navbar from "react-bootstrap/Navbar";
 import { BsGrid3X3Gap, BsViewStacked, BsGrid } from "react-icons/bs";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdCloudOutline } from "react-icons/io";
-import {useAuth} from "../store/AuthContext"
+import { useAuth } from "../store/AuthContext";
 import {
   MdOutlineRefresh,
   MdOutlineSupervisedUserCircle,
   MdOutlineSettings,
 } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import { searchNotes } from "../api/notesService";
 
-function LocalNav({ sidebarActive, setSidebarActive, showRow, setShowRow, refreshNotes }) {
+function LocalNav({
+  sidebarActive,
+  setSidebarActive,
+  showRow,
+  setShowRow,
+  refreshNotes,
+}) {
   const [refresh, setRefresh] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [searchString, setSearchString] = useState("");
@@ -22,20 +27,34 @@ function LocalNav({ sidebarActive, setSidebarActive, showRow, setShowRow, refres
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
+  const [searchParams] = useSearchParams();
+
   useEffect(() => {
-    refreshNotes()
+    const query = searchParams.get("query");
+
+    if (query && query.trim() !== "") {
+      setSearchString(query);
+    }else{
+      setSearchString("");
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    refreshNotes();
     const timerId = setTimeout(() => {
-    setRefresh(false)
-      }, 1000)
-  }, [refresh])
+      setRefresh(false);
+    }, 1000);
 
-  const seachsubmit = async (e) =>{
+    return () => clearTimeout(timerId);
+  }, [refresh]);
+
+  const handleSearchSubmit = (e) => {
     e.preventDefault();
-    console.log(searchString)
-    var data = await searchNotes(searchString);
-    console.log(data);
-  }
 
+    if (!searchString || searchString.trim() === "") return;
+
+    navigate(`/home/search?query=${encodeURIComponent(searchString)}`);
+  };
 
   const handleLogout = () => {
     logout();
@@ -45,42 +64,67 @@ function LocalNav({ sidebarActive, setSidebarActive, showRow, setShowRow, refres
 
   return (
     <>
-    <Navbar className="bg-body-tertiary bg-black" fixed="top" data-bs-theme="dark">
-      <div className='mx-1p d-flex w-100'>
-        <Navbar.Brand href="#home">
-          <GiHamburgerMenu onClick={setSidebarActive} size={25} className='me-4'/>
-          Keep
-        </Navbar.Brand>
+      <Navbar
+        className="bg-body-tertiary bg-black"
+        fixed="top"
+        data-bs-theme="dark"
+      >
+        <div className="mx-1p d-flex w-100">
+          <Navbar.Brand href="#home">
+            <GiHamburgerMenu
+              onClick={() => setSidebarActive(!sidebarActive)}
+              size={25}
+              className="me-4"
+            />
+            Keep
+          </Navbar.Brand>
 
-        <form onSubmit={(data)=>seachsubmit(data)} className="form-control w-50 p-0">
-          <input name="searchParameter" onChange={(e)=>setSearchString(e.target.value)}  type="text" className="form-control" />
-        </form>
+          <form onSubmit={handleSearchSubmit} className="form-control w-50 p-0">
+            <input
+              name="searchParameter"
+              value={searchString}
+              onChange={(e) => setSearchString(e.target.value)}
+              type="text"
+              className="form-control"
+              placeholder="Search notes..."
+            />
+          </form>
 
-        <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end gap-4 text-body-emphasis">
-          {
-            (refresh != true)? 
-            <MdOutlineRefresh onClick={()=> setRefresh(true)} size={25} />:
-            <IoMdCloudOutline size={25} />
-          }
-          
-          
-          {
-            (showRow != true)? 
-            <BsViewStacked onClick={()=> setShowRow(true)} size={25} />:
-            <BsGrid onClick={()=> setShowRow(false)} size={25} />
-          }
-          <MdOutlineSettings size={25} />
-          <BsGrid3X3Gap size={25} />
-          <MdOutlineSupervisedUserCircle size={25} onClick={()=> setShowModal(true)} />
+          <Navbar.Toggle />
+          <Navbar.Collapse className="justify-content-end gap-4 text-body-emphasis">
+            {refresh !== true ? (
+              <MdOutlineRefresh
+                onClick={() => setRefresh(true)}
+                size={25}
+              />
+            ) : (
+              <IoMdCloudOutline size={25} />
+            )}
 
-        </Navbar.Collapse>
-      </div>
-    </Navbar>
+            {showRow !== true ? (
+              <BsViewStacked
+                onClick={() => setShowRow(true)}
+                size={25}
+              />
+            ) : (
+              <BsGrid
+                onClick={() => setShowRow(false)}
+                size={25}
+              />
+            )}
 
-    {/* USER MODAL */}
-      <Modal show={showModal} onHide={() => setShowModal(false)} centered >
-        <Modal.Header closeButton className="bg-dark text-light" >
+            <MdOutlineSettings size={25} />
+            <BsGrid3X3Gap size={25} />
+            <MdOutlineSupervisedUserCircle
+              size={25}
+              onClick={() => setShowModal(true)}
+            />
+          </Navbar.Collapse>
+        </div>
+      </Navbar>
+
+      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+        <Modal.Header closeButton className="bg-dark text-light">
           <Modal.Title>User Profile</Modal.Title>
         </Modal.Header>
 
