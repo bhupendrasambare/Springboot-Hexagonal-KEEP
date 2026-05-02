@@ -107,7 +107,26 @@ export const unTrashNoteApi = async (noteId) => {
   return response?.data ?? null;
 };
 
-export const searchNotes = async (searchString) => {
-  const response = await axiosInstance.get(`/notes/search-notes?request=${searchString}`);
-  return response?.data ?? null;
+export const searchNotes = async (searchString, retryCount = 0) => {
+  try {
+    const response = await axiosInstance.get(
+      `/notes/search-notes?request=${searchString}`
+    );
+
+    return response?.data ?? null;
+
+  } catch (error) {
+    const status = error?.response?.status;
+
+    if (status === 500 && retryCount < 2) {
+      console.warn(`Retrying search... attempt ${retryCount + 1}`);
+
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // ⏳ 2 sec delay
+
+      return searchNotes(searchString, retryCount + 1);
+    }
+
+    console.error("Search API failed:", error);
+    throw error;
+  }
 };
