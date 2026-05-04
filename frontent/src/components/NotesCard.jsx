@@ -13,19 +13,15 @@ import {
 function NotesCard({ noteData, refreshNotes }) {
   const [showModal, setShowModal] = useState(false);
 
-  /* ================= TEXT LIMIT HANDLING ================= */
-
   const trimTitle = (text) => {
     if (!text) return "";
-    return text.length > 50 ? text.substring(0, 50) + "..." : text;
+    return text.length > 20 ? text.substring(0, 20) + "..." : text;
   };
 
   const trimDescription = (text) => {
     if (!text) return "";
-    return text.length > 200 ? text.substring(0, 200) + "..." : text;
+    return text.length > 70 ? text.substring(0, 70) + "..." : text;
   };
-
-  /* ================= ACTIONS ================= */
 
   const handleArchiveToggle = async () => {
     try {
@@ -117,7 +113,7 @@ function NotesCard({ noteData, refreshNotes }) {
       {/* ================= VIEW NOTE MODAL ================= */}
 
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-        <Modal.Header closeButton>
+        <Modal.Header className="border-0">
           <Modal.Title>{noteData.title}</Modal.Title>
         </Modal.Header>
 

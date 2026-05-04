@@ -123,7 +123,6 @@ export const Notes = ({refresh}) => {
     <Container fluid className="notes-wrapper">
       <h2 className="text-secondary fw-bold mb-5">Notes</h2>
 
-      {/* Create Note Box */}
       <div className="note-input-box mb-4">
         <input
           type="text"
@@ -139,32 +138,32 @@ export const Notes = ({refresh}) => {
         <>
           <h6 className="section-title">Pinned</h6>
 
-          <Row className="g-4">
+          <div className="notes-flex-container">
             {pinnedToShow.map((note) => (
-              <Col key={note.id} xs={12} sm={6} md={4} lg={3}>
+              <div key={note.id} className="notes-flex-item">
                 <NotesCard noteData={note} refreshNotes={refreshNotes} />
-              </Col>
+              </div>
             ))}
 
             {showMorePinned && (
-              <Col xs={12} md={4} lg={3} xl={2}>
-                <div
-                  className="note-card"
-                  onClick={() => navigate("/home/important")}
-                  style={{ cursor: "pointer" }}
-                >
+              <div
+                className="notes-flex-item"
+                onClick={() => navigate("/home/important")}
+                style={{ cursor: "pointer" }}
+              >
+                <div className="note-card">
                   <div className="note-content">
                     <h5 className="note-title text-primary text-center mt-4">
                       Show More
                     </h5>
-                    <p className="note-description px-5 text-center mt-4">
+                    <p className="note-description px-3 text-center mt-2">
                       View all important notes that are pinned
                     </p>
                   </div>
                 </div>
-              </Col>
+              </div>
             )}
-          </Row>
+          </div>
         </>
       )}
 
@@ -191,21 +190,19 @@ export const Notes = ({refresh}) => {
 
       {/* MODAL */}
       <Modal show={showModel} onHide={() => setShowModel(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Create Note</Modal.Title>
-        </Modal.Header>
 
         <Form onSubmit={handleSubmit}>
           <Modal.Body>
             <Form.Control
               type="text"
               placeholder="Title"
-              className="mb-3"
+              className="mb-3 border-0"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
 
             <Form.Control
+              className=" border-0"
               as="textarea"
               rows={4}
               placeholder="Write your note..."
@@ -214,12 +211,12 @@ export const Notes = ({refresh}) => {
             />
           </Modal.Body>
 
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowModel(false)}>
+          <Modal.Footer className=" border-0">
+            <Button variant="secondary" className="btn-sm" onClick={() => setShowModel(false)}>
               Cancel
             </Button>
 
-            <Button variant="primary" type="submit">
+            <Button variant="primary" className="btn-sm" type="submit">
               Save
             </Button>
           </Modal.Footer>
