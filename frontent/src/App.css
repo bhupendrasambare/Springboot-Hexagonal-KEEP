@@ -74,8 +74,7 @@ background: #eee;
   cursor: pointer;
 }
 .note-card{
-  max-width: 300px;
-  min-width: 200px;
+  width: 300px;
   height: 200px;
   
 }
@@ -239,6 +238,7 @@ body {
 .notes-flex-container {
   display: flex;
   flex-wrap: wrap;
+  justify-content: start;
   gap: 20px;              /* spacing between cards */
 }
 
