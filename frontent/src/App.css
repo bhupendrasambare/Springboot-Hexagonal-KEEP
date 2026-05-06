@@ -231,17 +231,13 @@ background: #eee;
 body {
   overflow-x: hidden;
 }
-.ms-6rem{
-  margin-left: 6rem;
+.ps-3-5rem{
+  padding-left: 3.3rem;
 }
 
 .notes-flex-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: start;
-  gap: 20px;              /* spacing between cards */
-}
-
-.notes-flex-item {
-  flex: 1 1 200px; 
+  flex-direction: left;
+  gap: 20px;
 }

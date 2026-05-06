@@ -34,7 +34,7 @@ function HomePage() {
       <div className="d-flex w-100">
         <Sidebar sidebarActive={sidebarActive} />
 
-        <div className="ms-6rem flex-grow-1">
+        <div className="ps-3-5rem flex-grow-1">
           <Routes>
             <Route path="/" element={<Notes refresh={refresh} />} />
             <Route path="/reminder" element={<Reminder refresh={refresh} />} />

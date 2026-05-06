@@ -15,12 +15,12 @@ function NotesCard({ noteData, refreshNotes }) {
 
   const trimTitle = (text) => {
     if (!text) return "";
-    return text.length > 20 ? text.substring(0, 20) + "..." : text;
+    return text.length > 15 ? text.substring(0, 15) + "..." : text;
   };
 
   const trimDescription = (text) => {
     if (!text) return "";
-    return text.length > 70 ? text.substring(0, 70) + "..." : text;
+    return text.length > 60 ? text.substring(0, 60) + "..." : text;
   };
 
   const handleArchiveToggle = async () => {

@@ -138,7 +138,7 @@ export const Notes = ({refresh}) => {
         <>
           <h6 className="section-title">Pinned</h6>
 
-          <div className="notes-flex-container">
+          <div className="notes-flex-container mx-auto">
             {pinnedToShow.map((note) => (
               <div key={note.id} className="notes-flex-item">
                 <NotesCard noteData={note} refreshNotes={refreshNotes} />
@@ -172,13 +172,13 @@ export const Notes = ({refresh}) => {
         <>
           <h6 className="section-title mt-5">Others</h6>
 
-          <Row className="g-4">
+          <div className="notes-flex-container">
             {notesList.map((note) => (
-              <Col key={note.id} xs={12} sm={6} md={4} lg={3}>
+              <div key={note.id} className="notes-flex-item">
                 <NotesCard noteData={note} refreshNotes={refreshNotes} />
-              </Col>
+              </div>
             ))}
-          </Row>
+          </div>
         </>
       )}
 
