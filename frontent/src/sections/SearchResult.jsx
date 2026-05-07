@@ -41,6 +41,16 @@ export const SearchResult = ({ refresh }) => {
 
   return (
     <Container fluid className="notes-wrapper">
+
+      <div className="note-input-box mb-4 mt-5">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Take a note..."
+          onClick={() => setShowModel(true)}
+          readOnly
+        />
+      </div>
       {loading && (
         <div className="empty-fullpage-wrapper">
           <Spinner animation="border" variant="secondary" />
