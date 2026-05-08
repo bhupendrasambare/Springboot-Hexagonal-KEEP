@@ -10,7 +10,7 @@ import {
   MdOutlineSupervisedUserCircle,
   MdOutlineSettings,
 } from "react-icons/md";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
 function LocalNav({
@@ -26,18 +26,6 @@ function LocalNav({
 
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-
-  const [searchParams] = useSearchParams();
-
-  useEffect(() => {
-    const query = searchParams.get("query");
-
-    if (query && query.trim() !== "") {
-      setSearchString(query);
-    }else{
-      setSearchString("");
-    }
-  }, [searchParams]);
 
   useEffect(() => {
     refreshNotes();

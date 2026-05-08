@@ -1,32 +1,41 @@
 import { useEffect, useState } from "react";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { MdLabelImportantOutline } from "react-icons/md";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { searchNotes } from "../api/notesService";
 import NotesCard from "../components/NotesCard";
 
 export const SearchResult = ({ refresh }) => {
   const [notesList, setNotesList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searchString, setSearchString] = useState("");
+
+  const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
-  const searchString = searchParams.get("query") || "";
+
+  useEffect(() => {
+    const query = searchParams.get("query");
+
+    if (query && query.trim() !== "") {
+      setSearchString(query);
+    } else {
+      setSearchString("");
+      setNotesList([]);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (searchString.trim() !== "") {
-      loadSearchNotes();
-    } else {
-      setNotesList([]);
+      loadSearchNotes(searchString);
     }
   }, [refresh, searchString]);
 
-  const loadSearchNotes = async () => {
+  const loadSearchNotes = async (query) => {
     try {
       setLoading(true);
 
-      console.log(searchString + " called");
-
-      const response = await searchNotes(searchString);
+      const response = await searchNotes(query);
 
       const notes = response?.data ?? [];
 
@@ -39,18 +48,31 @@ export const SearchResult = ({ refresh }) => {
     }
   };
 
+  const handleSearchSubmit = async (e) => {
+    e.preventDefault();
+
+    if (searchString.trim() === "") return;
+
+    navigate(`/home/search?query=${encodeURIComponent(searchString)}`);
+  };
+
   return (
     <Container fluid className="notes-wrapper">
-
-      <div className="note-input-box mb-4 mt-5">
+      {/* SEARCH INPUT */}
+      <form
+        onSubmit={handleSearchSubmit}
+        className="note-input-box mb-4 mt-5"
+      >
         <input
           type="text"
           className="form-control"
-          placeholder="Take a note..."
-          onClick={() => setShowModel(true)}
-          readOnly
+          placeholder="Search notes..."
+          value={searchString}
+          onChange={(e) => setSearchString(e.target.value)}
         />
-      </div>
+      </form>
+
+      {/* LOADING */}
       {loading && (
         <div className="empty-fullpage-wrapper">
           <Spinner animation="border" variant="secondary" />
@@ -60,33 +82,47 @@ export const SearchResult = ({ refresh }) => {
         </div>
       )}
 
+      {/* NOTES */}
       {!loading && notesList.length > 0 && (
         <>
           <h2 className="text-secondary fw-bold mb-5">
             Search Results for "{searchString}"
           </h2>
 
-          <Row className="g-4">
+          <div
+            className="d-flex flex-wrap justify-content-start"
+            style={{ gap: "20px" }}
+          >
             {notesList.map((note) => (
-              <Col key={note.id} xs={12} sm={6} md={4} lg={3}>
+              <div
+                key={note.id}
+                style={{
+                  minWidth: "200px",
+                  maxWidth: "300px",
+                  flex: "1 1 250px",
+                }}
+              >
                 <NotesCard
                   noteData={note}
-                  refreshNotes={loadSearchNotes}
+                  refreshNotes={() => loadSearchNotes(searchString)}
                 />
-              </Col>
+              </div>
             ))}
-          </Row>
+          </div>
         </>
       )}
 
-      {!loading && notesList.length === 0 && (
-        <div className="empty-fullpage-wrapper">
-          <MdLabelImportantOutline className="empty-fullpage-icon" />
-          <p className="empty-fullpage-text">
-            No notes found for "{searchString}"
-          </p>
-        </div>
-      )}
+      {/* EMPTY */}
+      {!loading &&
+        notesList.length === 0 &&
+        searchString.trim() !== "" && (
+          <div className="empty-fullpage-wrapper">
+            <MdLabelImportantOutline className="empty-fullpage-icon" />
+            <p className="empty-fullpage-text">
+              No notes found for "{searchString}"
+            </p>
+          </div>
+        )}
     </Container>
   );
 };
