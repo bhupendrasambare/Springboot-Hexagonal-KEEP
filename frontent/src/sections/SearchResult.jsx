@@ -29,7 +29,7 @@ export const SearchResult = ({ refresh }) => {
     if (searchString.trim() !== "") {
       loadSearchNotes(searchString);
     }
-  }, [refresh]);
+  }, [refresh, searchString]);
 
   const loadSearchNotes = async (query) => {
     try {
