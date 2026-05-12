@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Row, Col, Spinner } from "react-bootstrap";
+import { Container, Spinner } from "react-bootstrap";
 import { MdLabelImportantOutline } from "react-icons/md";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { searchNotes } from "../api/notesService";
@@ -29,7 +29,7 @@ export const SearchResult = ({ refresh }) => {
     if (searchString.trim() !== "") {
       loadSearchNotes(searchString);
     }
-  }, [refresh, searchString]);
+  }, [refresh]);
 
   const loadSearchNotes = async (query) => {
     try {
