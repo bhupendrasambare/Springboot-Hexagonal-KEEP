@@ -9,6 +9,7 @@ import {
   MdOutlineRefresh,
   MdOutlineSupervisedUserCircle,
   MdOutlineSettings,
+  MdOutlineSearch,
 } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
@@ -36,14 +37,6 @@ function LocalNav({
     return () => clearTimeout(timerId);
   }, [refresh]);
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-
-    if (!searchString || searchString.trim() === "") return;
-
-    navigate(`/home/search?query=${encodeURIComponent(searchString)}`);
-  };
-
   const handleLogout = () => {
     logout();
     setShowModal(false);
@@ -67,16 +60,11 @@ function LocalNav({
             Keep
           </Navbar.Brand>
 
-          <form onSubmit={handleSearchSubmit} className="form-control w-50 p-0">
-            <input
-              name="searchParameter"
-              value={searchString}
-              onChange={(e) => setSearchString(e.target.value)}
-              type="text"
-              className="form-control"
-              placeholder="Search notes..."
-            />
-          </form>
+          <div className="m-2 cursor-pointer" onClick={()=>{navigate("/home/search")}}>
+            <MdOutlineSearch
+                size={25}
+              />
+          </div>
 
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end gap-4 text-body-emphasis">
