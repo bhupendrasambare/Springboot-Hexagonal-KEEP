@@ -14,4 +14,6 @@ import org.springframework.stereotype.Repository;
 public class ReminderPersistenceAdapter {
 
     private final ReminderMongoRepository repository;
+
+
 }
