@@ -6,9 +6,16 @@
  **/
 package com.service.keep.adapter.outbound.persistence.mongo.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
+
+import java.util.List;
 
 public interface ReminderMongoRepository extends MongoRepository<ReminderDocument, String> {
 
 
+    List<ReminderDocument> findAllByUserId(String value);
+
+    Page<ReminderDocument> findAllByUserId(String value, Pageable request);
 }
