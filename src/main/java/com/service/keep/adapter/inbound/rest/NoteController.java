@@ -4,7 +4,7 @@
  * Time   :12:06 am
  * Project:Keep
  **/
-package com.service.keep.adapter.inbound.rest.note;
+package com.service.keep.adapter.inbound.rest;
 
 import com.service.keep.application.dto.request.*;
 import com.service.keep.application.dto.response.NoteResponse;
@@ -21,7 +21,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

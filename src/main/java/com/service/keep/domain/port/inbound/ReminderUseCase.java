@@ -21,11 +21,6 @@ public interface ReminderUseCase {
             Boolean completed
     );
 
-    void delete(
-            String userId,
-            String reminderId
-    );
-
     void markCompleted(
             String userId,
             String reminderId

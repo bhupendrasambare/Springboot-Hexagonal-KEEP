@@ -4,7 +4,7 @@
  * Time   :12:06 am
  * Project:Keep
  **/
-package com.service.keep.adapter.inbound.rest.user;
+package com.service.keep.adapter.inbound.rest;
 
 import com.service.keep.application.dto.request.ChangePasswordRequest;
 import com.service.keep.application.dto.request.UpdateProfileRequest;

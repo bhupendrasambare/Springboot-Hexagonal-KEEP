@@ -4,7 +4,7 @@
  * Time   :12:07 am
  * Project:Keep
  **/
-package com.service.keep.adapter.inbound.rest.tags;
+package com.service.keep.adapter.inbound.rest;
 
 import com.service.keep.application.dto.request.TagCreateRequest;
 import com.service.keep.application.dto.response.TagResponse;
