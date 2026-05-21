@@ -7,6 +7,7 @@
 package com.service.keep.domain.valueobject;
 
 import ch.qos.logback.core.util.StringUtil;
+import com.service.keep.application.exception.UserNotFoundException;
 import lombok.Getter;
 
 import java.util.Objects;
@@ -17,7 +18,7 @@ public class UserId {
 
     public UserId(String userid){
         if(StringUtil.isNullOrEmpty(userid)){
-            throw new IllegalArgumentException("UserId cannot be empty");
+            throw new UserNotFoundException();
         }
 
         this.value = userid;
