@@ -17,7 +17,7 @@ const safePage = (response) => {
 
 
 export const getPinnedNotesApi = async (page = 0, size = 10) => {
-  const response = await axiosInstance.post("/notes/find", {
+  const response = await axiosInstance.post("/note/find", {
     pinned: true,
     archived: false,
     trashed: false,
@@ -30,7 +30,7 @@ export const getPinnedNotesApi = async (page = 0, size = 10) => {
 };
 
 export const getNotesApi = async (page = 0, size = 10) => {
-  const response = await axiosInstance.post("/notes/find", {
+  const response = await axiosInstance.post("/note/find", {
     pinned: false,
     archived: false,
     trashed: false,
@@ -43,7 +43,7 @@ export const getNotesApi = async (page = 0, size = 10) => {
 };
 
 export const getArchiveNotesApi = async (page = 0, size = 10) => {
-  const response = await axiosInstance.post("/notes/find", {
+  const response = await axiosInstance.post("/note/find", {
     pinned: false,
     archived: true,
     trashed: false,
@@ -56,7 +56,7 @@ export const getArchiveNotesApi = async (page = 0, size = 10) => {
 };
 
 export const getTrashNotesApi = async (page = 0, size = 10) => {
-  const response = await axiosInstance.post("/notes/find", {
+  const response = await axiosInstance.post("/note/find", {
     pinned: false,
     archived: false,
     trashed: true,
@@ -70,47 +70,47 @@ export const getTrashNotesApi = async (page = 0, size = 10) => {
 
 
 export const createNoteApi = async (note) => {
-  const response = await axiosInstance.post("/notes", note);
+  const response = await axiosInstance.post("/note", note);
   return response?.data?.data ?? null;
 };
 
 
 export const pinNoteApi = async (noteId) => {
-  const response = await axiosInstance.post(`/notes/pin/${noteId}`);
+  const response = await axiosInstance.post(`/note/pin/${noteId}`);
   return response?.data ?? null;
 };
 
 export const unPinNoteApi = async (noteId) => {
-  const response = await axiosInstance.post(`/notes/un-pin/${noteId}`);
+  const response = await axiosInstance.post(`/note/un-pin/${noteId}`);
   return response?.data ?? null;
 };
 
 
 export const archiveNoteApi = async (noteId) => {
-  const response = await axiosInstance.post(`/notes/archive/${noteId}`);
+  const response = await axiosInstance.post(`/note/archive/${noteId}`);
   return response?.data ?? null;
 };
 
 export const unArchiveNoteApi = async (noteId) => {
-  const response = await axiosInstance.post(`/notes/un-archive/${noteId}`);
+  const response = await axiosInstance.post(`/note/un-archive/${noteId}`);
   return response?.data ?? null;
 };
 
 
 export const trashNoteApi = async (noteId) => {
-  const response = await axiosInstance.post(`/notes/trash/${noteId}`);
+  const response = await axiosInstance.post(`/note/trash/${noteId}`);
   return response?.data ?? null;
 };
 
 export const unTrashNoteApi = async (noteId) => {
-  const response = await axiosInstance.post(`/notes/un-trash/${noteId}`);
+  const response = await axiosInstance.post(`/note/un-trash/${noteId}`);
   return response?.data ?? null;
 };
 
 export const searchNotes = async (searchString, retryCount = 0) => {
   try {
     const response = await axiosInstance.get(
-      `/notes/search-notes?request=${searchString}`
+      `/note/search-notes?request=${searchString}`
     );
 
     return response?.data ?? null;
