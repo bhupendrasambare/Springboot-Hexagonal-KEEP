@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import {
   Container,
   Card,
@@ -17,18 +18,31 @@ import {
   MdRadioButtonUnchecked,
 } from "react-icons/md";
 
-import axiosInstance from "../api/axiosInstance";
+import {
+  getAllReminders,
+  createReminder,
+  updateReminder,
+  deleteReminder,
+  markReminderCompleted,
+  markReminderIncomplete,
+} from "../api/reminderService";
 
 function Reminder({ refresh }) {
 
   const [reminders, setReminders] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] =
+    useState(false);
 
-  const [selectedReminder, setSelectedReminder] = useState(null);
+  const [showEditModal, setShowEditModal] =
+    useState(false);
+
+  const [showDeleteModal, setShowDeleteModal] =
+    useState(false);
+
+  const [selectedReminder, setSelectedReminder] =
+    useState(null);
 
   const [formData, setFormData] = useState({
     noteId: "",
@@ -41,21 +55,33 @@ function Reminder({ refresh }) {
   }, [refresh]);
 
   const loadReminders = async () => {
+
     try {
+
       setLoading(true);
 
-      const response = await axiosInstance.get("/reminder");
+      const data = await getAllReminders();
 
-      setReminders(response?.data?.data ?? []);
+      setReminders(data);
+
     } catch (error) {
-      console.error("Error loading reminders", error);
+
+      console.error(
+        "Error loading reminders",
+        error
+      );
+
       setReminders([]);
+
     } finally {
+
       setLoading(false);
+
     }
   };
 
   const resetForm = () => {
+
     setFormData({
       noteId: "",
       title: "",
@@ -64,96 +90,147 @@ function Reminder({ refresh }) {
   };
 
   const handleCreate = async (e) => {
+
     e.preventDefault();
 
     try {
-      await axiosInstance.post(
-        `/reminder?noteId=${formData.noteId}&title=${formData.title}&description=${formData.description}`
-      );
+
+      await createReminder({
+        noteId: formData.noteId,
+        title: formData.title,
+        description: formData.description,
+      });
 
       setShowCreateModal(false);
+
       resetForm();
+
       loadReminders();
+
     } catch (error) {
-      console.error("Create reminder error", error);
+
+      console.error(
+        "Create reminder error",
+        error
+      );
     }
   };
 
   const handleEdit = async (e) => {
+
     e.preventDefault();
 
     try {
-      await axiosInstance.put(
-        `/reminder/${selectedReminder.id}?title=${formData.title}&description=${formData.description}&completed=${selectedReminder.completed}`
-      );
+
+      await updateReminder({
+        reminderId: selectedReminder.id,
+        title: formData.title,
+        description: formData.description,
+        completed: selectedReminder.completed,
+      });
 
       setShowEditModal(false);
+
       resetForm();
+
       setSelectedReminder(null);
 
       loadReminders();
+
     } catch (error) {
-      console.error("Update reminder error", error);
+
+      console.error(
+        "Update reminder error",
+        error
+      );
     }
   };
 
   const handleDelete = async () => {
+
     try {
-      await axiosInstance.delete(
-        `/reminder/${selectedReminder.id}`
+
+      await deleteReminder(
+        selectedReminder.id
       );
 
       setShowDeleteModal(false);
+
       setSelectedReminder(null);
 
       loadReminders();
+
     } catch (error) {
-      console.error("Delete reminder error", error);
+
+      console.error(
+        "Delete reminder error",
+        error
+      );
     }
   };
 
-  const toggleCompleted = async (reminder) => {
+  const toggleCompleted = async (
+    reminder
+  ) => {
+
     try {
 
       if (reminder.completed) {
-        await axiosInstance.patch(
-          `/reminder/${reminder.id}/incomplete`
+
+        await markReminderIncomplete(
+          reminder.id
         );
+
       } else {
-        await axiosInstance.patch(
-          `/reminder/${reminder.id}/complete`
+
+        await markReminderCompleted(
+          reminder.id
         );
       }
 
       loadReminders();
 
     } catch (error) {
-      console.error("Reminder status error", error);
+
+      console.error(
+        "Reminder status error",
+        error
+      );
     }
   };
 
   const openEditModal = (reminder) => {
+
     setSelectedReminder(reminder);
 
     setFormData({
       noteId: reminder.noteId || "",
       title: reminder.title || "",
-      description: reminder.description || "",
+      description:
+        reminder.description || "",
     });
 
     setShowEditModal(true);
   };
 
-  const openDeleteModal = (reminder) => {
+  const openDeleteModal = (
+    reminder
+  ) => {
+
     setSelectedReminder(reminder);
+
     setShowDeleteModal(true);
   };
 
   return (
-    <Container fluid className="notes-wrapper mt-5">
+    <Container
+      fluid
+      className="notes-wrapper py-4"
+    >
 
       {/* HEADER */}
       <div className="d-flex justify-content-between align-items-center mb-4">
+
         <h3 className="text-light fw-bold">
           Reminders
         </h3>
@@ -161,75 +238,95 @@ function Reminder({ refresh }) {
         <Button
           variant="primary"
           className="d-flex align-items-center gap-2"
-          onClick={() => setShowCreateModal(true)}
+          onClick={() =>
+            setShowCreateModal(true)
+          }
         >
           <MdAdd size={20} />
           Add Reminder
         </Button>
+
       </div>
 
       {/* LOADING */}
       {loading && (
         <div className="empty-fullpage-wrapper">
-          <Spinner animation="border" variant="light" />
+          <Spinner
+            animation="border"
+            variant="light"
+          />
         </div>
       )}
 
       {/* EMPTY */}
-      {!loading && reminders.length === 0 && (
-        <div className="empty-fullpage-wrapper text-center">
-          <h4 className="text-secondary">
-            No reminders found
-          </h4>
-        </div>
-      )}
+      {!loading &&
+        reminders.length === 0 && (
+          <div className="empty-fullpage-wrapper text-center">
+            <h4 className="text-secondary">
+              No reminders found
+            </h4>
+          </div>
+        )}
 
       {/* REMINDER LIST */}
-      {!loading && reminders.length > 0 && (
-        <div
-          className="d-flex flex-wrap gap-4"
-          style={{
-            alignItems: "stretch",
-          }}
-        >
+      {!loading &&
+        reminders.length > 0 && (
 
-          {reminders.map((reminder) => (
+          <div
+            className="d-flex flex-wrap gap-4"
+            style={{
+              alignItems: "stretch",
+            }}
+          >
 
-            <Card
-              key={reminder.id}
-              className="bg-dark text-light border-secondary"
-              style={{
-                minWidth: "250px",
-                maxWidth: "320px",
-                width: "100%",
-                borderRadius: "16px",
-              }}
-            >
+            {reminders.map((reminder) => (
 
-              <Card.Body className="d-flex flex-column">
+              <Card
+                key={reminder.id}
+                className="bg-dark text-light border-secondary"
+                style={{
+                  minWidth: "250px",
+                  maxWidth: "320px",
+                  width: "100%",
+                  borderRadius: "16px",
+                }}
+              >
 
-                {/* TOP */}
-                <div className="d-flex justify-content-between align-items-start mb-3">
+                <Card.Body className="d-flex flex-column">
 
-                  <div>
-                    <Card.Title className="fw-bold">
-                      {reminder.title}
-                    </Card.Title>
+                  {/* TOP */}
+                  <div className="d-flex justify-content-between align-items-start mb-3">
 
-                    <Badge
-                      bg={reminder.completed ? "success" : "warning"}
+                    <div>
+
+                      <Card.Title className="fw-bold">
+                        {reminder.title}
+                      </Card.Title>
+
+                      <Badge
+                        bg={
+                          reminder.completed
+                            ? "success"
+                            : "warning"
+                        }
+                      >
+                        {reminder.completed
+                          ? "Completed"
+                          : "Pending"}
+                      </Badge>
+
+                    </div>
+
+                    <Button
+                      variant="link"
+                      className="text-decoration-none p-0"
+                      onClick={() =>
+                        toggleCompleted(
+                          reminder
+                        )
+                      }
                     >
-                      {reminder.completed ? "Completed" : "Pending"}
-                    </Badge>
-                  </div>
-
-                  <Button
-                    variant="link"
-                    className="text-decoration-none p-0"
-                    onClick={() => toggleCompleted(reminder)}
-                  >
-                    {
-                      reminder.completed ? (
+                      {reminder.completed ? (
                         <MdCheckCircle
                           size={28}
                           color="#4ade80"
@@ -239,60 +336,69 @@ function Reminder({ refresh }) {
                           size={28}
                           color="#facc15"
                         />
-                      )
-                    }
-                  </Button>
-                </div>
+                      )}
+                    </Button>
 
-                {/* DESCRIPTION */}
-                <Card.Text
-                  className="text-secondary flex-grow-1"
-                >
-                  {reminder.description}
-                </Card.Text>
+                  </div>
 
-                {/* DATE */}
-                <small className="text-muted mb-3">
-                  Created :
-                  {" "}
-                  {new Date(reminder.createdAt)
-                    .toLocaleString()}
-                </small>
+                  {/* DESCRIPTION */}
+                  <Card.Text className="text-secondary flex-grow-1">
+                    {reminder.description}
+                  </Card.Text>
 
-                {/* ACTIONS */}
-                <div className="d-flex justify-content-end gap-2">
+                  {/* DATE */}
+                  <small className="text-muted mb-3">
+                    Created :
+                    {" "}
+                    {new Date(
+                      reminder.createdAt
+                    ).toLocaleString()}
+                  </small>
 
-                  <Button
-                    variant="outline-info"
-                    size="sm"
-                    onClick={() => openEditModal(reminder)}
-                  >
-                    <MdEdit size={18} />
-                  </Button>
+                  {/* ACTIONS */}
+                  <div className="d-flex justify-content-end gap-2">
 
-                  <Button
-                    variant="outline-danger"
-                    size="sm"
-                    onClick={() => openDeleteModal(reminder)}
-                  >
-                    <MdDelete size={18} />
-                  </Button>
+                    <Button
+                      variant="outline-info"
+                      size="sm"
+                      onClick={() =>
+                        openEditModal(
+                          reminder
+                        )
+                      }
+                    >
+                      <MdEdit size={18} />
+                    </Button>
 
-                </div>
+                    <Button
+                      variant="outline-danger"
+                      size="sm"
+                      onClick={() =>
+                        openDeleteModal(
+                          reminder
+                        )
+                      }
+                    >
+                      <MdDelete size={18} />
+                    </Button>
 
-              </Card.Body>
+                  </div>
 
-            </Card>
+                </Card.Body>
 
-          ))}
+              </Card>
 
-        </div>
-      )}
+            ))}
+
+          </div>
+        )}
 
       {/* CREATE MODAL */}
       <Modal
         show={showCreateModal}
-        onHide={() => setShowCreateModal(false)}
+        onHide={() =>
+          setShowCreateModal(false)
+        }
         centered
       >
 
@@ -300,9 +406,11 @@ function Reminder({ refresh }) {
           closeButton
           className="bg-dark text-light border-secondary"
         >
+
           <Modal.Title>
             Create Reminder
           </Modal.Title>
+
         </Modal.Header>
 
         <Form onSubmit={handleCreate}>
@@ -310,7 +418,10 @@ function Reminder({ refresh }) {
           <Modal.Body className="bg-dark text-light">
 
             <Form.Group className="mb-3">
-              <Form.Label>Note Id</Form.Label>
+
+              <Form.Label>
+                Note Id
+              </Form.Label>
 
               <Form.Control
                 type="text"
@@ -319,14 +430,19 @@ function Reminder({ refresh }) {
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    noteId: e.target.value,
+                    noteId:
+                      e.target.value,
                   })
                 }
               />
+
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Title</Form.Label>
+
+              <Form.Label>
+                Title
+              </Form.Label>
 
               <Form.Control
                 type="text"
@@ -335,26 +451,35 @@ function Reminder({ refresh }) {
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    title: e.target.value,
+                    title:
+                      e.target.value,
                   })
                 }
               />
+
             </Form.Group>
 
             <Form.Group>
-              <Form.Label>Description</Form.Label>
+
+              <Form.Label>
+                Description
+              </Form.Label>
 
               <Form.Control
                 as="textarea"
                 rows={4}
-                value={formData.description}
+                value={
+                  formData.description
+                }
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    description: e.target.value,
+                    description:
+                      e.target.value,
                   })
                 }
               />
+
             </Form.Group>
 
           </Modal.Body>
@@ -363,7 +488,9 @@ function Reminder({ refresh }) {
 
             <Button
               variant="secondary"
-              onClick={() => setShowCreateModal(false)}
+              onClick={() =>
+                setShowCreateModal(false)
+              }
             >
               Cancel
             </Button>
@@ -384,7 +511,9 @@ function Reminder({ refresh }) {
       {/* EDIT MODAL */}
       <Modal
         show={showEditModal}
-        onHide={() => setShowEditModal(false)}
+        onHide={() =>
+          setShowEditModal(false)
+        }
         centered
       >
 
@@ -392,9 +521,11 @@ function Reminder({ refresh }) {
           closeButton
           className="bg-dark text-light border-secondary"
         >
+
           <Modal.Title>
             Edit Reminder
           </Modal.Title>
+
         </Modal.Header>
 
         <Form onSubmit={handleEdit}>
@@ -402,7 +533,10 @@ function Reminder({ refresh }) {
           <Modal.Body className="bg-dark text-light">
 
             <Form.Group className="mb-3">
-              <Form.Label>Title</Form.Label>
+
+              <Form.Label>
+                Title
+              </Form.Label>
 
               <Form.Control
                 type="text"
@@ -411,26 +545,35 @@ function Reminder({ refresh }) {
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    title: e.target.value,
+                    title:
+                      e.target.value,
                   })
                 }
               />
+
             </Form.Group>
 
             <Form.Group>
-              <Form.Label>Description</Form.Label>
+
+              <Form.Label>
+                Description
+              </Form.Label>
 
               <Form.Control
                 as="textarea"
                 rows={4}
-                value={formData.description}
+                value={
+                  formData.description
+                }
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    description: e.target.value,
+                    description:
+                      e.target.value,
                   })
                 }
               />
+
             </Form.Group>
 
           </Modal.Body>
@@ -439,7 +582,9 @@ function Reminder({ refresh }) {
 
             <Button
               variant="secondary"
-              onClick={() => setShowEditModal(false)}
+              onClick={() =>
+                setShowEditModal(false)
+              }
             >
               Cancel
             </Button>
@@ -460,7 +605,9 @@ function Reminder({ refresh }) {
       {/* DELETE MODAL */}
       <Modal
         show={showDeleteModal}
-        onHide={() => setShowDeleteModal(false)}
+        onHide={() =>
+          setShowDeleteModal(false)
+        }
         centered
       >
 
@@ -468,14 +615,17 @@ function Reminder({ refresh }) {
           closeButton
           className="bg-dark text-light border-secondary"
         >
+
           <Modal.Title>
             Delete Reminder
           </Modal.Title>
+
         </Modal.Header>
 
         <Modal.Body className="bg-dark text-light">
 
-          Are you sure you want to delete this reminder?
+          Are you sure you want to
+          delete this reminder?
 
         </Modal.Body>
 
@@ -483,7 +633,9 @@ function Reminder({ refresh }) {
 
           <Button
             variant="secondary"
-            onClick={() => setShowDeleteModal(false)}
+            onClick={() =>
+              setShowDeleteModal(false)
+            }
           >
             Cancel
           </Button>
