@@ -18,6 +18,7 @@ public class Reminder {
     private final ReminderId id;
     private final NoteId noteId;
     private final UserId userId;
+    private LocalDateTime reminderTime;
     private String title;
     private String description;
     private boolean completed;
@@ -25,7 +26,7 @@ public class Reminder {
     private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Reminder(ReminderId reminderId, NoteId noteId, UserId userId, String title, String description, boolean completed, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Reminder(ReminderId reminderId, NoteId noteId, UserId userId, LocalDateTime reminderTime, String title, String description, boolean completed, LocalDateTime createdAt, LocalDateTime updatedAt) {
         if (reminderId == null) throw new IllegalArgumentException("id cannot be null");
         if (noteId == null) throw new IllegalArgumentException("note cannot be null");
         if (userId == null) throw new IllegalArgumentException("userId cannot be null");
@@ -36,6 +37,7 @@ public class Reminder {
         this.userId = userId;
 
         this.title = title == null ? "" : title;
+        this.reminderTime = reminderTime == null ? null : reminderTime;
         this.description = description == null ? "" : description;
 
         this.completed = completed;
@@ -101,16 +103,12 @@ public class Reminder {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
     public String toString() {
-        return "Reminders{" +
+        return "Reminder{" +
                 "id=" + id +
                 ", noteId=" + noteId +
                 ", userId=" + userId +
+                ", reminderTime=" + reminderTime +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", completed=" + completed +
@@ -119,5 +117,16 @@ public class Reminder {
                 '}';
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
+    public LocalDateTime getReminderTime() {
+        return reminderTime;
+    }
+
+    public void setReminderTime(LocalDateTime reminderTime) {
+        this.reminderTime = reminderTime;
+    }
 }

@@ -18,6 +18,7 @@ import com.service.keep.domain.valueobject.NoteId;
 import com.service.keep.domain.valueobject.ReminderId;
 import com.service.keep.domain.valueobject.UserId;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,7 @@ public class ReminderService implements ReminderUseCase {
     public Reminder create(
             String userId,
             String noteId,
+            LocalDateTime reminderTime,
             String title,
             String description
     ) {
@@ -52,6 +54,7 @@ public class ReminderService implements ReminderUseCase {
                 new ReminderId(UUID.randomUUID().toString()),
                 new NoteId(noteId),
                 new UserId(userId),
+                reminderTime,
                 title,
                 description,
                 false,
@@ -66,12 +69,17 @@ public class ReminderService implements ReminderUseCase {
     public Reminder update(
             String userId,
             String reminderId,
+            LocalDateTime reminderTime,
             String title,
             String description,
             Boolean completed
     ) {
 
         Reminder reminder = getOwnedReminder(userId, reminderId);
+
+        if (ObjectUtils.isNotEmpty(reminderTime)) {
+            reminder.setReminderTime(reminderTime);
+        }
 
         if (StringUtils.isNotBlank(title)) {
             reminder.setTitle(title);

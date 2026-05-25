@@ -2,6 +2,7 @@ package com.service.keep.domain.port.inbound;
 
 import com.service.keep.domain.model.Reminder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ReminderUseCase {
@@ -9,6 +10,7 @@ public interface ReminderUseCase {
     Reminder create(
             String userId,
             String noteId,
+            LocalDateTime reminderTime,
             String title,
             String description
     );
@@ -16,6 +18,7 @@ public interface ReminderUseCase {
     Reminder update(
             String userId,
             String reminderId,
+            LocalDateTime reminderTime,
             String title,
             String description,
             Boolean completed

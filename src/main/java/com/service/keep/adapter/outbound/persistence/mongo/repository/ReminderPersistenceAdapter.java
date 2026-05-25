@@ -142,6 +142,7 @@ public class ReminderPersistenceAdapter implements ReminderRepositoryPort {
                 new ReminderId(document.getId()),
                 new NoteId(document.getNoteId()),
                 new UserId(document.getUserId()),
+                document.getReminderTime(),
                 document.getTitle(),
                 document.getDescription(),
                 document.isCompleted(),

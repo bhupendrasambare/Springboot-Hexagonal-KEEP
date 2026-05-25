@@ -6,6 +6,7 @@
  **/
 package com.service.keep.adapter.inbound.rest;
 
+import com.service.keep.application.dto.request.ReminderRequest;
 import com.service.keep.application.response.Response;
 import com.service.keep.application.response.ResponseUtil;
 import com.service.keep.domain.model.Reminder;
@@ -25,19 +26,16 @@ public class ReminderController {
     private final AuthenticatedUserPort authenticatedUserPort;
 
     @PostMapping
-    public ResponseEntity<Response> create(
-            @RequestParam String noteId,
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) String description
-    ) {
+    public ResponseEntity<Response> create(@RequestBody ReminderRequest request) {
 
         UserId userId = authenticatedUserPort.getCurrentUserId();
 
         Reminder reminder = reminderUseCase.create(
                 userId.getValue(),
-                noteId,
-                title,
-                description
+                request.getNoteId(),
+                request.getReminderTime(),
+                request.getTitle(),
+                request.getDescription()
         );
 
         return ResponseUtil.success(
@@ -49,19 +47,17 @@ public class ReminderController {
     @PutMapping("/{reminderId}")
     public ResponseEntity<Response> update(
             @PathVariable String reminderId,
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) String description,
-            @RequestParam(required = false) Boolean completed
-    ) {
+            @RequestBody ReminderRequest request) {
 
         UserId userId = authenticatedUserPort.getCurrentUserId();
 
         Reminder reminder = reminderUseCase.update(
                 userId.getValue(),
                 reminderId,
-                title,
-                description,
-                completed
+                request.getReminderTime(),
+                request.getTitle(),
+                request.getDescription(),
+                request.getCompleted()
         );
 
         return ResponseUtil.success(

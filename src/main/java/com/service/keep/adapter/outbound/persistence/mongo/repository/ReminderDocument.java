@@ -25,6 +25,8 @@ public class ReminderDocument {
 
     private String userId;
 
+    private LocalDateTime reminderTime;
+
     private String title;
 
     private String description;
@@ -38,10 +40,11 @@ public class ReminderDocument {
     public ReminderDocument() {
     }
 
-    public ReminderDocument(String id, String noteId, String userId, String title, String description, boolean completed, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public ReminderDocument(String id, String noteId, String userId, LocalDateTime reminderTime, String title, String description, boolean completed, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.noteId = noteId;
         this.userId = userId;
+        this.reminderTime = reminderTime;
         this.title = title;
         this.description = description;
         this.completed = completed;
@@ -111,5 +114,13 @@ public class ReminderDocument {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public LocalDateTime getReminderTime() {
+        return reminderTime;
+    }
+
+    public void setReminderTime(LocalDateTime reminderTime) {
+        this.reminderTime = reminderTime;
     }
 }
