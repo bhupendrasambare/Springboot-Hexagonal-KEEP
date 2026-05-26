@@ -34,11 +34,18 @@ export const getReminderById = async (reminderId) => {
 export const createReminder = async ({
   noteId,
   title,
+  reminderTime,
   description,
 }) => {
 
   const response = await axiosInstance.post(
-    `/reminder?noteId=${encodeURIComponent(noteId)}&title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`
+    "/reminder",
+    {
+      noteId,
+      title,
+      reminderTime,
+      description,
+    }
   );
 
   return safeObject(response);
@@ -46,13 +53,22 @@ export const createReminder = async ({
 
 export const updateReminder = async ({
   reminderId,
+  noteId,
   title,
+  reminderTime,
   description,
   completed,
 }) => {
 
   const response = await axiosInstance.put(
-    `/reminder/${reminderId}?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&completed=${completed}`
+    `/reminder/${reminderId}`,
+    {
+      noteId,
+      title,
+      reminderTime,
+      description,
+      completed,
+    }
   );
 
   return safeObject(response);

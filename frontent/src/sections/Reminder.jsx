@@ -48,6 +48,7 @@ function Reminder({ refresh }) {
     noteId: "",
     title: "",
     description: "",
+    reminderTime: "",
   });
 
   useEffect(() => {
@@ -86,6 +87,7 @@ function Reminder({ refresh }) {
       noteId: "",
       title: "",
       description: "",
+      reminderTime: "",
     });
   };
 
@@ -99,6 +101,7 @@ function Reminder({ refresh }) {
         noteId: formData.noteId,
         title: formData.title,
         description: formData.description,
+        reminderTime: formData.reminderTime,
       });
 
       setShowCreateModal(false);
@@ -124,8 +127,10 @@ function Reminder({ refresh }) {
 
       await updateReminder({
         reminderId: selectedReminder.id,
+        noteId: selectedReminder.noteId,
         title: formData.title,
         description: formData.description,
+        reminderTime: formData.reminderTime,
         completed: selectedReminder.completed,
       });
 
@@ -208,6 +213,9 @@ function Reminder({ refresh }) {
       title: reminder.title || "",
       description:
         reminder.description || "",
+      reminderTime: reminder.reminderTime
+        ? reminder.reminderTime.slice(0, 16)
+        : "",
     });
 
     setShowEditModal(true);
@@ -346,6 +354,17 @@ function Reminder({ refresh }) {
                     {reminder.description}
                   </Card.Text>
 
+                  {/* REMINDER TIME */}
+                  {reminder.reminderTime && (
+                    <small className="text-info mb-2">
+                      Reminder :
+                      {" "}
+                      {new Date(
+                        reminder.reminderTime
+                      ).toLocaleString()}
+                    </small>
+                  )}
+
                   {/* DATE */}
                   <small className="text-muted mb-3">
                     Created :
@@ -459,6 +478,28 @@ function Reminder({ refresh }) {
 
             </Form.Group>
 
+            <Form.Group className="mb-3">
+
+              <Form.Label>
+                Reminder Time
+              </Form.Label>
+
+              <Form.Control
+                type="datetime-local"
+                value={
+                  formData.reminderTime
+                }
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    reminderTime:
+                      e.target.value,
+                  })
+                }
+              />
+
+            </Form.Group>
+
             <Form.Group>
 
               <Form.Label>
@@ -546,6 +587,28 @@ function Reminder({ refresh }) {
                   setFormData({
                     ...formData,
                     title:
+                      e.target.value,
+                  })
+                }
+              />
+
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+
+              <Form.Label>
+                Reminder Time
+              </Form.Label>
+
+              <Form.Control
+                type="datetime-local"
+                value={
+                  formData.reminderTime
+                }
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    reminderTime:
                       e.target.value,
                   })
                 }
