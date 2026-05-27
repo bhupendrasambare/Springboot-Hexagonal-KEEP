@@ -10,11 +10,14 @@ import com.service.keep.application.dto.response.ErrorResponse;
 import com.service.keep.application.exception.ApplicationException;
 import com.service.keep.application.exception.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -23,6 +26,15 @@ public class GlobalExceptionHandler {
             ApplicationException ex,
             HttpServletRequest request
     ) {
+
+        // PRINT ACTUAL ERROR
+        log.error(
+                "ApplicationException occurred at [{}] : {}",
+                request.getRequestURI(),
+                ex.getMessage(),
+                ex
+        );
+
         ErrorCode code = ex.getErrorCode();
 
         return ResponseEntity
@@ -41,6 +53,14 @@ public class GlobalExceptionHandler {
             Exception ex,
             HttpServletRequest request
     ) {
+
+        // PRINT FULL STACKTRACE
+        log.error(
+                "Unhandled exception occurred at [{}]",
+                request.getRequestURI(),
+                ex
+        );
+
         return ResponseEntity
                 .status(ErrorCode.INTERNAL_ERROR.status())
                 .body(new ErrorResponse(
