@@ -311,6 +311,20 @@ function Reminder({ refresh }) {
                         {reminder.title}
                       </Card.Title>
 
+                  <div className="d-flex justify-content-start gap-2">
+                    {/* DATE */}
+                    <small className="text-muted">
+                      {new Date(reminder.createdAt).toLocaleString("en-GB", {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false,
+                      })}
+                    </small>
+                  </div>
+
                       <Badge
                         bg={
                           reminder.completed
@@ -364,15 +378,6 @@ function Reminder({ refresh }) {
                       ).toLocaleString()}
                     </small>
                   )}
-
-                  {/* DATE */}
-                  <small className="text-muted mb-3">
-                    Created :
-                    {" "}
-                    {new Date(
-                      reminder.createdAt
-                    ).toLocaleString()}
-                  </small>
 
                   {/* ACTIONS */}
                   <div className="d-flex justify-content-end gap-2">
