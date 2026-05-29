@@ -185,11 +185,8 @@ function NotesCard({ noteData, refreshNotes }) {
       }
     };
 
-  /* ================= UI ================= */
-
   return (
     <>
-      {/* ================= NOTE CARD ================= */}
 
       <div
         className="bg-dark text-light border border-secondary d-flex flex-column"
@@ -203,7 +200,6 @@ function NotesCard({ noteData, refreshNotes }) {
         }}
       >
 
-        {/* CONTENT */}
         <div
           className="flex-grow-1"
           style={{ cursor: "pointer" }}
@@ -242,7 +238,6 @@ function NotesCard({ noteData, refreshNotes }) {
 
         </div>
 
-        {/* FOOTER */}
         <div className="d-flex justify-content-between align-items-center mt-3">
 
           <small className="text-muted">
@@ -253,7 +248,6 @@ function NotesCard({ noteData, refreshNotes }) {
 
           <div className="d-flex align-items-center gap-2">
 
-            {/* REMINDER */}
             {noteData.trashed === false && (
 
               <Button
@@ -268,7 +262,6 @@ function NotesCard({ noteData, refreshNotes }) {
 
             )}
 
-            {/* TRASH */}
             {noteData.trashed === false && (
 
               <Button
@@ -281,7 +274,6 @@ function NotesCard({ noteData, refreshNotes }) {
 
             )}
 
-            {/* ARCHIVE */}
             {noteData.trashed === false && (
 
               <Button
@@ -296,7 +288,6 @@ function NotesCard({ noteData, refreshNotes }) {
 
             )}
 
-            {/* PIN */}
             {noteData.archived === false &&
               noteData.trashed === false && (
 
@@ -325,8 +316,6 @@ function NotesCard({ noteData, refreshNotes }) {
         </div>
 
       </div>
-
-      {/* ================= VIEW NOTE MODAL ================= */}
 
       <Modal
         show={showModal}
@@ -360,8 +349,6 @@ function NotesCard({ noteData, refreshNotes }) {
         </Modal.Body>
 
       </Modal>
-
-      {/* ================= REMINDER MODAL ================= */}
 
       <Modal
         show={showReminderModal}
