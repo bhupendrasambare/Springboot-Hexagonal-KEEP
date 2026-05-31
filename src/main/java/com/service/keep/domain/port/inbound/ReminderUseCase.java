@@ -50,4 +50,6 @@ public interface ReminderUseCase {
     List<Reminder> getPendingReminders(
             String userId
     );
+
+    List<Reminder> getPendingReminders();
 }

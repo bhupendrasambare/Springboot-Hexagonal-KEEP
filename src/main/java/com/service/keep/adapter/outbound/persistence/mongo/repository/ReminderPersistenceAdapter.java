@@ -81,6 +81,11 @@ public class ReminderPersistenceAdapter implements ReminderRepositoryPort {
     }
 
     @Override
+    public List<Reminder> findAllByIsCompleted(Boolean completed) {
+        return repository.findByIsCompleted(completed);
+    }
+
+    @Override
     public Page<Reminder> findAllByMetaDataFlag(Boolean metaDataFlag, Pageable pageable) {
 
         Page<ReminderDocument> reminderPage =

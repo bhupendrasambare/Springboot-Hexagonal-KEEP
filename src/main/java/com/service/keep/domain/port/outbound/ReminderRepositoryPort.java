@@ -34,6 +34,8 @@ public interface ReminderRepositoryPort {
 
     List<Reminder> findAllByUserId(UserId userId);
 
+    List<Reminder> findAllByIsCompleted(Boolean completed);
+
     Page<Reminder> findAllByMetaDataFlag(Boolean metaDataFlag, Pageable pageable);
 
     List<Reminder> searchByAi(UserId userId, List<String> keywords, List<String> tags, String title);

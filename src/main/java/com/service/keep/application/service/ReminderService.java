@@ -156,6 +156,12 @@ public class ReminderService implements ReminderUseCase {
                 .toList();
     }
 
+    @Override
+    public List<Reminder> getPendingReminders() {
+        return reminderRepository.findAllByIsCompleted(false)
+                .stream().toList();
+    }
+
     private Reminder getOwnedReminder(String userId, String reminderId) {
 
         validateUser(userId);
