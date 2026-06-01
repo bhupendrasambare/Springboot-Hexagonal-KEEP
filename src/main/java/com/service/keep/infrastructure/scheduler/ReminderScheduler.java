@@ -20,6 +20,8 @@ public class ReminderScheduler {
 
     private ReminderUseCase reminderUseCase;
 
+
+    // TODO fix and complete this function
     @Scheduled(fixedDelay = 1000)
     public void checkReminders(){
 
