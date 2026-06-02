@@ -10,6 +10,7 @@ import com.service.keep.domain.model.Reminder;
 import com.service.keep.domain.valueobject.ReminderId;
 import com.service.keep.domain.valueobject.UserId;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public interface ReminderRepositoryPort {
 
     List<Reminder> findAllByUserId(UserId userId);
 
-    List<Reminder> findAllByIsCompleted(Boolean completed);
+    Page<Reminder> findAllByIsCompleted(PageRequest request, Boolean completed);
 
     Page<Reminder> findAllByMetaDataFlag(Boolean metaDataFlag, Pageable pageable);
 

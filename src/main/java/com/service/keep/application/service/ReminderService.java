@@ -20,6 +20,8 @@ import com.service.keep.domain.valueobject.UserId;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -157,9 +159,8 @@ public class ReminderService implements ReminderUseCase {
     }
 
     @Override
-    public List<Reminder> getPendingReminders() {
-        return reminderRepository.findAllByIsCompleted(false)
-                .stream().toList();
+    public Page<Reminder> getPendingReminders(PageRequest request) {
+        return reminderRepository.findAllByIsCompleted(request, false);
     }
 
     private Reminder getOwnedReminder(String userId, String reminderId) {

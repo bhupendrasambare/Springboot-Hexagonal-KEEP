@@ -81,8 +81,8 @@ public class ReminderPersistenceAdapter implements ReminderRepositoryPort {
     }
 
     @Override
-    public List<Reminder> findAllByIsCompleted(Boolean completed) {
-        return repository.findByIsCompleted(completed);
+    public Page<Reminder> findAllByIsCompleted(PageRequest request, Boolean completed) {
+        return repository.findByCompleted(request, completed);
     }
 
     @Override

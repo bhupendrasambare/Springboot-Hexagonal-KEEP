@@ -31,7 +31,7 @@ public class ReminderDocument {
 
     private String description;
 
-    private boolean completed;
+    private Boolean completed;
 
     private LocalDateTime createdAt;
 

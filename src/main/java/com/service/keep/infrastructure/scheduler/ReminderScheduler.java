@@ -9,6 +9,8 @@ package com.service.keep.infrastructure.scheduler;
 import com.service.keep.domain.model.Reminder;
 import com.service.keep.domain.port.inbound.ReminderUseCase;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -20,13 +22,21 @@ public class ReminderScheduler {
 
     private ReminderUseCase reminderUseCase;
 
-
-    // TODO fix and complete this function
     @Scheduled(fixedDelay = 1000)
     public void checkReminders(){
+        int page = 0;
+        int size = 10;
+        int total = 0;
+        PageRequest request = PageRequest.of(page, size);
+        do{
+            Page<Reminder> reminders = reminderUseCase.getPendingReminders(request);
+            total = reminders.getTotalPages();
 
-        List<Reminder> reminders = reminderUseCase.getPendingReminders();
+            for(Reminder reminder: reminders){
+                // TODO make the notification and emails based on the configuration
 
-
+                reminderUseCase.markCompleted(null, reminder.getId().getValue());
+            }
+        }while(total > page);
     }
 }

@@ -1,6 +1,8 @@
 package com.service.keep.domain.port.inbound;
 
 import com.service.keep.domain.model.Reminder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -51,5 +53,5 @@ public interface ReminderUseCase {
             String userId
     );
 
-    List<Reminder> getPendingReminders();
+    Page<Reminder> getPendingReminders(PageRequest request);
 }
