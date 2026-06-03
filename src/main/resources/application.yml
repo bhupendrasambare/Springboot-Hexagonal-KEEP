@@ -1,4 +1,27 @@
 spring:
+    application:
+        name: Keep
+
+    data:
+        mongodb:
+            uri: mongodb://localhost:27017/keep_db
+
+    threads:
+        virtual:
+            enabled: true
+
+    security:
+        oauth2:
+            client:
+                registration:
+                    google:
+                        client-id: YOUR_GOOGLE_CLIENT_ID
+                        client-secret: YOUR_GOOGLE_CLIENT_SECRET
+                        scope:
+                            - profile
+                            - email
+                            - openid
+
     mail:
         host: smtp.gmail.com
         port: 587
@@ -11,8 +34,21 @@ spring:
                     starttls:
                         enable: true
 
+security:
+    jwt:
+        secret: secret-token-key-for-hexagonal-spring-boot-application
+        access-token-expiration: 86400
+        refresh-token-expiration: 604800
+
+app:
+    ollama: true
+
+ollama:
+    base-url: http://localhost:11434
+    model: phi3
+
 sms:
     twilio:
         account-sid: YOUR_SID
         auth-token: YOUR_TOKEN
-        from-number: +1234567890
+        from-number: "+1234567890"

@@ -9,6 +9,8 @@ package com.service.keep.infrastructure.scheduler;
 import com.service.keep.domain.model.Reminder;
 import com.service.keep.domain.port.inbound.ReminderUseCase;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,26 +19,65 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Slf4j
 public class ReminderScheduler {
 
-    private ReminderUseCase reminderUseCase;
+    private final ReminderUseCase reminderUseCase;
 
-    @Scheduled(fixedDelay = 1000)
-    public void checkReminders(){
+    private final NotificationUseCase notificationUseCase;
+
+    private final ExecutorService reminderExecutor;
+
+    @Scheduled(fixedDelay = 30000)
+    public void checkReminders() {
+
         int page = 0;
-        int size = 10;
-        int total = 0;
-        PageRequest request = PageRequest.of(page, size);
-        do{
-            Page<Reminder> reminders = reminderUseCase.getPendingReminders(request);
-            total = reminders.getTotalPages();
 
-            for(Reminder reminder: reminders){
-                // TODO make the notification and emails based on the configuration
+        Page<Reminder> reminders;
 
-                reminderUseCase.markCompleted(null, reminder.getId().getValue());
-            }
-        }while(total > page);
+        do {
+
+            reminders =
+                    reminderUseCase.getPendingReminders(
+                            PageRequest.of(page, 100)
+                    );
+
+            reminders.forEach(reminder ->
+                    reminderExecutor.submit(
+                            () -> processReminder(reminder)
+                    )
+            );
+
+            page++;
+
+        } while (page < reminders.getTotalPages());
+    }
+
+    private void processReminder(
+            Reminder reminder
+    ) {
+
+        try {
+
+            notificationUseCase.sendEmail(
+                    reminder.getEmail(),
+                    reminder.getTitle(),
+                    reminder.getDescription()
+            );
+
+            reminderUseCase.markCompleted(
+                    null,
+                    reminder.getId().getValue()
+            );
+
+        } catch (Exception e) {
+
+            log.error(
+                    "Failed reminder {}",
+                    reminder.getId().getValue(),
+                    e
+            );
+        }
     }
 }
