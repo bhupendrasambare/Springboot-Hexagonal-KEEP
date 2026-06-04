@@ -7,7 +7,10 @@
 package com.service.keep.infrastructure.scheduler;
 
 import com.service.keep.domain.model.Reminder;
+import com.service.keep.domain.model.User;
+import com.service.keep.domain.port.inbound.NotificationUseCase;
 import com.service.keep.domain.port.inbound.ReminderUseCase;
+import com.service.keep.domain.port.inbound.UserProfileUseCase;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +20,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 @Component
 @RequiredArgsConstructor
@@ -26,6 +30,8 @@ public class ReminderScheduler {
     private final ReminderUseCase reminderUseCase;
 
     private final NotificationUseCase notificationUseCase;
+
+    private final UserProfileUseCase userProfileUseCase;
 
     private final ExecutorService reminderExecutor;
 
@@ -59,9 +65,9 @@ public class ReminderScheduler {
     ) {
 
         try {
-
+            User user = userProfileUseCase.getUserProfile(reminder.getUserId().getValue());
             notificationUseCase.sendEmail(
-                    reminder.getEmail(),
+                    user.getEmail().getValue(),
                     reminder.getTitle(),
                     reminder.getDescription()
             );
