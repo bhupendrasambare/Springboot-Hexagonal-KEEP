@@ -11,7 +11,6 @@ import com.service.keep.domain.model.User;
 import com.service.keep.domain.port.inbound.NotificationUseCase;
 import com.service.keep.domain.port.inbound.ReminderUseCase;
 import com.service.keep.domain.port.inbound.UserProfileUseCase;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,7 +18,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 @Component
