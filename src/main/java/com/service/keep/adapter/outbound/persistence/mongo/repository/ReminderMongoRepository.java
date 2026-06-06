@@ -21,5 +21,5 @@ public interface ReminderMongoRepository extends MongoRepository<ReminderDocumen
 
     Page<ReminderDocument> findAllByUserId(String value, Pageable request);
 
-    Page<Reminder> findByCompleted(PageRequest request, Boolean completed);
+    Page<Reminder> findAllByCompleted(PageRequest request, Boolean completed);
 }
