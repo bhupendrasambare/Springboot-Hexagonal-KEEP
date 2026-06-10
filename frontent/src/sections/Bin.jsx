@@ -87,13 +87,13 @@ export const Bin = ({refresh}) => {
         </div>
       ) : (
         <>
-          <Row className="g-4">
+          <div className="notes-flex-container mx-auto">
             {trashNotesList.map((note) => (
-              <Col key={note.id} xs={12} sm={6} md={4} lg={3}>
-                <NotesCard noteData={note} refreshNotes={loadTrashNotes} />
-              </Col>
+              <div key={note.id} className="notes-flex-item">
+                <NotesCard noteData={note} refreshNotes={refreshNotes} />
+              </div>
             ))}
-          </Row>
+          </div>
 
           {loading && (
             <div className="text-center mt-4 mb-5">

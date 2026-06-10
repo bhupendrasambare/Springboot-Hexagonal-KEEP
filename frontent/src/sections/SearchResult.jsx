@@ -89,23 +89,10 @@ export const SearchResult = ({ refresh }) => {
             Search Results for "{searchString}"
           </h2>
 
-          <div
-            className="d-flex flex-wrap justify-content-start"
-            style={{ gap: "20px" }}
-          >
+          <div className="notes-flex-container mx-auto">
             {notesList.map((note) => (
-              <div
-                key={note.id}
-                style={{
-                  minWidth: "200px",
-                  maxWidth: "300px",
-                  flex: "1 1 250px",
-                }}
-              >
-                <NotesCard
-                  noteData={note}
-                  refreshNotes={() => loadSearchNotes(searchString)}
-                />
+              <div key={note.id} className="notes-flex-item">
+                <NotesCard noteData={note} refreshNotes={refreshNotes} />
               </div>
             ))}
           </div>

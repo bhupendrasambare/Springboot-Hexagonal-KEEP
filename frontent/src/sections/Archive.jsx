@@ -4,7 +4,7 @@ import { MdOutlineArchive } from "react-icons/md";
 import { getArchiveNotesApi } from "../api/notesService";
 import NotesCard from "../components/NotesCard";
 
-export const Archived = ({refresh}) => {
+export const Archived = ({refreshNotes}) => {
   const [archiveNotesList, setArchiveNotes] = useState([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -14,7 +14,7 @@ export const Archived = ({refresh}) => {
 
   useEffect(() => {
     loadArchiveNotes();
-  }, [refresh]);
+  }, [refreshNotes]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -91,13 +91,13 @@ export const Archived = ({refresh}) => {
         </div>
       ) : (
         <>
-          <Row className="g-4">
+          <div className="notes-flex-container mx-auto">
             {archiveNotesList.map((note) => (
-              <Col key={note.id} xs={12} sm={6} md={4} lg={3}>
-                <NotesCard noteData={note} refreshNotes={loadArchiveNotes} />
-              </Col>
+              <div key={note.id} className="notes-flex-item">
+                <NotesCard noteData={note} refreshNotes={refreshNotes} />
+              </div>
             ))}
-          </Row>
+          </div>
 
           {loading && (
             <div className="text-center mt-4 mb-5">

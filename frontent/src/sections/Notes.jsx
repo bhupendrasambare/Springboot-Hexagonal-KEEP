@@ -172,7 +172,7 @@ export const Notes = ({refresh}) => {
         <>
           <h6 className="section-title mt-5">Others</h6>
 
-          <div className="notes-flex-container">
+          <div className="notes-flex-container mx-auto">
             {notesList.map((note) => (
               <div key={note.id} className="notes-flex-item">
                 <NotesCard noteData={note} refreshNotes={refreshNotes} />
