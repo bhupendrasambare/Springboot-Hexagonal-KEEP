@@ -33,7 +33,7 @@ public class ReminderScheduler {
         do {
 
             reminders = reminderUseCase.getPendingReminders(
-                    PageRequest.of(page, 100)
+                    PageRequest.of(page, 10)
             );
 
             reminders.forEach(reminder ->
