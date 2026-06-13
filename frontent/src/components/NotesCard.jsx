@@ -360,17 +360,6 @@ function NotesCard({ noteData, refreshNotes }) {
         centered
       >
 
-        <Modal.Header
-          closeButton
-          className="bg-dark text-light border-secondary"
-        >
-
-          <Modal.Title>
-            Create Reminder
-          </Modal.Title>
-
-        </Modal.Header>
-
         <Form
           onSubmit={
             handleCreateReminder
