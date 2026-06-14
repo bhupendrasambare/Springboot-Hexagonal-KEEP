@@ -84,24 +84,6 @@ public class ReminderController {
         );
     }
 
-    @PatchMapping("/{reminderId}/incomplete")
-    public ResponseEntity<Response> markIncomplete(
-            @PathVariable String reminderId
-    ) {
-
-        UserId userId = authenticatedUserPort.getCurrentUserId();
-
-        reminderUseCase.markIncomplete(
-                userId.getValue(),
-                reminderId
-        );
-
-        return ResponseUtil.success(
-                "Reminder marked as incomplete",
-                null
-        );
-    }
-
     @GetMapping("/{reminderId}")
     public ResponseEntity<Response> getById(
             @PathVariable String reminderId

@@ -112,17 +112,6 @@ public class ReminderService implements ReminderUseCase {
     }
 
     @Override
-    public void markIncomplete(String userId, String reminderId) {
-
-        Reminder reminder = getOwnedReminder(userId, reminderId);
-
-        reminder.setCompleted(false);
-        reminder.setUpdatedAt(LocalDateTime.now());
-
-        reminderRepository.save(reminder);
-    }
-
-    @Override
     public Reminder getById(String userId, String reminderId) {
 
         return getOwnedReminder(userId, reminderId);

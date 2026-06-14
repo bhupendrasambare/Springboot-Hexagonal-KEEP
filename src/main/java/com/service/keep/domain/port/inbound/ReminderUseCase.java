@@ -31,11 +31,6 @@ public interface ReminderUseCase {
             String reminderId
     );
 
-    void markIncomplete(
-            String userId,
-            String reminderId
-    );
-
     Reminder getById(
             String userId,
             String reminderId
