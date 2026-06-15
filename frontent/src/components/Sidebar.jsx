@@ -35,12 +35,6 @@ function Sidebar({ sidebarActive }) {
           {sidebarActive && <div className="ms-3 w-100">Important</div>}
         </NavLink>
 
-        {/* Edit Labels */}
-        <NavLink to="/home/edit-labels" className={getClass}>
-          <BsPencil className="ms-1 sidebar-circle-icon text-white" />
-          {sidebarActive && <div className="ms-3 w-100">Edit labels</div>}
-        </NavLink>
-
         {/* Archive */}
         <NavLink to="/home/archive" className={getClass}>
           <BsArchive className="ms-1 sidebar-circle-icon text-white" />

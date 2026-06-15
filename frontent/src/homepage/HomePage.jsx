@@ -7,7 +7,6 @@ import Sidebar from "../components/Sidebar";
 import Notes from "../sections/Notes";
 import Reminder from "../sections/Reminder";
 import Important from "../sections/Important";
-import EditLabels from "../sections/EditLabels";
 import Archived from "../sections/Archive";
 import Bin from "../sections/Bin";
 import SearchResult from "../sections/SearchResult";
@@ -39,7 +38,6 @@ function HomePage() {
             <Route path="/" element={<Notes refresh={refresh} />} />
             <Route path="/reminder" element={<Reminder refresh={refresh} />} />
             <Route path="/important" element={<Important refresh={refresh} />} />
-            <Route path="/edit-labels" element={<EditLabels refresh={refresh} />} />
             <Route path="/archive" element={<Archived refresh={refresh} />} />
             <Route path="/bin" element={<Bin refresh={refresh} />} />
             <Route path="/search" element={<SearchResult refresh={refresh} />} />
