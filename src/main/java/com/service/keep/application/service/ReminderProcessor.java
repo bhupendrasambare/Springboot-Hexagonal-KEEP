@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +27,7 @@ public class ReminderProcessor {
     private final UserProfileUseCase userProfileUseCase;
 
     @Async("virtualThreadExecutor")
+    @Transactional
     public void processReminder(Reminder reminder) {
 
         try {
@@ -41,7 +43,7 @@ public class ReminderProcessor {
             );
 
             reminderUseCase.markCompleted(
-                    null,
+                    "SYSTEM",
                     reminder.getId().getValue()
             );
 

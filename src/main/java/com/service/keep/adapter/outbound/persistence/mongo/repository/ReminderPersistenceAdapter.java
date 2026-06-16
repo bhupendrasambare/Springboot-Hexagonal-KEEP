@@ -16,6 +16,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -81,8 +83,14 @@ public class ReminderPersistenceAdapter implements ReminderRepositoryPort {
     }
 
     @Override
-    public Page<Reminder> findAllByIsCompleted(PageRequest request, Boolean completed) {
-        return repository.findByCompleted(request, completed);
+    public Page<Reminder> findAllByIsCompleted(
+            PageRequest request,
+            Boolean completed
+    ) {
+
+        return repository
+                .findAllByCompleted(completed, request)
+                .map(this::toDomain);
     }
 
     @Override

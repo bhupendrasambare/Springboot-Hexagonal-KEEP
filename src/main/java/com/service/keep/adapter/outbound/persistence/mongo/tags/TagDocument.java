@@ -6,6 +6,7 @@
  **/
 package com.service.keep.adapter.outbound.persistence.mongo.tags;
 
+import com.querydsl.core.annotations.QueryEntity;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -13,6 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
+@QueryEntity
 @Setter
 @Getter
 @Document(collation = "tags")

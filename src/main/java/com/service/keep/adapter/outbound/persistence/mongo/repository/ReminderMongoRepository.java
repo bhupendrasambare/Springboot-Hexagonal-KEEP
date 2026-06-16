@@ -10,6 +10,7 @@ import com.service.keep.domain.model.Reminder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
@@ -21,5 +22,8 @@ public interface ReminderMongoRepository extends MongoRepository<ReminderDocumen
 
     Page<ReminderDocument> findAllByUserId(String value, Pageable request);
 
-    Page<Reminder> findByCompleted(PageRequest request, Boolean completed);
+    Page<ReminderDocument> findAllByCompleted(
+            Boolean completed,
+            Pageable pageable
+    );
 }

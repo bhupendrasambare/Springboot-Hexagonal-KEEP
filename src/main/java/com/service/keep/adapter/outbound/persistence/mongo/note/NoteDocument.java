@@ -6,6 +6,7 @@
  **/
 package com.service.keep.adapter.outbound.persistence.mongo.note;
 
+import com.querydsl.core.annotations.QueryEntity;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@QueryEntity
 @Document("notes")
 public class NoteDocument {
 

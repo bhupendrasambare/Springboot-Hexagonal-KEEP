@@ -6,6 +6,7 @@
  **/
 package com.service.keep.adapter.outbound.persistence.mongo.repository;
 
+import com.querydsl.core.annotations.QueryEntity;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 
 @Setter
 @Getter
+@QueryEntity
 @Document(collection = "reminder")
 public class ReminderDocument {
 

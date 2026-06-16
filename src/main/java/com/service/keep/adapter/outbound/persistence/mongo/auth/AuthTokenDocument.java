@@ -6,6 +6,7 @@
  **/
 package com.service.keep.adapter.outbound.persistence.mongo.auth;
 
+import com.querydsl.core.annotations.QueryEntity;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -13,6 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
+@QueryEntity
 @Document(collection = "auth_tokens")
 @Getter
 @Setter
