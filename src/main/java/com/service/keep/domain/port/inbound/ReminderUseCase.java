@@ -31,6 +31,8 @@ public interface ReminderUseCase {
             String reminderId
     );
 
+    void markCompletedBySystem(String reminderId);
+
     Reminder getById(
             String userId,
             String reminderId

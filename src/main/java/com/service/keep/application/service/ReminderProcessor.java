@@ -42,10 +42,7 @@ public class ReminderProcessor {
                     reminder.getDescription()
             );
 
-            reminderUseCase.markCompleted(
-                    "SYSTEM",
-                    reminder.getId().getValue()
-            );
+            reminderUseCase.markCompletedBySystem(reminder.getId().getValue());
 
         } catch (Exception e) {
 

@@ -112,6 +112,18 @@ public class ReminderService implements ReminderUseCase {
     }
 
     @Override
+    public void markCompletedBySystem(String reminderId) {
+
+        Reminder reminder = getOwnedReminder(reminderId);
+
+        reminder.setCompleted(true);
+        reminder.setUpdatedAt(LocalDateTime.now());
+
+        reminderRepository.save(reminder);
+
+    }
+
+    @Override
     public Reminder getById(String userId, String reminderId) {
 
         return getOwnedReminder(userId, reminderId);
@@ -167,6 +179,15 @@ public class ReminderService implements ReminderUseCase {
         }
 
         return reminder;
+    }
+
+    private Reminder getOwnedReminder(String reminderId) {
+
+        return reminderRepository
+                .findById(new ReminderId(reminderId))
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Reminder not found")
+                );
     }
 
     private void validateUser(String userId) {
