@@ -14,12 +14,12 @@ import com.service.keep.domain.port.inbound.UserProfileUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
-@RequiredArgsConstructor
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class ReminderProcessor {
 
     private final ReminderUseCase reminderUseCase;
@@ -30,10 +30,27 @@ public class ReminderProcessor {
     @Transactional
     public void processReminder(Reminder reminder) {
 
+        String reminderId = reminder.getId().getValue();
+
+        log.info(
+                "Processing reminder. reminderId={}, userId={}, reminderTime={}",
+                reminderId,
+                reminder.getUserId().getValue(),
+                reminder.getReminderTime()
+        );
+
+        long start = System.currentTimeMillis();
+
         try {
 
             User user = userProfileUseCase.getUserProfile(
                     reminder.getUserId().getValue()
+            );
+
+            log.debug(
+                    "User profile loaded. reminderId={}, email={}",
+                    reminderId,
+                    user.getEmail().getValue()
             );
 
             notificationUseCase.sendEmail(
@@ -42,13 +59,31 @@ public class ReminderProcessor {
                     reminder.getDescription()
             );
 
-            reminderUseCase.markCompletedBySystem(reminder.getId().getValue());
+            log.info(
+                    "Email notification sent successfully. reminderId={}, email={}",
+                    reminderId,
+                    user.getEmail().getValue()
+            );
+
+            reminderUseCase.markCompletedBySystem(reminderId);
+
+            log.info(
+                    "Reminder marked completed. reminderId={}",
+                    reminderId
+            );
+
+            log.info(
+                    "Reminder processed successfully. reminderId={}, duration={}ms",
+                    reminderId,
+                    System.currentTimeMillis() - start
+            );
 
         } catch (Exception e) {
 
             log.error(
-                    "Failed reminder {}",
-                    reminder.getId().getValue(),
+                    "Failed to process reminder. reminderId={}, duration={}ms",
+                    reminderId,
+                    System.currentTimeMillis() - start,
                     e
             );
         }

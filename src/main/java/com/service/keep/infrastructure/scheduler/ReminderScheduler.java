@@ -21,27 +21,73 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class ReminderScheduler {
 
+    private static final int PAGE_SIZE = 10;
+
     private final ReminderUseCase reminderUseCase;
     private final ReminderProcessor reminderProcessor;
 
     @Scheduled(fixedDelay = 30000)
     public void checkReminders() {
 
+        long start = System.currentTimeMillis();
+
+        log.info("Reminder scheduler started");
+
         int page = 0;
+        int totalProcessed = 0;
+
         Page<Reminder> reminders;
 
-        do {
+        try {
 
-            reminders = reminderUseCase.getPendingReminders(
-                    PageRequest.of(page, 10)
+            do {
+
+                log.debug(
+                        "Fetching pending reminders. page={}, size={}",
+                        page,
+                        PAGE_SIZE
+                );
+
+                reminders = reminderUseCase.getPendingReminders(
+                        PageRequest.of(page, PAGE_SIZE)
+                );
+
+                log.info(
+                        "Fetched page {} of {}. remindersFound={}",
+                        page + 1,
+                        reminders.getTotalPages(),
+                        reminders.getNumberOfElements()
+                );
+
+                reminders.forEach(reminder -> {
+
+                    log.debug(
+                            "Submitting reminder for async processing. reminderId={}",
+                            reminder.getId().getValue()
+                    );
+
+                    reminderProcessor.processReminder(reminder);
+                });
+
+                totalProcessed += reminders.getNumberOfElements();
+
+                page++;
+
+            } while (page < reminders.getTotalPages());
+
+            log.info(
+                    "Reminder scheduler completed. totalProcessed={}, duration={}ms",
+                    totalProcessed,
+                    System.currentTimeMillis() - start
             );
 
-            reminders.forEach(reminder ->
-                    reminderProcessor.processReminder(reminder)
+        } catch (Exception e) {
+
+            log.error(
+                    "Reminder scheduler failed after processing {} reminders",
+                    totalProcessed,
+                    e
             );
-
-            page++;
-
-        } while (page < reminders.getTotalPages());
+        }
     }
 }
