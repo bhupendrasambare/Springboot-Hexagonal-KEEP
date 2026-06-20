@@ -1,49 +1,115 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../store/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../api/axiosInstance";
 
 function Login() {
-  const { login } = useAuth();
+  const { login, logout } = useAuth();
   const navigate = useNavigate();
+
+  const [checkingAuth, setCheckingAuth] = useState(true);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+  useEffect(() => {
+    checkExistingSession();
+  }, []);
+
+  const checkExistingSession = async () => {
+    const refreshToken = localStorage.getItem("refreshToken");
+
+    if (!refreshToken) {
+      setCheckingAuth(false);
+      return;
+    }
 
     try {
-      const response = await axiosInstance.post("/auth/login", {
-        email,
-        password,
-      });
+      const response = await axiosInstance.post(
+        "/auth/refresh",
+        {
+          refreshToken,
+        }
+      );
 
       const authData = response.data.data;
 
       login(authData);
+
+      navigate("/home", { replace: true });
+
+    } catch (error) {
+
+      console.error(
+        "Refresh token validation failed",
+        error
+      );
+
+      logout();
+
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+
+      setCheckingAuth(false);
+    }
+  };
+
+  const handleLogin = async (e) => {
+
+    e.preventDefault();
+
+    setError("");
+    setLoading(true);
+
+    try {
+
+      const response = await axiosInstance.post(
+        "/auth/login",
+        {
+          email,
+          password,
+        }
+      );
+
+      const authData = response.data.data;
+
+      login(authData);
+
       navigate("/home");
 
     } catch (err) {
+
       setError(
-        err.response?.data?.message || "Invalid email or password"
+        err.response?.data?.message ||
+        "Invalid email or password"
       );
+
     } finally {
+
       setLoading(false);
+
     }
   };
 
   const handleGoogleLogin = () => {
-    // later you can redirect to backend oauth endpoint
-    window.location.href = "http://localhost:8080/oauth2/authorization/google";
+    window.location.href =
+      "http://localhost:8080/oauth2/authorization/google";
   };
 
+  if (checkingAuth) {
+    return (
+      <div className="vh-100 d-flex justify-content-center align-items-center">
+        <div className="spinner-border" />
+      </div>
+    );
+  }
+
   return (
-    <section
+    
+<section
       className="vh-100 d-flex align-items-center"
     >
       <div className="container">
