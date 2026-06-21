@@ -100,9 +100,6 @@ function LocalNav({
       </Navbar>
 
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-        <Modal.Header closeButton className="bg-dark text-light">
-          <Modal.Title>User Profile</Modal.Title>
-        </Modal.Header>
 
         <Modal.Body className="bg-dark text-light">
           {user ? (
@@ -117,7 +114,7 @@ function LocalNav({
           )}
         </Modal.Body>
 
-        <Modal.Footer className="bg-dark text-light">
+        <Modal.Footer className="bg-dark text-light b-0">
           <Button variant="secondary" onClick={() => setShowModal(false)}>
             Close
           </Button>
