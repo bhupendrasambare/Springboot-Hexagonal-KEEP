@@ -10,6 +10,7 @@ import Important from "../sections/Important";
 import Archived from "../sections/Archive";
 import Bin from "../sections/Bin";
 import SearchResult from "../sections/SearchResult";
+import Settings from "../sections/Settings";
 
 function HomePage() {
   const [sidebarActive, setSidebarActive] = useState(false);
@@ -41,6 +42,7 @@ function HomePage() {
             <Route path="/archive" element={<Archived refresh={refresh} />} />
             <Route path="/bin" element={<Bin refresh={refresh} />} />
             <Route path="/search" element={<SearchResult refresh={refresh} />} />
+            <Route path="/settings" element={<Settings refresh={refresh} />} />
 
             {/* default */}
             <Route path="*" element={<Navigate to="/home" />} />
