@@ -89,7 +89,7 @@ function LocalNav({
               />
             )}
 
-            <MdOutlineSettings size={25} />
+            <MdOutlineSettings size={25} className="cursor-pointer" onClick={()=>{navigate("/home/settings")}} />
             <BsGrid3X3Gap size={25} />
             <MdOutlineSupervisedUserCircle
               size={25}
