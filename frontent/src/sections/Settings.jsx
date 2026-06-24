@@ -64,7 +64,6 @@ function Settings({ refresh }) {
                             {user.userName}
                           </div>
                         </div>
-                        <hr className="settings-divider" />
                         <div className="mb-3">
                           <div className="settings-label">
                             Full Name
@@ -74,7 +73,6 @@ function Settings({ refresh }) {
                             {user.firstName} {user.lastName}
                           </div>
                         </div>
-                        <hr className="settings-divider" />
                         <div className="mb-3">
                           <div className="settings-label">
                             Email
@@ -84,7 +82,6 @@ function Settings({ refresh }) {
                             {user.email}
                           </div>
                         </div>
-                        <hr className="settings-divider" />
                       </Card.Body>
                     </Card>
                   </Tab.Pane>
