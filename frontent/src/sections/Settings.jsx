@@ -4,10 +4,30 @@ import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 import Card from "react-bootstrap/Card";
 import { useAuth } from "../store/AuthContext";
+import { useState } from "react";
 
 function Settings({ refresh }) {
 
   const { user, logout } = useAuth();
+  const[newPassword,setNewPassword] = useState("")
+  const[oldPassword,setOldPassword] = useState("")
+
+
+  const handleChangePassword =
+    async () => {
+
+      try {
+
+        if (noteData.pinned) {
+
+          await handleChangePassword(newPassword, oldPassword);
+
+        }
+
+      } catch (error) {
+      }
+    };
+
 
   return (
     <>
