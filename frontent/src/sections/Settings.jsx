@@ -17,12 +17,7 @@ function Settings({ refresh }) {
     async () => {
 
       try {
-
-        if (noteData.pinned) {
-
           await handleChangePassword(newPassword, oldPassword);
-
-        }
 
       } catch (error) {
       }
