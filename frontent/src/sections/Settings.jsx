@@ -5,6 +5,7 @@ import Tab from "react-bootstrap/Tab";
 import Card from "react-bootstrap/Card";
 import { useAuth } from "../store/AuthContext";
 import { useState } from "react";
+import { changePassword } from "../api/notesService";
 
 function Settings({ refresh }) {
 
@@ -17,7 +18,7 @@ function Settings({ refresh }) {
     async () => {
 
       try {
-          await handleChangePassword(newPassword, oldPassword);
+          await changePassword(oldPassword, newPassword);
 
       } catch (error) {
       }

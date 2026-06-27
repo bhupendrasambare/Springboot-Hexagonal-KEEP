@@ -29,6 +29,20 @@ export const getPinnedNotesApi = async (page = 0, size = 10) => {
   return safePage(response);
 };
 
+
+export const changePassword = async (currentPassword, newPassword) => {
+  const response = await axiosInstance.post("/note/find", {
+    pinned: true,
+    archived: false,
+    trashed: false,
+    keyword: "",
+    page,
+    pageSize: size,
+  });
+
+  return safePage(response);
+};
+
 export const getNotesApi = async (page = 0, size = 10) => {
   const response = await axiosInstance.post("/note/find", {
     pinned: false,
