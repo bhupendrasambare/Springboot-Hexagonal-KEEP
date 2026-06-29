@@ -7,7 +7,7 @@ import { useAuth } from "../store/AuthContext";
 import { useState } from "react";
 import { changePassword } from "../api/notesService";
 
-function Settings({ refresh }) {
+function Settings() {
   const { user } = useAuth();
 
   const [oldPassword, setOldPassword] = useState("");
@@ -15,13 +15,63 @@ function Settings({ refresh }) {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
+
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  const [passwordError, setPasswordError] =
+    useState("");
+
+  const [confirmError, setConfirmError] =
+    useState("");
 
   const validatePassword = (password) => {
     return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/.test(
       password
     );
+  };
+
+  const handleNewPasswordChange = (value) => {
+    setNewPassword(value);
+
+    if (!value) {
+      setPasswordError("");
+    } else if (!validatePassword(value)) {
+      setPasswordError(
+        "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character."
+      );
+    } else {
+      setPasswordError("");
+    }
+
+    if (confirmPassword) {
+      if (value !== confirmPassword) {
+        setConfirmError(
+          "Passwords do not match."
+        );
+      } else {
+        setConfirmError("");
+      }
+    }
+  };
+
+  const handleConfirmPasswordChange = (
+    value
+  ) => {
+    setConfirmPassword(value);
+
+    if (!value) {
+      setConfirmError("");
+      return;
+    }
+
+    if (value !== newPassword) {
+      setConfirmError(
+        "Passwords do not match."
+      );
+    } else {
+      setConfirmError("");
+    }
   };
 
   const handleChangePassword = async (e) => {
@@ -31,32 +81,44 @@ function Settings({ refresh }) {
     setSuccess("");
 
     if (!oldPassword.trim()) {
-      setError("Current password is required.");
+      setError(
+        "Current password is required."
+      );
       return;
     }
 
     if (!validatePassword(newPassword)) {
       setError(
-        "New password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character."
+        "Please enter a valid new password."
       );
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setError("New password and Confirm password do not match.");
+      setError(
+        "Passwords do not match."
+      );
       return;
     }
 
     try {
       setLoading(true);
 
-      await changePassword(oldPassword, newPassword);
+      await changePassword(
+        oldPassword,
+        newPassword
+      );
 
-      setSuccess("Password updated successfully.");
+      setSuccess(
+        "Password updated successfully."
+      );
 
       setOldPassword("");
       setNewPassword("");
       setConfirmPassword("");
+
+      setPasswordError("");
+      setConfirmError("");
     } catch (err) {
       setError(
         err.response?.data?.message ||
@@ -74,7 +136,6 @@ function Settings({ refresh }) {
         defaultActiveKey="details"
       >
         <Row className="g-4">
-          {/* Sidebar */}
           <Col lg={3}>
             <div className="settings-sidebar">
               <Nav
@@ -96,11 +157,9 @@ function Settings({ refresh }) {
             </div>
           </Col>
 
-          {/* Content */}
           <Col lg={9}>
             <div className="settings-content">
               <Tab.Content>
-                {/* ================= PROFILE ================= */}
                 <Tab.Pane eventKey="details">
                   <h3 className="settings-title">
                     Profile Details
@@ -146,7 +205,6 @@ function Settings({ refresh }) {
                   </Card>
                 </Tab.Pane>
 
-                {/* ================= PASSWORD ================= */}
                 <Tab.Pane eventKey="password">
                   <h3 className="settings-title">
                     Reset Password
@@ -162,6 +220,7 @@ function Settings({ refresh }) {
                         onSubmit={
                           handleChangePassword
                         }
+                        noValidate
                       >
                         <div className="mb-3">
                           <label className="form-label">
@@ -171,8 +230,8 @@ function Settings({ refresh }) {
                           <input
                             type="password"
                             className="form-control custom-dark-input"
-                            placeholder="Enter current password"
                             value={oldPassword}
+                            placeholder="Enter current password"
                             onChange={(e) =>
                               setOldPassword(
                                 e.target.value
@@ -189,54 +248,81 @@ function Settings({ refresh }) {
                           <input
                             type="password"
                             className="form-control custom-dark-input"
-                            placeholder="Enter new password"
                             value={newPassword}
+                            placeholder="Enter new password"
                             onChange={(e) =>
-                              setNewPassword(
+                              handleNewPasswordChange(
                                 e.target.value
                               )
                             }
                           />
 
-                          <small className="text-secondary">
-                            Password must be at
-                            least 8 characters
-                            long and contain one
-                            uppercase letter, one
-                            lowercase letter, one
-                            number and one special
-                            character.
-                          </small>
+                          {passwordError ? (
+                            <small className="text-danger">
+                              {
+                                passwordError
+                              }
+                            </small>
+                          ) : newPassword ? (
+                            <small className="text-success">
+                              ✓ Strong
+                              password
+                            </small>
+                          ) : (
+                            <small className="text-secondary">
+                              Minimum 8
+                              characters,
+                              uppercase,
+                              lowercase,
+                              number &
+                              special
+                              character.
+                            </small>
+                          )}
                         </div>
 
                         <div className="mb-3">
                           <label className="form-label">
-                            Confirm Password
+                            Confirm
+                            Password
                           </label>
 
                           <input
                             type="password"
                             className="form-control custom-dark-input"
-                            placeholder="Confirm new password"
                             value={
                               confirmPassword
                             }
+                            placeholder="Confirm new password"
                             onChange={(e) =>
-                              setConfirmPassword(
+                              handleConfirmPasswordChange(
                                 e.target.value
                               )
                             }
                           />
+
+                          {confirmError ? (
+                            <small className="text-danger">
+                              {
+                                confirmError
+                              }
+                            </small>
+                          ) : confirmPassword ? (
+                            <small className="text-success">
+                              ✓ Passwords
+                              match
+                            </small>
+                          ) : null}
                         </div>
 
                         {error && (
-                          <div className="alert alert-danger py-2">
+                          <div className="alert alert-danger">
                             {error}
                           </div>
                         )}
 
                         {success && (
-                          <div className="alert alert-success py-2">
+                          <div className="alert alert-success">
                             {success}
                           </div>
                         )}
@@ -244,7 +330,11 @@ function Settings({ refresh }) {
                         <button
                           type="submit"
                           className="btn btn-primary"
-                          disabled={loading}
+                          disabled={
+                            loading ||
+                            passwordError ||
+                            confirmError
+                          }
                         >
                           {loading
                             ? "Updating..."
