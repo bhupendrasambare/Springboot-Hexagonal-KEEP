@@ -77,20 +77,7 @@ function LocalNav({
               <IoMdCloudOutline size={25} />
             )}
 
-            {showRow !== true ? (
-              <BsViewStacked
-                onClick={() => setShowRow(true)}
-                size={25}
-              />
-            ) : (
-              <BsGrid
-                onClick={() => setShowRow(false)}
-                size={25}
-              />
-            )}
-
             <MdOutlineSettings size={25} className="cursor-pointer" onClick={()=>{navigate("/home/settings")}} />
-            <BsGrid3X3Gap size={25} />
             <MdOutlineSupervisedUserCircle
               size={25}
               onClick={() => setShowModal(true)}
