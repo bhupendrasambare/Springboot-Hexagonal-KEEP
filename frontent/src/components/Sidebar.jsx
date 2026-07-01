@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { BsArchive, BsBell, BsLightbulb, BsPencil, BsTrash3 } from "react-icons/bs";
-import { MdLabelImportantOutline } from "react-icons/md";
+import { MdLabelImportantOutline, MdOutlineSearch } from "react-icons/md";
 
 function Sidebar({ sidebarActive }) {
 
@@ -21,6 +21,12 @@ function Sidebar({ sidebarActive }) {
         <NavLink to="/home" end className={getClass}>
           <BsLightbulb className="ms-1 sidebar-circle-icon text-white" />
           {sidebarActive && <div className="ms-3 w-100">Notes</div>}
+        </NavLink>
+
+        {/* Notes */}
+        <NavLink to="/home/search" end className={getClass}>
+          <MdOutlineSearch className="ms-1 sidebar-circle-icon text-white" />
+          {sidebarActive && <div className="ms-3 w-100">Search</div>}
         </NavLink>
 
         {/* Reminder */}

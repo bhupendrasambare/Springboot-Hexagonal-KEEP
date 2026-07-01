@@ -60,12 +60,6 @@ function LocalNav({
             Keep
           </Navbar.Brand>
 
-          <div className="m-2 cursor-pointer" onClick={()=>{navigate("/home/search")}}>
-            <MdOutlineSearch
-                size={25}
-              />
-          </div>
-
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end gap-4 text-body-emphasis">
             {refresh !== true ? (
